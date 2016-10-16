@@ -11,10 +11,7 @@ ABoxTest::ABoxTest() {
 
 // Called when the game starts or when spawned
 void ABoxTest::BeginPlay() {
-	Super::BeginPlay();
-	
-	// Implemented as an event on the blueprint, so allows for calls from cpp to the blueprint
-	SomethingHappened();
+	Super::BeginPlay();	
 }
 
 void ABoxTest::CursorOver() {

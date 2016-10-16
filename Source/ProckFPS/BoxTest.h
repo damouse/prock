@@ -23,4 +23,6 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Happened"))
 	void SomethingHappened();
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Control")
+	bool SpawnOnce;
 };

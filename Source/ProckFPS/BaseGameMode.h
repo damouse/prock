@@ -5,6 +5,7 @@
 #include "GameFramework/GameMode.h"
 #include "BaseGameMode.generated.h"
 
+
 /**
  * 
  */
@@ -19,4 +20,5 @@ public:
 	virtual void InitGameState();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "X") TSubclassOf<AActor> boxBPClass;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "X") TSubclassOf<AActor> operatorBPClass;
 };
