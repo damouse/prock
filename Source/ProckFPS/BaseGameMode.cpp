@@ -5,10 +5,6 @@
 #include "Operation.h"
 #include "BaseGameMode.h"
 
-// For the cables
-#include "CableComponent.h"
-#include "CableActor.h"
-
 ABaseGameMode::ABaseGameMode() {
 	  static ConstructorHelpers::FClassFinder<AActor> doorBPClassFinder(TEXT("Blueprint'/Game/Box'"));
 	  static ConstructorHelpers::FClassFinder<AActor> operatorBPFinder(TEXT("Blueprint'/Game/Operator'"));
@@ -20,6 +16,11 @@ ABaseGameMode::ABaseGameMode() {
 	  if (operatorBPFinder.Class != nullptr) {
 		  operatorBPClass = operatorBPFinder.Class;
 	  }
+
+	  // Start up a new python module and bootstrap the native modules
+	  python = FUnrealEnginePythonModule();
+	  python.StartupModule();
+	  python.RunString("import peter");
 }
 
 void ABaseGameMode::InitGameState() {

@@ -3,12 +3,9 @@
 #pragma once
 
 #include "GameFramework/GameMode.h"
+#include "UnrealEnginePython.h"
 #include "BaseGameMode.generated.h"
 
-
-/**
- * 
- */
 UCLASS()
 class PROCKFPS_API ABaseGameMode : public AGameMode
 {
@@ -19,6 +16,9 @@ public:
 
 	virtual void InitGameState();
 
+	// Stored static classes that reference blueprints for runtime instantiation
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "X") TSubclassOf<AActor> boxBPClass;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "X") TSubclassOf<AActor> operatorBPClass;
+
+	FUnrealEnginePythonModule python;
 };
