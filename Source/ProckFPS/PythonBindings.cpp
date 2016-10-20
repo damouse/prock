@@ -9,31 +9,25 @@ PythonBindings::PythonBindings() {
 	python = new FUnrealEnginePythonModule();
 	python->StartupModule();
 
-	//python->RunString("import peter");
-	//this->RunString("import peter");
-
-	PyObject *import = this->RunString("import peter");
-	Py_DECREF(import);
-
-	// So run string uses PyRunString internally, which is for statements and returns nothing. Need a different api.
-	PyObject *result = this->RunString("peter.hello()");
-	unreal_engine_py_log_error();
-
-	if (!result) {
+	// Basic example, calling the equivalent of hello world in our python bindings
+	PyObject *native = PyImport_ImportModule("peter");
+	if (!native) {
 		unreal_engine_py_log_error();
-	} else {
-		// It seems the call is executing but not returning anything. Might need a different call method into c python
-		this->printpy(result);
-		UE_LOG(LogProck, Log, TEXT("Value returned from python: %s"), UTF8_TO_TCHAR(PyString_AsString(result)));
-		Py_DECREF(result);
 	}
-	// This doesn't return a value well, or at all...
+
+	PyObject *hello = PyObject_CallMethod(native, (char *)"hello", nullptr);
+	if (!hello) {
+		unreal_engine_py_log_error();
+	}
+
+	printpy(hello);
 }
 
 PythonBindings::~PythonBindings() {
 	python->ShutdownModule();
 }
 
+// Run a string against the target environment. Only really handles statements, don't expect to get anything back
 PyObject* PythonBindings::RunString(char *str) {
 	FScopePythonGIL gil;
 	PyObject *eval_ret = PyRun_StringFlags(str, Py_file_input, (PyObject *)python->main_dict, (PyObject *)python->local_dict, nullptr);
@@ -45,11 +39,6 @@ PyObject* PythonBindings::RunString(char *str) {
 
 	//Py_DECREF(eval_ret);
 	return eval_ret;
-}
-
-// Note that this isn't going to work for python 3. See the original bindings for the right method
-void PythonBindings::printpy(PyObject* obj) {
-	UE_LOG(LogProck, Log, TEXT("%s"), UTF8_TO_TCHAR(PyString_AsString(PyObject_Str(obj))));
 }
 
 void PythonBindings::unreal_engine_py_log_error() {
@@ -115,4 +104,9 @@ void PythonBindings::unreal_engine_py_log_error() {
 	}
 
 	PyErr_Clear();
+}
+
+// Note that this isn't going to work for python 3. See the original bindings for the right method
+void printpy(PyObject* obj) {
+	UE_LOG(LogProck, Log, TEXT("%s"), UTF8_TO_TCHAR(PyString_AsString(PyObject_Str(obj))));
 }

@@ -19,7 +19,7 @@
 
 
 /**
- * 
+ * Interfaces with the native python components
  */
 class PROCKFPS_API PythonBindings {
 public:
@@ -30,6 +30,7 @@ public:
 
 private: 
 	FUnrealEnginePythonModule *python;
-	void printpy(PyObject *obj);
 	void unreal_engine_py_log_error();
 };
+
+void printpy(PyObject *obj);
