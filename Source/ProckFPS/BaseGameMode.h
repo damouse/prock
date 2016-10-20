@@ -1,9 +1,11 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+/*
+The one and only game mode. Does most of the heavy lifting on organization and state. 
+*/
 #pragma once
 
 #include "GameFramework/GameMode.h"
 #include "UnrealEnginePython.h"
+#include "Peter.h"
 #include "BaseGameMode.generated.h"
 
 UCLASS()
@@ -20,5 +22,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "X") TSubclassOf<AActor> boxBPClass;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "X") TSubclassOf<AActor> operatorBPClass;
 
-	FUnrealEnginePythonModule python;
+private:
+	Peter *peter;
 };

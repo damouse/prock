@@ -5,6 +5,7 @@
 #include "Operation.h"
 #include "BaseGameMode.h"
 
+
 ABaseGameMode::ABaseGameMode() {
 	  static ConstructorHelpers::FClassFinder<AActor> doorBPClassFinder(TEXT("Blueprint'/Game/Box'"));
 	  static ConstructorHelpers::FClassFinder<AActor> operatorBPFinder(TEXT("Blueprint'/Game/Operator'"));
@@ -17,10 +18,7 @@ ABaseGameMode::ABaseGameMode() {
 		  operatorBPClass = operatorBPFinder.Class;
 	  }
 
-	  // Start up a new python module and bootstrap the native modules
-	  python = FUnrealEnginePythonModule();
-	  python.StartupModule();
-	  python.RunString("import peter");
+	  peter = new Peter();
 }
 
 void ABaseGameMode::InitGameState() {

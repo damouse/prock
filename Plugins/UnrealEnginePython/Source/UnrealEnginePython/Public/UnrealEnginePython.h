@@ -17,10 +17,10 @@ public:
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
 
+	//PyObject* RunReturnString(char *);
 	void RunString(char *);
 	void RunFile(char *);
 
-private:
 	void *ue_python_gil;
 	// used by console
 	void *main_dict;
