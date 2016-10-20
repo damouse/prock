@@ -32,7 +32,3 @@ private:
 
 void printpy(PyObject *obj);
 void log_py_error();
-
-PyObject *py_unreal_engine_log(PyObject * self, PyObject * args);
-PyObject *py_unreal_engine_log_warning(PyObject * self, PyObject * args);
-PyObject *py_unreal_engine_log_error(PyObject * self, PyObject * args);

@@ -5,13 +5,6 @@
 
 PyDoc_STRVAR(unreal_engine_py_doc, "Unreal Engine Python module.");
 
-// These methods are exposed to python
-static PyMethodDef unreal_engine_methods[] = {
-	{ "log", py_unreal_engine_log, METH_VARARGS, "" },
-	{ "log_warning", py_unreal_engine_log_warning, METH_VARARGS, "" },
-	{ "log_error", py_unreal_engine_log_error, METH_VARARGS, "" }
-};
-
 // Initialize the python environment and import the native peter components
 // The old module code created an import specifically made for output. This has not been carried over.
 PythonBindings::PythonBindings() {
@@ -87,7 +80,6 @@ void log_py_error() {
 
 	UE_LOG(LogProck, Error, TEXT("%s"), UTF8_TO_TCHAR(msg));
 
-	// taken from uWSGI ;)
 	if (!traceback) {
 		PyErr_Clear();
 		return;
@@ -141,58 +133,4 @@ void PythonBindings::PythonGILAcquire() {
 #if UEPY_THREADING
 	PyEval_RestoreThread((PyThreadState *)ue_python_gil);
 #endif
-}
-
-/*
-Log interceptors
-*/
-PyObject *py_unreal_engine_log(PyObject * self, PyObject * args) {
-	PyObject *py_message;
-	if (!PyArg_ParseTuple(args, "O:log", &py_message)) {
-		return NULL;
-	}
-
-	PyObject *stringified = PyObject_Str(py_message);
-	if (!stringified)
-		return PyErr_Format(PyExc_Exception, "argument cannot be casted to string");
-	char *message = PyString_AsString(stringified);
-	UE_LOG(LogProck, Log, TEXT("%s"), UTF8_TO_TCHAR(message));
-	Py_DECREF(stringified);
-
-	Py_INCREF(Py_None);
-	return Py_None;
-}
-
-PyObject *py_unreal_engine_log_warning(PyObject * self, PyObject * args) {
-	PyObject *py_message;
-	if (!PyArg_ParseTuple(args, "O:log_warning", &py_message)) {
-		return NULL;
-	}
-
-	PyObject *stringified = PyObject_Str(py_message);
-	if (!stringified)
-		return PyErr_Format(PyExc_Exception, "argument cannot be casted to string");
-	char *message = PyString_AsString(stringified);
-	UE_LOG(LogProck, Warning, TEXT("%s"), UTF8_TO_TCHAR(message));
-	Py_DECREF(stringified);
-
-	Py_INCREF(Py_None);
-	return Py_None;
-}
-
-PyObject *py_unreal_engine_log_error(PyObject * self, PyObject * args) {
-	PyObject *py_message;
-	if (!PyArg_ParseTuple(args, "O:log_error", &py_message)) {
-		return NULL;
-	}
-
-	PyObject *stringified = PyObject_Str(py_message);
-	if (!stringified)
-		return PyErr_Format(PyExc_Exception, "argument cannot be casted to string");
-	char *message = PyString_AsString(stringified);
-	UE_LOG(LogProck, Error, TEXT("%s"), UTF8_TO_TCHAR(message));
-	Py_DECREF(stringified);
-
-	Py_INCREF(Py_None);
-	return Py_None;
 }
