@@ -17,11 +17,6 @@ ABaseGameMode::ABaseGameMode() {
 	  if (operatorBPFinder.Class != nullptr) {
 		  operatorBPClass = operatorBPFinder.Class;
 	  }
-
-	  peter = new Peter();
-	  peter->LoadPython();
-	  peter->UnloadPython();
-	  delete peter;
 }
 
 void ABaseGameMode::InitGameState() {
@@ -41,6 +36,10 @@ void ABaseGameMode::InitGameState() {
 		op->ConnectToBoxes(box1);
 	}
 
+	peter = new Peter();
+	peter->LoadPython();
+	peter->UnloadPython();
+	delete peter;
 	//// Spawn a nested box in the coordinate space of its parent
 	//ABoxTest *child = (ABoxTest *)GetWorld()->SpawnActor<AActor>(boxBPClass);
 	//child->AttachToComponent(box->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);

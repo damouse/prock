@@ -3,12 +3,16 @@
 using UnrealBuildTool;
 using System.Collections.Generic;
 
-public class ProckFPSTarget : TargetRules
-{
-	public ProckFPSTarget(TargetInfo Target)
-	{
+
+public class ProckFPSTarget : TargetRules {
+
+
+
+    public ProckFPSTarget(TargetInfo Target) {
 		Type = TargetType.Game;
-	}
+
+
+    }
 
 	//
 	// TargetRules interface.
@@ -21,5 +25,5 @@ public class ProckFPSTarget : TargetRules
 		)
 	{
 		OutExtraModuleNames.AddRange( new string[] { "ProckFPS" } );
-	}
+    }
 }

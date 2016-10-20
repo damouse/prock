@@ -4,7 +4,6 @@ The one and only game mode. Does most of the heavy lifting on organization and s
 #pragma once
 
 #include "GameFramework/GameMode.h"
-#include "UnrealEnginePython.h"
 #include "Peter.h"
 #include "BaseGameMode.generated.h"
 

@@ -3,45 +3,62 @@
 #include "ProckFPS.h"
 #include "PythonBindings.h"
 
-PythonBindings::PythonBindings() {
-	//Using the unrealenginepythonmodule only as a means of bootstrapping the python environment
-	// Once loaded we just cast the main dict and operate on it (mostly) directly
-	python = new FUnrealEnginePythonModule();
-	python->StartupModule();
+PyDoc_STRVAR(unreal_engine_py_doc, "Unreal Engine Python module.");
 
-	// Basic example, calling the equivalent of hello world in our python bindings
-	PyObject *native = PyImport_ImportModule("peter");
+// These methods are exposed to python
+static PyMethodDef unreal_engine_methods[] = {
+	{ "log", py_unreal_engine_log, METH_VARARGS, "" },
+	{ "log_warning", py_unreal_engine_log_warning, METH_VARARGS, "" },
+	{ "log_error", py_unreal_engine_log_error, METH_VARARGS, "" }
+};
+
+// Initialize the python environment and import the native peter components
+// The old module code created an import specifically made for output. This has not been carried over.
+PythonBindings::PythonBindings() {
+	Py_Initialize();
+	char *argv[] = { (char *)"UnrealEngine", NULL };
+	PySys_SetArgv(1, argv);
+	PyEval_InitThreads();
+
+	// Inject new paths into sys.path so we can find our modules
+	PyObject *py_sys = PyImport_ImportModule("sys");
+	PyObject *py_sys_dict = PyModule_GetDict(py_sys);
+	PyObject *py_path = PyDict_GetItemString(py_sys_dict, "path");
+
+	char *native_path = TCHAR_TO_UTF8(*FPaths::Combine(*FPaths::GameSourceDir(), UTF8_TO_TCHAR("")));
+	PyObject *py_native_path = PyUnicode_FromString(native_path);
+	PyList_Insert(py_path, 0, py_native_path);
+
+	// Add the scripts directory (which contains dependencies)
+	char *scripts_path = TCHAR_TO_UTF8(*FPaths::Combine(*FPaths::GameContentDir(), UTF8_TO_TCHAR("Scripts")));
+	PyObject *py_scripts_path = PyUnicode_FromString(scripts_path);
+	PyList_Insert(py_path, 0, py_scripts_path);
+
+	UE_LOG(LogProck, Log, TEXT("Python VM initialized: %s"), UTF8_TO_TCHAR(Py_GetVersion()));
+	UE_LOG(LogProck, Log, TEXT("Python Scripts search path: %s"), UTF8_TO_TCHAR(scripts_path));
+
+	// import python native peter
+	PyObject *native = PyImport_ImportModule("pypeter.main");
 	if (!native) {
-		unreal_engine_py_log_error();
+		log_py_error();
 	}
 
-	PyObject *hello = PyObject_CallMethod(native, (char *)"hello", nullptr);
+	PyObject *hello = PyObject_CallMethod(native, (char *)"handshake", nullptr);
 	if (!hello) {
-		unreal_engine_py_log_error();
+		log_py_error();
 	}
 
 	printpy(hello);
 }
 
 PythonBindings::~PythonBindings() {
-	python->ShutdownModule();
+	UE_LOG(LogProck, Log, TEXT("Unloading python"));
+	PythonGILAcquire();
+	Py_Finalize();
 }
 
-// Run a string against the target environment. Only really handles statements, don't expect to get anything back
-PyObject* PythonBindings::RunString(char *str) {
-	FScopePythonGIL gil;
-	PyObject *eval_ret = PyRun_StringFlags(str, Py_file_input, (PyObject *)python->main_dict, (PyObject *)python->local_dict, nullptr);
-
-	if (!eval_ret) {
-		unreal_engine_py_log_error();
-		return nullptr;
-	}
-
-	//Py_DECREF(eval_ret);
-	return eval_ret;
-}
-
-void PythonBindings::unreal_engine_py_log_error() {
+// Check for a python runtime error and print it if it exists
+void log_py_error() {
 	PyObject *type = NULL;
 	PyObject *value = NULL;
 	PyObject *traceback = NULL;
@@ -109,4 +126,73 @@ void PythonBindings::unreal_engine_py_log_error() {
 // Note that this isn't going to work for python 3. See the original bindings for the right method
 void printpy(PyObject* obj) {
 	UE_LOG(LogProck, Log, TEXT("%s"), UTF8_TO_TCHAR(PyString_AsString(PyObject_Str(obj))));
+}
+
+/*
+GIL Management
+*/
+void PythonBindings::PythonGILRelease() {
+#if UEPY_THREADING
+	ue_python_gil = PyEval_SaveThread();
+#endif
+}
+
+void PythonBindings::PythonGILAcquire() {
+#if UEPY_THREADING
+	PyEval_RestoreThread((PyThreadState *)ue_python_gil);
+#endif
+}
+
+/*
+Log interceptors
+*/
+PyObject *py_unreal_engine_log(PyObject * self, PyObject * args) {
+	PyObject *py_message;
+	if (!PyArg_ParseTuple(args, "O:log", &py_message)) {
+		return NULL;
+	}
+
+	PyObject *stringified = PyObject_Str(py_message);
+	if (!stringified)
+		return PyErr_Format(PyExc_Exception, "argument cannot be casted to string");
+	char *message = PyString_AsString(stringified);
+	UE_LOG(LogProck, Log, TEXT("%s"), UTF8_TO_TCHAR(message));
+	Py_DECREF(stringified);
+
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+
+PyObject *py_unreal_engine_log_warning(PyObject * self, PyObject * args) {
+	PyObject *py_message;
+	if (!PyArg_ParseTuple(args, "O:log_warning", &py_message)) {
+		return NULL;
+	}
+
+	PyObject *stringified = PyObject_Str(py_message);
+	if (!stringified)
+		return PyErr_Format(PyExc_Exception, "argument cannot be casted to string");
+	char *message = PyString_AsString(stringified);
+	UE_LOG(LogProck, Warning, TEXT("%s"), UTF8_TO_TCHAR(message));
+	Py_DECREF(stringified);
+
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+
+PyObject *py_unreal_engine_log_error(PyObject * self, PyObject * args) {
+	PyObject *py_message;
+	if (!PyArg_ParseTuple(args, "O:log_error", &py_message)) {
+		return NULL;
+	}
+
+	PyObject *stringified = PyObject_Str(py_message);
+	if (!stringified)
+		return PyErr_Format(PyExc_Exception, "argument cannot be casted to string");
+	char *message = PyString_AsString(stringified);
+	UE_LOG(LogProck, Error, TEXT("%s"), UTF8_TO_TCHAR(message));
+	Py_DECREF(stringified);
+
+	Py_INCREF(Py_None);
+	return Py_None;
 }

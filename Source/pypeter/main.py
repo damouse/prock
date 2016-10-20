@@ -9,7 +9,6 @@ from utils import log
 import files
 import nast
 
-
 def load_source(path="../../../../../../Code/unreal/ProckFPS 4.13/samplecode.py"):
     '''
     Load the source code. Note that we should be taking arguments here eventually. 
@@ -33,7 +32,13 @@ def load_source(path="../../../../../../Code/unreal/ProckFPS 4.13/samplecode.py"
     # # Insert a comment at the given index
     # ast.insert(1, "# Test insert")
 
+def handshake():
+    ''' Just a sanity method to make sure the python methods are properly accessible in cpp '''
+    return "Python native functions imported"
+
 if __name__ == '__main__':
 
     # load the sample file (in this directory)
     load_source('sample.py')
+
+

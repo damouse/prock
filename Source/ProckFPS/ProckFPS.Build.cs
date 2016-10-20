@@ -1,21 +1,44 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 using UnrealBuildTool;
+using System.IO;
 
-public class ProckFPS : ModuleRules
-{
-	public ProckFPS(TargetInfo Target)
+public class ProckFPS : ModuleRules {
+    private string pythonHome = "python27";
+
+    protected string PythonHome
+    {
+        get
+        {
+            return Path.GetFullPath(Path.Combine(ModuleDirectory, "..", "..", "Env", "python27"));
+        }
+    }
+
+    public ProckFPS(TargetInfo Target)
 	{
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "CableComponent", "UnrealEnginePython" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "CableComponent" });
+		PrivateDependencyModuleNames.AddRange(new string[] { "CableComponent" });
 
-		PrivateDependencyModuleNames.AddRange(new string[] { "CableComponent", "UnrealEnginePython" });
+        if ((Target.Platform == UnrealTargetPlatform.Win64) || (Target.Platform == UnrealTargetPlatform.Win32))
+        {
+            System.Console.WriteLine("Using Python at: " + PythonHome);
+            PublicIncludePaths.Add(PythonHome);
+            PublicAdditionalLibraries.Add(Path.Combine(PythonHome, "libs", string.Format("{0}.lib", pythonHome)));
 
-		// Uncomment if you are using Slate UI
-		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
-		
-		// Uncomment if you are using online features
-		// PrivateDependencyModuleNames.Add("OnlineSubsystem");
+        }
+        else if (Target.Platform == UnrealTargetPlatform.Mac)
+        {
+            string mac_python = "/Library/Frameworks/Python.framework/Versions/2.7/";
+            PublicIncludePaths.Add(Path.Combine(mac_python, "include"));
+            PublicAdditionalLibraries.Add(Path.Combine(mac_python, "lib", "libpython2.7.dylib"));
+            Definitions.Add(string.Format("UNREAL_ENGINE_PYTHON_ON_MAC=2"));
 
-		// To include OnlineSubsystemSteam, add it to the plugins section in your uproject file with the Enabled attribute set to true
-	}
+        }
+        else if (Target.Platform == UnrealTargetPlatform.Linux)
+        {
+            PublicIncludePaths.Add("/usr/include/python2.7");
+            PublicAdditionalLibraries.Add("/usr/lib/python2.7/config-x86_64-linux-gnu/libpython2.7.so");
+            Definitions.Add(string.Format("UNREAL_ENGINE_PYTHON_ON_LINUX"));
+        }
+    }
 }

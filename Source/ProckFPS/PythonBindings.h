@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-#include "UnrealEnginePython.h"
 
 #if UNREAL_ENGINE_PYTHON_ON_MAC == 3
 #include <python3.5m/Python.h>
@@ -17,7 +16,6 @@
 #include <include/structmember.h>
 #endif
 
-
 /**
  * Interfaces with the native python components
  */
@@ -26,11 +24,15 @@ public:
 	PythonBindings();
 	~PythonBindings();
 
-	PyObject *RunString(char *str);
-
 private: 
-	FUnrealEnginePythonModule *python;
-	void unreal_engine_py_log_error();
+	void PythonGILAcquire();
+	void PythonGILRelease();
+	void *ue_python_gil;
 };
 
 void printpy(PyObject *obj);
+void log_py_error();
+
+PyObject *py_unreal_engine_log(PyObject * self, PyObject * args);
+PyObject *py_unreal_engine_log_warning(PyObject * self, PyObject * args);
+PyObject *py_unreal_engine_log_error(PyObject * self, PyObject * args);
