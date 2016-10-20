@@ -31,3 +31,24 @@ ue.log('done')
 
 # def main():
 # 	pass
+
+# from redbaron import RedBaron
+# import json
+
+# if __name__ == '__main__':
+#    with open("sample.py", "r") as source:
+#        red = RedBaron(source.read())
+
+# Prints __repr__, which is the literal source
+# for l in red:
+#     print l
+
+# Full json output for full FST.
+# print(json.dumps(red.fst(), indent=4))
+
+# Prints a human readable version of the nodes shown above. Each
+# enter here could have one of the following keys: [value, operator, target]
+# red[0].help()
+
+# Insert a comment at the given index
+# red.insert(1, "# Test insert")
