@@ -24,6 +24,10 @@ ue.log(red.dumps())
 ue.log('done')
 
 
+def hello():
+	ue.log('Python received a call')
+	return "HELLO"
+
 
 # def import_parse(dir, name):
 # 	''' load the module 'name' from the given directory '''

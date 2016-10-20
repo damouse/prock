@@ -20,6 +20,8 @@ ABaseGameMode::ABaseGameMode() {
 
 	  peter = new Peter();
 	  peter->LoadPython();
+	  peter->UnloadPython();
+	  delete peter;
 }
 
 void ABaseGameMode::InitGameState() {

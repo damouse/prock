@@ -8,18 +8,51 @@ PythonBindings::PythonBindings() {
 	// Once loaded we just cast the main dict and operate on it (mostly) directly
 	python = new FUnrealEnginePythonModule();
 	python->StartupModule();
-	python->RunString("import peter");
 
-	PyObject *dict = (PyObject *)python->main_dict;
+	//python->RunString("import peter");
+	//this->RunString("import peter");
 
-	UE_LOG(LogProck, Log, TEXT("%s"), UTF8_TO_TCHAR(PyString_AsString(PyObject_Str(dict))));
+	PyObject *import = this->RunString("import peter");
+	Py_DECREF(import);
+
+	// So run string uses PyRunString internally, which is for statements and returns nothing. Need a different api.
+	PyObject *result = this->RunString("peter.hello()");
+	unreal_engine_py_log_error();
+
+	if (!result) {
+		unreal_engine_py_log_error();
+	} else {
+		// It seems the call is executing but not returning anything. Might need a different call method into c python
+		this->printpy(result);
+		UE_LOG(LogProck, Log, TEXT("Value returned from python: %s"), UTF8_TO_TCHAR(PyString_AsString(result)));
+		Py_DECREF(result);
+	}
+	// This doesn't return a value well, or at all...
 }
 
 PythonBindings::~PythonBindings() {
 	python->ShutdownModule();
 }
 
-void unreal_engine_py_log_error() {
+PyObject* PythonBindings::RunString(char *str) {
+	FScopePythonGIL gil;
+	PyObject *eval_ret = PyRun_StringFlags(str, Py_file_input, (PyObject *)python->main_dict, (PyObject *)python->local_dict, nullptr);
+
+	if (!eval_ret) {
+		unreal_engine_py_log_error();
+		return nullptr;
+	}
+
+	//Py_DECREF(eval_ret);
+	return eval_ret;
+}
+
+// Note that this isn't going to work for python 3. See the original bindings for the right method
+void PythonBindings::printpy(PyObject* obj) {
+	UE_LOG(LogProck, Log, TEXT("%s"), UTF8_TO_TCHAR(PyString_AsString(PyObject_Str(obj))));
+}
+
+void PythonBindings::unreal_engine_py_log_error() {
 	PyObject *type = NULL;
 	PyObject *value = NULL;
 	PyObject *traceback = NULL;
@@ -83,14 +116,3 @@ void unreal_engine_py_log_error() {
 
 	PyErr_Clear();
 }
-
-//PyObject* PythonBindings::RunString(char *str) {
-//	FScopePythonGIL gil;
-//	PyObject *eval_ret = PyRun_String(str, Py_file_input, (PyObject *)main_dict, (PyObject *)local_dict);
-//	if (!eval_ret) {
-//		unreal_engine_py_log_error();
-//		return;
-//	}
-//	//Py_DECREF(eval_ret);
-//	return eval_ret;
-//}

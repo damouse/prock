@@ -30,4 +30,6 @@ public:
 
 private: 
 	FUnrealEnginePythonModule *python;
+	void printpy(PyObject *obj);
+	void unreal_engine_py_log_error();
 };
