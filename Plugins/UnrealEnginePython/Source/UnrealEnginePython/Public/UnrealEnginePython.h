@@ -17,7 +17,6 @@ public:
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
 
-	//PyObject* RunReturnString(char *);
 	void RunString(char *);
 	void RunFile(char *);
 

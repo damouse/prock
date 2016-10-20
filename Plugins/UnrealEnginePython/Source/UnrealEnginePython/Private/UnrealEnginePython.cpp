@@ -116,17 +116,6 @@ void FUnrealEnginePythonModule::ShutdownModule()
 	Py_Finalize();
 }
 
-//PyObject* FUnrealEnginePythonModule::RunReturnString(char *str) {
-//	FScopePythonGIL gil;
-//	PyObject *eval_ret = PyRun_String(str, Py_file_input, (PyObject *)main_dict, (PyObject *)local_dict);
-//	if (!eval_ret) {
-//		unreal_engine_py_log_error();
-//		return;
-//	}
-//	//Py_DECREF(eval_ret);
-//	return eval_ret;
-//}
-
 void FUnrealEnginePythonModule::RunString(char *str) {
 	FScopePythonGIL gil;
 	PyObject *eval_ret = PyRun_String(str, Py_file_input, (PyObject *)main_dict, (PyObject *)local_dict);

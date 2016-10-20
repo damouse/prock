@@ -19,6 +19,7 @@ ABaseGameMode::ABaseGameMode() {
 	  }
 
 	  peter = new Peter();
+	  peter->LoadPython();
 }
 
 void ABaseGameMode::InitGameState() {
