@@ -30,15 +30,19 @@ PythonBindings::PythonBindings() {
 	UE_LOG(LogProck, Log, TEXT("Python VM initialized: %s"), UTF8_TO_TCHAR(Py_GetVersion()));
 	UE_LOG(LogProck, Log, TEXT("Python Scripts search path: %s"), UTF8_TO_TCHAR(scripts_path));
 
-	// import python native peter
-	PyObject *native = PyImport_ImportModule("pypeter.main");
-	if (!native) {
+	// You know, I'm not entirely sure we need to have native extensions at all. Why not just do 
+	// the processing here? Just import redbaron and do the work in c++
+	// import python native peter module
+	this->pypeter = PyImport_ImportModule("pypeter.main");
+	if (!this->pypeter) {
 		log_py_error();
+		return;
 	}
 
-	PyObject *hello = PyObject_CallMethod(native, (char *)"handshake", nullptr);
+	PyObject *hello = PyObject_CallMethod(this->pypeter, (char *)"handshake", nullptr);
 	if (!hello) {
 		log_py_error();
+		return;
 	}
 
 	printpy(hello);
@@ -48,6 +52,49 @@ PythonBindings::~PythonBindings() {
 	UE_LOG(LogProck, Log, TEXT("Unloading python"));
 	PythonGILAcquire();
 	Py_Finalize();
+}
+
+// Kick off the source code processing job
+void PythonBindings::ImportCode() {
+	PyObject *ast = PyObject_CallMethod(this->pypeter, (char *)"load_source", nullptr);
+	//printpy(ast);
+
+	if (!ast) {
+		log_py_error();
+		return;
+	}
+
+	// Make sure we recieved a list, then iterate over it
+	if (PyList_Check(ast)) {
+		for (int i = 0; i < PyList_Size(ast); i++) {
+			PyObject *item = PyList_GetItem(ast, i);
+			if (!item) {
+				log_py_error();
+				return;
+			}
+
+			FString name = UTF8_TO_TCHAR(PyString_AsString(PyObject_GetAttrString(item, (char *)"type")));
+
+			if (name.Equals(TEXT("endl"))) {
+				UE_LOG(LogProck, Log, TEXT("endl"));
+
+			} else if (name.Equals(TEXT("comment"))) {
+				UE_LOG(LogProck, Log, TEXT("comment"));
+
+			} else if (name.Equals(TEXT("assignment"))) {
+				UE_LOG(LogProck, Log, TEXT("assignment"));
+
+			//} else if (name.Equals(TEXT("assignment"))) {
+			//	UE_LOG(LogProck, Log, TEXT("assignment"));
+
+			} else {
+				UE_LOG(LogProck, Error, TEXT("Unknown node type: %s"), name);
+			}
+		}
+	} else {
+		UE_LOG(LogProck, Error, TEXT("Did not recieve list as ast: %s"), UTF8_TO_TCHAR(PyString_AsString(PyObject_Str(ast))));
+		return;
+	}
 }
 
 // Check for a python runtime error and print it if it exists

@@ -22,7 +22,19 @@ def load_source(path="../../../../../../Code/unreal/ProckFPS 4.13/samplecode.py"
     #     log(x)
 
     # Example for turning the ast to json
-    # log('\nPrinting full AST: ' + nast.to_json(ast))
+    log('\nPrinting full AST: ' + nast.to_json(ast))
+
+    for x in ast:
+        if x.type in ["comment", "endl"]:
+            continue
+
+        # This could be: endl, assignment, comment, etc. Print .help() for more information
+        print "Type: \t" + x.type
+
+        if x.type == "assignment":
+            print "Target: " + str(x.target) + " Value: " + str(x.value)
+
+        # Here's the core peter algo: for every line 
 
     # Prints a human readable version of the nodes shown above. Each
     # enter here could have one of the following keys: [value, operator, target]
@@ -32,6 +44,9 @@ def load_source(path="../../../../../../Code/unreal/ProckFPS 4.13/samplecode.py"
     # # Insert a comment at the given index
     # ast.insert(1, "# Test insert")
 
+    # return it as a list so c++ is happy
+    return [x for x in ast]
+
 def handshake():
     ''' Just a sanity method to make sure the python methods are properly accessible in cpp '''
     return "Python native functions imported"
@@ -39,6 +54,6 @@ def handshake():
 if __name__ == '__main__':
 
     # load the sample file (in this directory)
-    load_source('sample.py')
+    load_source('../../samplecode.py')
 
 

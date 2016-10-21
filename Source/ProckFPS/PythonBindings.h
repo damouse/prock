@@ -24,10 +24,13 @@ public:
 	PythonBindings();
 	~PythonBindings();
 
+	void ImportCode();
+
 private: 
 	void PythonGILAcquire();
 	void PythonGILRelease();
 	void *ue_python_gil;
+	PyObject *pypeter;
 };
 
 void printpy(PyObject *obj);
