@@ -48,28 +48,13 @@ void PythonNode::Resolve() {
 		return;
 	}
 
-	const char *name = pyGetAttr(pythonNode, "type");
+	char *name = pyGetAttr(pythonNode, "type");
 	if (!name) {
 		UE_LOG(LogProck, Error, TEXT("Native node has no type field"));
 		return;
 	}
 
-	UE_LOG(LogProck, Log, TEXT("%s"), UTF8_TO_TCHAR(name));
-
-	// Set this node's type based on the reported string
-	if (strcmp(name, "endl")) {
-		type = PNT_Endline;
-
-	} else if (strcmp(name, "comment")) {
-		type = PMT_Comment;
-
-	} else if (strcmp(name, "assignment")) {
-		type = PNT_Assignment;
-
-	} else {
-		type = PNT_Unknown;
-		UE_LOG(LogProck, Error, TEXT("Unknown node type: %s"), name);
-	}
+	type = pntFromPyString(name);
 
 	resolved = true;
 }

@@ -7,6 +7,7 @@
 Peter::Peter() {}
 Peter::~Peter() {}
 
+// Instantiate python bindings, import the code, and set the root ProckNode to the top level node returned by the import
 void Peter::LoadPython() {
 	bindPython = new PythonBindings();
 	prockRootNode = bindPython->ImportCode();
