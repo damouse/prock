@@ -16,7 +16,7 @@ def load_source(path="../../../../../../Code/unreal/ProckFPS 4.13/samplecode.py"
     '''
     ast = files.load_file(path)
 
-    print ast.__dict__
+    # print ast.__dict__
     # ast.help()
 
     # Below are some random examples on how you could interact with the AST once its loaded

@@ -226,7 +226,7 @@ ProckNodeType pntFromPyString(char *t) {
 		return PNT_ArgumentGeneratorComprehension;
 	} else if (strcmp(t, "assert") == 0) {
 		return PNT_Assert;
-	} else if (strcmp(t, "assign") == 0) {
+	} else if (strcmp(t, "assignment") == 0) {
 		return PNT_Assignment;
 	} else if (strcmp(t, "associative_parenthesis") == 0) {
 		return PNT_AssociativeParenthesis;

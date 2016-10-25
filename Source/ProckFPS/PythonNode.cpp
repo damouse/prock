@@ -56,10 +56,10 @@ void PythonNode::Resolve() {
 		type = pntFromPyString(name);
 	}
 
-	//UE_LOG(LogProck, Log, TEXT("%s"), ANSI_TO_TCHAR(name));
-	/*UE_LOG(LogProck, Log, TEXT("%s"), ANSI_TO_TCHAR(pntToString(type)));*/
-
 	// Set value based on our type
+
+	// Value could be: []node, str, 
+	// Target could be: NameNode
 
 	// Wrap children in a 
 

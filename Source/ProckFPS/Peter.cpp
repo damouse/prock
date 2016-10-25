@@ -8,10 +8,15 @@ Peter::~Peter() {}
 
 void Peter::LoadRoom() {
 	// Need to specify which room to load. Assuming that null means to load the root
-	// Note: not testing if the root node exists
+	if (!prockRootNode) {
+		UE_LOG(LogProck, Error, TEXT("Root node not initialized"));
+		return;
+	}
 
 	for (ProckNode *node : prockRootNode->Children()) {
 		node->Resolve();
+
+		//if (node->Type() != PNT_Endl && node->Type() != PNT_Comment) 
 		node->Print();
 	}
 }
@@ -20,6 +25,11 @@ void Peter::LoadRoom() {
 void Peter::LoadPython() {
 	bindPython = new PythonBindings();
 	prockRootNode = bindPython->ImportCode();
+
+	if (!prockRootNode) {
+		UE_LOG(LogProck, Error, TEXT("An error occured loading the root ProckNode"));
+		return;
+	}
 
 	prockRootNode->Resolve();
 	prockRootNode->Print();
