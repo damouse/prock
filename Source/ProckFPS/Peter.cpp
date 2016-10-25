@@ -9,9 +9,13 @@ Peter::~Peter() {}
 
 void Peter::LoadPython() {
 	bindPython = new PythonBindings();
-	bindPython->ImportCode();
+	prockRootNode = bindPython->ImportCode();
+
+	prockRootNode->Resolve();
+	prockRootNode->Print();
 }
 
 void Peter::UnloadPython() {
 	delete bindPython;
+	delete prockRootNode;
 }

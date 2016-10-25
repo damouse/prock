@@ -15,7 +15,12 @@ public:
 	PythonNode(PyObject *native);
 	~PythonNode();
 
+	// Called only for one node in a graph
+	void InitRoot(PyObject *astList);
+
 	virtual void Resolve() override;
+	virtual void Print() override;
+
 private: 
-	PyObject *native_node;
+	PyObject *pythonNode;
 };

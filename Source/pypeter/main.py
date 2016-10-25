@@ -15,7 +15,9 @@ def load_source(path="../../../../../../Code/unreal/ProckFPS 4.13/samplecode.py"
     Hardcoded for now.
     '''
     ast = files.load_file(path)
-    ast.help()
+
+    print ast.__dict__
+    # ast.help()
 
     # Below are some random examples on how you could interact with the AST once its loaded
     # Example for turning the ast back to source
@@ -23,7 +25,7 @@ def load_source(path="../../../../../../Code/unreal/ProckFPS 4.13/samplecode.py"
     #     log(x)
 
     # Example for turning the ast to json
-    log('\nPrinting full AST: ' + nast.to_json(ast))
+    # log('\nPrinting full AST: ' + nast.to_json(ast))
 
     # for x in ast:
     #     if x.type in ["comment", "endl"]:
@@ -45,6 +47,7 @@ def load_source(path="../../../../../../Code/unreal/ProckFPS 4.13/samplecode.py"
     # ast.insert(1, "# Test insert")
 
     # return it as a list so c++ is happy
+    # return ast
     return [x for x in ast]
 
 def handshake():

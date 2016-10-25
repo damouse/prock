@@ -3,6 +3,8 @@
 #include "ProckFPS.h"
 #include "PythonBindings.h"
 
+#include "PythonNode.h"
+
 PyDoc_STRVAR(unreal_engine_py_doc, "Unreal Engine Python module.");
 
 // Initialize the python environment and import the native peter components
@@ -57,48 +59,37 @@ PythonBindings::~PythonBindings() {
 // Kick off the source code processing job
 ProckNode* PythonBindings::ImportCode() {
 	PyObject *ast = PyObject_CallMethod(this->pypeter, (char *)"load_source", nullptr);
-	//printpy(ast);
-
 	if (!ast) {
 		log_py_error();
 		return nullptr;
 	}
 
-	// Make sure we recieved a list, then iterate over it
-	if (PyList_Check(ast)) {
-		for (int i = 0; i < PyList_Size(ast); i++) {
-			PyObject *item = PyList_GetItem(ast, i);
-			if (!item) {
-				log_py_error();
-				return nullptr;
-			}
-
-			FString name = UTF8_TO_TCHAR(PyString_AsString(PyObject_GetAttrString(item, (char *)"type")));
-
-			if (name.Equals(TEXT("endl"))) {
-				UE_LOG(LogProck, Log, TEXT("endl"));
-
-			} else if (name.Equals(TEXT("comment"))) {
-				UE_LOG(LogProck, Log, TEXT("comment"));
-
-			} else if (name.Equals(TEXT("assignment"))) {
-				UE_LOG(LogProck, Log, TEXT("assignment"));
-
-			//} else if (name.Equals(TEXT("assignment"))) {
-			//	UE_LOG(LogProck, Log, TEXT("assignment"));
-
-			} else {
-				// This line errs
-				//UE_LOG(LogProck, Error, TEXT("Unknown node type: %s"), name);
-			}
-		}
-	} else {
+	// Make sure we recieved a list
+	if (!PyList_Check(ast)) {
 		UE_LOG(LogProck, Error, TEXT("Did not recieve list as ast: %s"), UTF8_TO_TCHAR(PyString_AsString(PyObject_Str(ast))));
 		return nullptr;
 	}
 
-	return nullptr;
+	PythonNode *root = new PythonNode(nullptr);
+	root->InitRoot(ast);
+	return root;
 }
+
+/*
+GIL Management
+*/
+void PythonBindings::PythonGILRelease() {
+#if UEPY_THREADING
+	ue_python_gil = PyEval_SaveThread();
+#endif
+}
+
+void PythonBindings::PythonGILAcquire() {
+#if UEPY_THREADING
+	PyEval_RestoreThread((PyThreadState *)ue_python_gil);
+#endif
+}
+
 
 // Check for a python runtime error and print it if it exists
 void log_py_error() {
@@ -170,17 +161,12 @@ void printpy(PyObject* obj) {
 	UE_LOG(LogProck, Log, TEXT("%s"), UTF8_TO_TCHAR(PyString_AsString(PyObject_Str(obj))));
 }
 
-/*
-GIL Management
-*/
-void PythonBindings::PythonGILRelease() {
-#if UEPY_THREADING
-	ue_python_gil = PyEval_SaveThread();
-#endif
-}
+char *pyGetAttr(PyObject* obj, char *attrName) {
+	PyObject *item = PyObject_GetAttrString(obj, attrName);
+	if (!item) {
+		log_py_error();
+		return nullptr;
+	}
 
-void PythonBindings::PythonGILAcquire() {
-#if UEPY_THREADING
-	PyEval_RestoreThread((PyThreadState *)ue_python_gil);
-#endif
+	return PyString_AsString(PyObject_Str(item));
 }
