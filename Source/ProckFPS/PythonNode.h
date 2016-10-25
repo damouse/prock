@@ -15,8 +15,7 @@ public:
 	PythonNode(PyObject *native);
 	~PythonNode();
 
-
-	virtual void Resolve();
+	virtual void Resolve() override;
 private: 
 	PyObject *native_node;
 };
