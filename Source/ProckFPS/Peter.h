@@ -13,8 +13,12 @@ public:
 	Peter();
 	~Peter();
 
+	// Lanuage specific initialization
 	void LoadPython();
 	void UnloadPython();
+
+	// Create a room and return it
+	void LoadRoom();
 
 private: 
 	PythonBindings *bindPython; // Don't know if this needs to stick around. Thinking the root node is enough

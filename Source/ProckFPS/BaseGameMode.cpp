@@ -23,6 +23,8 @@ void ABaseGameMode::InitGameState() {
 	// Load the processing module, ask it to load python, and return. 
 	peter = new Peter();
 	peter->LoadPython();
+	peter->LoadRoom();
+
 	peter->UnloadPython();
 	delete peter;
 

@@ -220,191 +220,192 @@ char *pntToString(ProckNodeType type) {
 	}
 }
 
-// Specific to python and redbaron
-ProckNodeType pntFromPyString(char *native) {
-	if (strcmp(native, "argument_generator_comprehension")) {
+// Specific to python and redbaron. Switch this to an array index, eh?
+ProckNodeType pntFromPyString(char *t) {
+	if (strcmp(t, "argument_generator_comprehension") == 0) {
 		return PNT_ArgumentGeneratorComprehension;
-	} else if (strcmp(native, "assert")) {
+	} else if (strcmp(t, "assert") == 0) {
 		return PNT_Assert;
-	} else if (strcmp(native, "assign")) {
+	} else if (strcmp(t, "assign") == 0) {
 		return PNT_Assignment;
-	} else if (strcmp(native, "associative_parenthesis")) {
+	} else if (strcmp(t, "associative_parenthesis") == 0) {
 		return PNT_AssociativeParenthesis;
-	} else if (strcmp(native, "atomtrailers")) {
+	} else if (strcmp(t, "atomtrailers") == 0) {
 		return PNT_Atomtrailers;
-	} else if (strcmp(native, "binary")) {
+	} else if (strcmp(t, "binary") == 0) {
 		return PNT_Binary;
-	} else if (strcmp(native, "binary_operator")) {
+	} else if (strcmp(t, "binary_operator") == 0) {
 		return PNT_BinaryOperator;
-	} else if (strcmp(native, "binary_raw_string")) {
+	} else if (strcmp(t, "binary_raw_string") == 0) {
 		return PNT_BinaryRawString;
-	} else if (strcmp(native, "binary_string")) {
+	} else if (strcmp(t, "binary_string") == 0) {
 		return PNT_BinaryString;
-	} else if (strcmp(native, "boolean_operator")) {
+	} else if (strcmp(t, "boolean_operator") == 0) {
 		return PNT_BooleanOperator;
-	} else if (strcmp(native, "break")) {
+	} else if (strcmp(t, "break") == 0) {
 		return PNT_Break;
-	} else if (strcmp(native, "call_argument")) {
+	} else if (strcmp(t, "call_argument") == 0) {
 		return PNT_CallArgument;
-	} else if (strcmp(native, "call")) {
+	} else if (strcmp(t, "call") == 0) {
 		return PNT_Call;
-	} else if (strcmp(native, "class")) {
+	} else if (strcmp(t, "class") == 0) {
 		return PNT_Class;
-	} else if (strcmp(native, "code_block")) {
+	} else if (strcmp(t, "code_block") == 0) {
 		return PNT_CodeBlock;
-	} else if (strcmp(native, "comma")) {
+	} else if (strcmp(t, "comma") == 0) {
 		return PNT_Comma;
-	} else if (strcmp(native, "comment")) {
+	} else if (strcmp(t, "comment") == 0) {
 		return PNT_Comment;
-	} else if (strcmp(native, "comparison")) {
+	} else if (strcmp(t, "comparison") == 0) {
 		return PNT_Comparison;
-	} else if (strcmp(native, "comparison_operator")) {
+	} else if (strcmp(t, "comparison_operator") == 0) {
 		return PNT_ComparisonOperator;
-	} else if (strcmp(native, "complex")) {
+	} else if (strcmp(t, "complex") == 0) {
 		return PNT_Complex;
-	} else if (strcmp(native, "comprehension_if")) {
+	} else if (strcmp(t, "comprehension_if") == 0) {
 		return PNT_ComprehensionIf;
-	} else if (strcmp(native, "comprehension_loop")) {
+	} else if (strcmp(t, "comprehension_loop") == 0) {
 		return PNT_ComprehensionLoop;
-	} else if (strcmp(native, "continue")) {
+	} else if (strcmp(t, "continue") == 0) {
 		return PNT_Continue;
-	} else if (strcmp(native, "decorator")) {
+	} else if (strcmp(t, "decorator") == 0) {
 		return PNT_Decorator;
-	} else if (strcmp(native, "def_argument")) {
+	} else if (strcmp(t, "def_argument") == 0) {
 		return PNT_DefArgument;
-	} else if (strcmp(native, "def")) {
+	} else if (strcmp(t, "def") == 0) {
 		return PNT_Def;
-	} else if (strcmp(native, "del")) {
+	} else if (strcmp(t, "del") == 0) {
 		return PNT_Del;
-	} else if (strcmp(native, "dict_argument")) {
+	} else if (strcmp(t, "dict_argument") == 0) {
 		return PNT_DictArgument;
-	} else if (strcmp(native, "dict_comprehension")) {
+	} else if (strcmp(t, "dict_comprehension") == 0) {
 		return PNT_DictComprehension;
-	} else if (strcmp(native, "dict")) {
+	} else if (strcmp(t, "dict") == 0) {
 		return PNT_Dict;
-	} else if (strcmp(native, "dictitem")) {
+	} else if (strcmp(t, "dictitem") == 0) {
 		return PNT_Dictitem;
-	} else if (strcmp(native, "dot")) {
+	} else if (strcmp(t, "dot") == 0) {
 		return PNT_Dot;
-	} else if (strcmp(native, "dotted_as_name")) {
+	} else if (strcmp(t, "dotted_as_name") == 0) {
 		return PNT_DottedAsName;
-	} else if (strcmp(native, "dotted_name")) {
+	} else if (strcmp(t, "dotted_name") == 0) {
 		return PNT_DottedName;
-	} else if (strcmp(native, "elif")) {
+	} else if (strcmp(t, "elif") == 0) {
 		return PNT_Elif;
-	} else if (strcmp(native, "ellipsis")) {
+	} else if (strcmp(t, "ellipsis") == 0) {
 		return PNT_Ellipsis;
-	} else if (strcmp(native, "else_attribute")) {
+	} else if (strcmp(t, "else_attribute") == 0) {
 		return PNT_ElseAttribute;
-	} else if (strcmp(native, "else")) {
+	} else if (strcmp(t, "else") == 0) {
 		return PNT_Else;
-	} else if (strcmp(native, "endl")) {
+	} else if (strcmp(t, "endl") == 0) {
 		return PNT_Endl;
-	} else if (strcmp(native, "except")) {
+	} else if (strcmp(t, "except") == 0) {
 		return PNT_Except;
-	} else if (strcmp(native, "exec")) {
+	} else if (strcmp(t, "exec") == 0) {
 		return PNT_Exec;
-	} else if (strcmp(native, "finally")) {
+	} else if (strcmp(t, "finally") == 0) {
 		return PNT_Finally;
-	} else if (strcmp(native, "float_exponant_complex")) {
+	} else if (strcmp(t, "float_exponant_complex") == 0) {
 		return PNT_FloatExponantComplex;
-	} else if (strcmp(native, "float_exponant")) {
+	} else if (strcmp(t, "float_exponant") == 0) {
 		return PNT_FloatExponant;
-	} else if (strcmp(native, "float")) {
+	} else if (strcmp(t, "float") == 0) {
 		return PNT_Float;
-	} else if (strcmp(native, "for")) {
+	} else if (strcmp(t, "for") == 0) {
 		return PNT_For;
-	} else if (strcmp(native, "from_import")) {
+	} else if (strcmp(t, "from_import") == 0) {
 		return PNT_FromImport;
-	} else if (strcmp(native, "generator_comprehension")) {
+	} else if (strcmp(t, "generator_comprehension") == 0) {
 		return PNT_GeneratorComprehension;
-	} else if (strcmp(native, "getitem")) {
+	} else if (strcmp(t, "getitem") == 0) {
 		return PNT_Getitem;
-	} else if (strcmp(native, "global")) {
+	} else if (strcmp(t, "global") == 0) {
 		return PNT_Global;
-	} else if (strcmp(native, "hexa")) {
+	} else if (strcmp(t, "hexa") == 0) {
 		return PNT_Hexa;
-	} else if (strcmp(native, "if_else_block_sibling")) {
+	} else if (strcmp(t, "if_else_block_sibling") == 0) {
 		return PNT_IfElseBlockSibling;
-	} else if (strcmp(native, "if")) {
+	} else if (strcmp(t, "if") == 0) {
 		return PNT_If;
-	} else if (strcmp(native, "ifelseblock")) {
+	} else if (strcmp(t, "ifelseblock") == 0) {
 		return PNT_Ifelseblock;
-	} else if (strcmp(native, "import")) {
+	} else if (strcmp(t, "import") == 0) {
 		return PNT_Import;
-	} else if (strcmp(native, "int")) {
+	} else if (strcmp(t, "int") == 0) {
 		return PNT_Int;
-	} else if (strcmp(native, "lambda")) {
+	} else if (strcmp(t, "lambda") == 0) {
 		return PNT_Lambda;
-	} else if (strcmp(native, "left_parenthesis")) {
+	} else if (strcmp(t, "left_parenthesis") == 0) {
 		return PNT_LeftParenthesis;
-	} else if (strcmp(native, "list_argument")) {
+	} else if (strcmp(t, "list_argument") == 0) {
 		return PNT_ListArgument;
-	} else if (strcmp(native, "list_comprehension")) {
+	} else if (strcmp(t, "list_comprehension") == 0) {
 		return PNT_ListComprehension;
-	} else if (strcmp(native, "list")) {
+	} else if (strcmp(t, "list") == 0) {
 		return PNT_List;
-	} else if (strcmp(native, "long")) {
+	} else if (strcmp(t, "long") == 0) {
 		return PNT_Long;
-	} else if (strcmp(native, "name_as_name")) {
+	} else if (strcmp(t, "name_as_name") == 0) {
 		return PNT_NameAsName;
-	} else if (strcmp(native, "name")) {
+	} else if (strcmp(t, "name") == 0) {
 		return PNT_Name;
-	} else if (strcmp(native, "octa")) {
+	} else if (strcmp(t, "octa") == 0) {
 		return PNT_Octa;
-	} else if (strcmp(native, "pass")) {
+	} else if (strcmp(t, "pass") == 0) {
 		return PNT_Pass;
-	} else if (strcmp(native, "print")) {
+	} else if (strcmp(t, "print") == 0) {
 		return PNT_Print;
-	} else if (strcmp(native, "raise")) {
+	} else if (strcmp(t, "raise") == 0) {
 		return PNT_Raise;
-	} else if (strcmp(native, "raw_string")) {
+	} else if (strcmp(t, "raw_string") == 0) {
 		return PNT_RawString;
-	} else if (strcmp(native, "repr")) {
+	} else if (strcmp(t, "repr") == 0) {
 		return PNT_Repr;
-	} else if (strcmp(native, "return")) {
+	} else if (strcmp(t, "return") == 0) {
 		return PNT_Return;
-	} else if (strcmp(native, "right_parenthesis")) {
+	} else if (strcmp(t, "right_parenthesis") == 0) {
 		return PNT_RightParenthesis;
-	} else if (strcmp(native, "semicolon")) {
+	} else if (strcmp(t, "semicolon") == 0) {
 		return PNT_Semicolon;
-	} else if (strcmp(native, "set_comprehension")) {
+	} else if (strcmp(t, "set_comprehension") == 0) {
 		return PNT_SetComprehension;
-	} else if (strcmp(native, "set")) {
+	} else if (strcmp(t, "set") == 0) {
 		return PNT_Set;
-	} else if (strcmp(native, "slice")) {
+	} else if (strcmp(t, "slice") == 0) {
 		return PNT_Slice;
-	} else if (strcmp(native, "space")) {
+	} else if (strcmp(t, "space") == 0) {
 		return PNT_Space;
-	} else if (strcmp(native, "star")) {
+	} else if (strcmp(t, "star") == 0) {
 		return PNT_Star;
-	} else if (strcmp(native, "string_chain")) {
+	} else if (strcmp(t, "string_chain") == 0) {
 		return PNT_StringChain;
-	} else if (strcmp(native, "string")) {
+	} else if (strcmp(t, "string") == 0) {
 		return PNT_String;
-	} else if (strcmp(native, "ternary_operator")) {
+	} else if (strcmp(t, "ternary_operator") == 0) {
 		return PNT_TernaryOperator;
-	} else if (strcmp(native, "try")) {
+	} else if (strcmp(t, "try") == 0) {
 		return PNT_Try;
-	} else if (strcmp(native, "tuple")) {
+	} else if (strcmp(t, "tuple") == 0) {
 		return PNT_Tuple;
-	} else if (strcmp(native, "unicode_raw_string")) {
+	} else if (strcmp(t, "unicode_raw_string") == 0) {
 		return PNT_UnicodeRawString;
-	} else if (strcmp(native, "unicode_string")) {
+	} else if (strcmp(t, "unicode_string") == 0) {
 		return PNT_UnicodeString;
-	} else if (strcmp(native, "unitary_operator")) {
+	} else if (strcmp(t, "unitary_operator") == 0) {
 		return PNT_UnitaryOperator;
-	} else if (strcmp(native, "while")) {
+	} else if (strcmp(t, "while") == 0) {
 		return PNT_While;
-	} else if (strcmp(native, "with_context_item")) {
+	} else if (strcmp(t, "with_context_item") == 0) {
 		return PNT_WithContextItem;
-	} else if (strcmp(native, "with")) {
+	} else if (strcmp(t, "with") == 0) {
 		return PNT_With;
-	} else if (strcmp(native, "yield_atom")) {
+	} else if (strcmp(t, "yield_atom") == 0) {
 		return PNT_YieldAtom;
-	} else if (strcmp(native, "yield")) {
+	} else if (strcmp(t, "yield") == 0) {
 		return PNT_Yield;
 	} else {
+		UE_LOG(LogProck, Error, TEXT("Unknown node type: %s"), ANSI_TO_TCHAR(t));
 		return PNT_Unknown;
 	}
 }

@@ -42,19 +42,26 @@ void PythonNode::Resolve() {
 
 	// Reset the resolved state. In the case of an error this node remains unresolved
 	resolved = false;
-
 	if (!pythonNode) {
 		UE_LOG(LogProck, Error, TEXT("Native node not set, cannot resolve"));
 		return;
 	}
 
+	// Set our type
 	char *name = pyGetAttr(pythonNode, "type");
 	if (!name) {
 		UE_LOG(LogProck, Error, TEXT("Native node has no type field"));
 		return;
+	} else {
+		type = pntFromPyString(name);
 	}
 
-	type = pntFromPyString(name);
+	//UE_LOG(LogProck, Log, TEXT("%s"), ANSI_TO_TCHAR(name));
+	/*UE_LOG(LogProck, Log, TEXT("%s"), ANSI_TO_TCHAR(pntToString(type)));*/
+
+	// Set value based on our type
+
+	// Wrap children in a 
 
 	resolved = true;
 }
