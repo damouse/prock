@@ -26,22 +26,22 @@ void ProckNode::print(char *subclass) {
 	// Make the types human readable
 	switch (type) {
 	case PNT_Root:
-		typ = "PNT_Root\0";
+		typ = "Root\0";
 		break;
 	case PNT_Assignment:
-		typ = "PNT_Assignment\0";
+		typ = "Assignment\0";
 		break;
 	case PNT_Addition:
-		typ = "PNT_Addition\0";
+		typ = "Addition\0";
 		break;
 	case PNT_Unknown:
-		typ = "PNT_Unknown\0";
+		typ = "Unknown\0";
 		break;
 	case PNT_Unresolved:
-		typ = "PNT_Unresolved\0";
+		typ = "Unresolved\0";
 		break;
 	default:
-		typ = "PNT_Unknown\0";
+		typ = "Unknown\0";
 		break;
 	}
 

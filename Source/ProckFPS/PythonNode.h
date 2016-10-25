@@ -15,7 +15,7 @@ public:
 	PythonNode(PyObject *native);
 	~PythonNode();
 
-	// Called only for one node in a graph
+	// Called only once by PythonBindings when initializing the root of the AST.
 	void InitRoot(PyObject *astList);
 
 	virtual void Resolve() override;

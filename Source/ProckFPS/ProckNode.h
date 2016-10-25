@@ -5,11 +5,18 @@
 
 // The abstract "type" of this node. May not be the same as the native AST node reports
 enum ProckNodeType {
+	// Meta node types
 	PNT_Root,
+	PNT_Unknown,
+	PNT_Unresolved,
+
+	// Operations
 	PNT_Assignment,
 	PNT_Addition,
-	PNT_Unknown,
-	PNT_Unresolved
+
+	// Formatting
+	PNT_Endline,
+	PMT_Comment,
 };
 
 /**
