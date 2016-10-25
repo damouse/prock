@@ -16,8 +16,12 @@ void Peter::LoadRoom() {
 	for (ProckNode *node : prockRootNode->Children()) {
 		node->Resolve();
 
-		//if (node->Type() != PNT_Endl && node->Type() != PNT_Comment) 
-		node->Print();
+		//if (node->Type() != PNT_Endl)
+		//	UE_LOG(LogProck, Error, TEXT("Type exists"));
+
+		if (node->Type() != PNT_Endl && node->Type() != PNT_Comment) {
+			node->Print();
+		}
 	}
 }
 

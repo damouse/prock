@@ -15,9 +15,14 @@ def load_source(path="../../../../../../Code/unreal/ProckFPS 4.13/samplecode.py"
     Hardcoded for now.
     '''
     ast = files.load_file(path)
+    return [x for x in ast]
 
+def test_source(path):
+    ''' A demo function here to play with the AST graph '''
+
+    ast = files.load_file(path)
     # print ast.__dict__
-    # ast.help()
+    ast.help(deep=10)
 
     # Below are some random examples on how you could interact with the AST once its loaded
     # Example for turning the ast back to source
@@ -27,17 +32,49 @@ def load_source(path="../../../../../../Code/unreal/ProckFPS 4.13/samplecode.py"
     # Example for turning the ast to json
     # log('\nPrinting full AST: ' + nast.to_json(ast))
 
-    # for x in ast:
-    #     if x.type in ["comment", "endl"]:
-    #         continue
+    '''
+    Common child names for a given node type: 
+        assignment:             target
+        binaryOperatorNode:     first, second
+        if, else:               test, value
+        while:                  test, else
 
-    #     # This could be: endl, assignment, comment, etc. Print .help() for more information
-    #     print "Type: \t" + x.type
+    The following nodes leaf nodes:
+        Int, Name
 
-    #     if x.type == "assignment":
-    #         print "Target: " + str(x.target) + " Value: " + str(x.value)
+    if/else has a list under its value key
+    '''
 
-    #     # Here's the core peter algo: for every line 
+    for x in ast:
+        if x.type in ["comment", "endl"]:
+            continue
+
+        print x.__dict__
+        print "" 
+        # Note that every node has _dict_keys, _str_keys, and _list_keys which define its attrs
+        print x._dict_keys
+        print x._str_keys
+        print x._list_keys
+        print ""
+
+        print x.value
+        # return
+        # print "Type: " + x.type
+
+        # if hasattr(x, 'target'): 
+        #     print '\ttarget: ', x.target
+
+        # if hasattr(x, 'value'): 
+        #     print '\tvalue: ', x.value
+        #     x.value.help()
+
+        # if hasattr(x, 'left'): 
+        #     print '\tleft: ', x.left
+
+        # print ""
+
+        # if x.type == "assignment":
+            # print "Target: " + str(x.target) + " Value: " + str(x.value)
 
     # Prints a human readable version of the nodes shown above. Each
     # enter here could have one of the following keys: [value, operator, target]
@@ -48,7 +85,19 @@ def load_source(path="../../../../../../Code/unreal/ProckFPS 4.13/samplecode.py"
 
     # return it as a list so c++ is happy
     # return ast
-    return [x for x in ast]
+
+def test_baron(path):
+    import pprint
+    import ast
+
+    with open(path, "r") as source_code:
+        tree = ast.parse(source_code.read())
+
+    for x in ast.iter_fields(tree):
+        print x
+    # print ast.dump(tree)
+    # print ast
+    # return ast
 
 def handshake():
     ''' Just a sanity method to make sure the python methods are properly accessible in cpp '''
@@ -57,6 +106,8 @@ def handshake():
 if __name__ == '__main__':
 
     # load the sample file (in this directory)
-    load_source('../../samplecode.py')
+    # ast = test_source('../../samplecode.py')
+
+    ast = test_baron('../../samplecode.py')
 
 

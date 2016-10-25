@@ -8,6 +8,8 @@ enum ProckNodeType: int;
 
 /**
 * An abstract node subclassed by native specific implementations.
+*
+* Instead of storing the dynamic values just make all lazy access getters
 */
 class PROCKFPS_API ProckNode {
 public:
