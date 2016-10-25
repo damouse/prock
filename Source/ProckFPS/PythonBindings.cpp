@@ -55,13 +55,13 @@ PythonBindings::~PythonBindings() {
 }
 
 // Kick off the source code processing job
-void PythonBindings::ImportCode() {
+ProckNode* PythonBindings::ImportCode() {
 	PyObject *ast = PyObject_CallMethod(this->pypeter, (char *)"load_source", nullptr);
 	//printpy(ast);
 
 	if (!ast) {
 		log_py_error();
-		return;
+		return nullptr;
 	}
 
 	// Make sure we recieved a list, then iterate over it
@@ -70,7 +70,7 @@ void PythonBindings::ImportCode() {
 			PyObject *item = PyList_GetItem(ast, i);
 			if (!item) {
 				log_py_error();
-				return;
+				return nullptr;
 			}
 
 			FString name = UTF8_TO_TCHAR(PyString_AsString(PyObject_GetAttrString(item, (char *)"type")));
@@ -88,13 +88,16 @@ void PythonBindings::ImportCode() {
 			//	UE_LOG(LogProck, Log, TEXT("assignment"));
 
 			} else {
-				UE_LOG(LogProck, Error, TEXT("Unknown node type: %s"), name);
+				// This line errs
+				//UE_LOG(LogProck, Error, TEXT("Unknown node type: %s"), name);
 			}
 		}
 	} else {
 		UE_LOG(LogProck, Error, TEXT("Did not recieve list as ast: %s"), UTF8_TO_TCHAR(PyString_AsString(PyObject_Str(ast))));
-		return;
+		return nullptr;
 	}
+
+	return nullptr;
 }
 
 // Check for a python runtime error and print it if it exists

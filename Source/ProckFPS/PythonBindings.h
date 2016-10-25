@@ -16,6 +16,12 @@
 #include <include/structmember.h>
 #endif
 
+#include "ProckNode.h"
+#include "PythonNode.h"
+
+#include <list>
+
+
 /**
  * Interfaces with the native python components
  */
@@ -24,7 +30,8 @@ public:
 	PythonBindings();
 	~PythonBindings();
 
-	void ImportCode();
+	// Load the environment  then load the root node
+	ProckNode *ImportCode();
 
 private: 
 	void PythonGILAcquire();

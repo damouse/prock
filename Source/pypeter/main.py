@@ -15,6 +15,7 @@ def load_source(path="../../../../../../Code/unreal/ProckFPS 4.13/samplecode.py"
     Hardcoded for now.
     '''
     ast = files.load_file(path)
+    # ast.help()
 
     # Below are some random examples on how you could interact with the AST once its loaded
     # Example for turning the ast back to source
@@ -22,24 +23,23 @@ def load_source(path="../../../../../../Code/unreal/ProckFPS 4.13/samplecode.py"
     #     log(x)
 
     # Example for turning the ast to json
-    log('\nPrinting full AST: ' + nast.to_json(ast))
+    # log('\nPrinting full AST: ' + nast.to_json(ast))
 
-    for x in ast:
-        if x.type in ["comment", "endl"]:
-            continue
+    # for x in ast:
+    #     if x.type in ["comment", "endl"]:
+    #         continue
 
-        # This could be: endl, assignment, comment, etc. Print .help() for more information
-        print "Type: \t" + x.type
+    #     # This could be: endl, assignment, comment, etc. Print .help() for more information
+    #     print "Type: \t" + x.type
 
-        if x.type == "assignment":
-            print "Target: " + str(x.target) + " Value: " + str(x.value)
+    #     if x.type == "assignment":
+    #         print "Target: " + str(x.target) + " Value: " + str(x.value)
 
-        # Here's the core peter algo: for every line 
+    #     # Here's the core peter algo: for every line 
 
     # Prints a human readable version of the nodes shown above. Each
     # enter here could have one of the following keys: [value, operator, target]
     # log('\nPrinting help text for first line')
-    # ast[0].help()
 
     # # Insert a comment at the given index
     # ast.insert(1, "# Test insert")
