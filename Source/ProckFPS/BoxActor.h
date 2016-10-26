@@ -16,9 +16,10 @@ public:
 
 	virtual void BeginPlay() override;
 
-	void AddEdge(FVector start, FVector end, int index);
+private:
+	void AddEdge(FVector start, FVector end);
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "X")
-	 std::vector<UParticleSystemComponent *> beams;
+	std::vector<UParticleSystemComponent *> beams;
 
+	UParticleSystem *particleBeamComponent;
 };
