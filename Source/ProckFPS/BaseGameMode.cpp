@@ -4,7 +4,6 @@
 #include "BoxTest.h"
 #include "Operation.h"
 #include "BaseGameMode.h"
-#include "DynamicMesh.h"
 #include "BoxActor.h"
 
 ABaseGameMode::ABaseGameMode() {

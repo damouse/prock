@@ -13,6 +13,9 @@ enum ProckNodeType: int;
 * One each for value, target, left, right, if, else, etc. 
 *
 * All information (children, values, etc) should be represented exhaustively out of the box.
+*
+* Note that this class is lightly deprecated. I've kept it around for later use (like multilanguage support)
+* but for now you should most likely deal in PythonNodes.
 */
 class PROCKFPS_API ProckNode {
 public:
