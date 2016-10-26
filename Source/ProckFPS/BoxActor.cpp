@@ -4,6 +4,12 @@
 #include "BoxActor.h"
 #include <stdio.h>
 
+/*
+Possible solutions to spawning components at runtime
+https://answers.unrealengine.com/questions/160501/how-do-i-properly-procedurally-add-components-in-c.html
+https://forums.unrealengine.com/showthread.php?52410-What-is-the-correct-way-to-create-and-add-components-at-runtime
+*/
+
 ABoxActor::ABoxActor() {
 	//beams = {};
 
@@ -11,7 +17,6 @@ ABoxActor::ABoxActor() {
 	RootComponent = SphereComponent;
 
 	ConstructorHelpers::FObjectFinder<UParticleSystem> beamClassFinder(TEXT("ParticleSystem'/Game/Particles/P_Beam.P_Beam'"));
-	beam = beamClassFinder.Object;
 
 	// For now createDefaultSubobject only works during construction time. This is obviously going to limit usability, but 
 	// if we can move this then making it dynamic should be relatively simple
@@ -21,7 +26,7 @@ ABoxActor::ABoxActor() {
 		FString name = FString(ANSI_TO_TCHAR(buffer));
 
 	 	UParticleSystemComponent *newBeam = CreateDefaultSubobject<UParticleSystemComponent>(FName(*(name)));
-	 	newBeam->SetTemplate(beam);
+	 	newBeam->SetTemplate(beamClassFinder.Object);
 	 	beams.push_back(newBeam);
 	 }
 }

@@ -21,6 +21,4 @@ public:
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "X")
 	 std::vector<UParticleSystemComponent *> beams;
 
-	//void AddEdge(FVector start, FVector end);
-	 UParticleSystem *beam;
 };
