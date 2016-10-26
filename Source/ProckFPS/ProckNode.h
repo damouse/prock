@@ -9,7 +9,10 @@ enum ProckNodeType: int;
 /**
 * An abstract node subclassed by native specific implementations.
 *
-* Instead of storing the dynamic values just make all lazy access getters
+* Instead of storing the dynamic values just make all lazy access getters.
+* One each for value, target, left, right, if, else, etc. 
+*
+* All information (children, values, etc) should be represented exhaustively out of the box.
 */
 class PROCKFPS_API ProckNode {
 public:

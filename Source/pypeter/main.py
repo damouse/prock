@@ -86,18 +86,6 @@ def test_source(path):
     # return it as a list so c++ is happy
     # return ast
 
-def test_baron(path):
-    import pprint
-    import ast
-
-    with open(path, "r") as source_code:
-        tree = ast.parse(source_code.read())
-
-    for x in ast.iter_fields(tree):
-        print x
-    # print ast.dump(tree)
-    # print ast
-    # return ast
 
 def handshake():
     ''' Just a sanity method to make sure the python methods are properly accessible in cpp '''
@@ -106,8 +94,6 @@ def handshake():
 if __name__ == '__main__':
 
     # load the sample file (in this directory)
-    # ast = test_source('../../samplecode.py')
-
-    ast = test_baron('../../samplecode.py')
+    ast = test_source('../../samplecode.py')
 
 

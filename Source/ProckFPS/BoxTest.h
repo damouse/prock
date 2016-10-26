@@ -25,4 +25,7 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Control")
 	bool SpawnOnce;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "X")
+	//UParticleSystemComponent *beam;
 };

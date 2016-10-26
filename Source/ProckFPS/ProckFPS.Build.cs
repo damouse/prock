@@ -16,8 +16,10 @@ public class ProckFPS : ModuleRules {
 
     public ProckFPS(TargetInfo Target)
 	{
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "CableComponent" });
-		PrivateDependencyModuleNames.AddRange(new string[] { "CableComponent" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "ProceduralMeshComponent" });
+
+        //PrivateDependencyModuleNames.AddRange(new string[] { "CustomMeshComponent" });
+        PrivateIncludePathModuleNames.AddRange(new string[] { "ProceduralMeshComponent" });
 
         if ((Target.Platform == UnrealTargetPlatform.Win64) || (Target.Platform == UnrealTargetPlatform.Win32))
         {

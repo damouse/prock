@@ -24,5 +24,5 @@ private:
 	PythonBindings *bindPython; // Don't know if this needs to stick around. Thinking the root node is enough
 
 	// The root of the loaded ast
-	ProckNode *prockRootNode;
+	PythonNode *prockRootNode;
 };

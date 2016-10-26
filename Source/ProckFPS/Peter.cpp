@@ -16,19 +16,28 @@ void Peter::LoadRoom() {
 	for (ProckNode *node : prockRootNode->Children()) {
 		node->Resolve();
 
+		PythonNode *pyNode = (PythonNode *)node;
+
+		PythonNode *target = pyNode->GetTarget();
+		if (target) {
+			//target->Resolve();
+			UE_LOG(LogProck, Log, TEXT("Target: %s"), UTF8_TO_TCHAR(target->GetType()));
+		}
+
+		//UE_LOG(LogProck, Log, TEXT("%s"), UTF8_TO_TCHAR(pyNode->GetType()));'
 		//if (node->Type() != PNT_Endl)
 		//	UE_LOG(LogProck, Error, TEXT("Type exists"));
 
-		if (node->Type() != PNT_Endl && node->Type() != PNT_Comment) {
-			node->Print();
-		}
+		//if (node->Type() != PNT_Endl && node->Type() != PNT_Comment) {
+		//	node->Print();
+		//}
 	}
 }
 
 // Instantiate python bindings, import the code, and set the root ProckNode to the top level node returned by the import
 void Peter::LoadPython() {
 	bindPython = new PythonBindings();
-	prockRootNode = bindPython->ImportCode();
+	prockRootNode = (PythonNode *) bindPython->ImportCode();
 
 	if (!prockRootNode) {
 		UE_LOG(LogProck, Error, TEXT("An error occured loading the root ProckNode"));
