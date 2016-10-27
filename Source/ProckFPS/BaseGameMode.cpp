@@ -29,7 +29,10 @@ void ABaseGameMode::InitGameState() {
 	//peter->UnloadPython();
 	//delete peter;
 	
-	ABoxActor *truebox = GetWorld()->SpawnActor<ABoxActor>(ABoxActor::StaticClass(), FVector(0.f, 0.f, 200.f), FRotator::ZeroRotator);
+	ABoxActor *box1 = GetWorld()->SpawnActor<ABoxActor>(ABoxActor::StaticClass(), FVector(0.f, 0.f, 200.f), FRotator::ZeroRotator);
+	ABoxActor *box2 = GetWorld()->SpawnActor<ABoxActor>(ABoxActor::StaticClass(), FVector(200.f, 0.f, 200.f), FRotator::ZeroRotator);
+
+	//truebox->SetActorScale3D(FVector(10, 10, 10));
 
 	// Translation offset between blocks
 	//FVector currOffset = FVector(0.f, 0.f, 0.f);

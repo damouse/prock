@@ -15,11 +15,17 @@ public:
 	ABoxActor();
 
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
 
-private:
 	void AddEdge(FVector start, FVector end);
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RootComponentSphere")
+	UBoxComponent* root;
 
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Beams")
 	std::vector<UParticleSystemComponent *> beams;
 
 	UParticleSystem *particleBeamComponent;
+
+	float RunningTime;
 };
