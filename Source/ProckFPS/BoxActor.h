@@ -3,7 +3,9 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
- #include <vector>
+// #include "SplineComponent.h"
+ #include "Runtime/Engine/Classes/Components/SplineMeshComponent.h"
+#include <vector>
 #include "BoxActor.generated.h"
 
 
@@ -28,4 +30,7 @@ public:
 	UParticleSystem *particleBeamComponent;
 
 	float RunningTime;
+
+	 UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SplineTest")
+	 USplineMeshComponent* spline;
 };

@@ -5,25 +5,19 @@
 #include <stdio.h>
 
 /*
-Possible solutions to spawning components at runtime
-https://answers.unrealengine.com/questions/160501/how-do-i-properly-procedurally-add-components-in-c.html
-https://forums.unrealengine.com/showthread.php?52410-What-is-the-correct-way-to-create-and-add-components-at-runtime
-
-UObject* something = StaticLoadObject(UObject::StaticClass(), nullptr, TEXT("ParticleSystem'/Game/Particles/P_Beam.P_Beam'"));
-UBlueprint* bp = Cast<UBlueprint>(something);
-TSubclassOf<class UObject> MyItemBlueprint;
-MyItemBlueprint = (UClass*)bp->GeneratedClass;
-
-This is the code from the first one. Doesn't work because its not a blueprint
-
-
 // See this for adding connections between actors:
 // http://ironthighs.com/unreal-engine-4/coding/2015/04/18/
+
+Possible answer: setting the particle locations
+https://answers.unrealengine.com/questions/140298/attaching-particle-to-socket-of-skeletal-mesh-runt.html
+
+
 */
 
 ABoxActor::ABoxActor() {
 	root = CreateDefaultSubobject<UBoxComponent>(TEXT("RootComponent"));
 	RootComponent = root;
+	RootComponent->SetMobility(EComponentMobility::Movable);
 	//root->SetCollisionProfileName(TEXT("Pawn"));
 
 	UStaticMeshComponent* SphereVisual = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualRepresentation"));
@@ -39,10 +33,28 @@ ABoxActor::ABoxActor() {
 	particleBeamComponent = beamClassFinder.Object;
 
 	PrimaryActorTick.bCanEverTick = true;
+
+	// So this works. The mesh currently being used is not terribly useful, however
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> SplinePipeAsset(TEXT("StaticMesh'/Game/Geometry/Meshes/S_Pipe_Spline.S_Pipe_Spline'"));
+	spline = CreateDefaultSubobject<USplineMeshComponent>(TEXT("SplineTest"));
+	
+	spline->ForwardAxis = ESplineMeshAxis::Z;
+	spline->SetMobility(EComponentMobility::Movable);
+	spline->SetStaticMesh(SplinePipeAsset.Object);
+	spline->SetupAttachment(RootComponent);
+
+	FVector start(0, 0, 100);
+	FVector end(100, 100, 100);
+
+	spline->SetStartAndEnd(start, FVector(0, 0, 0), end, FVector(0, 0, 0));
+	spline->SetStartScale(FVector2D(0.1, 0.1));
+	spline->SetEndScale(FVector2D(0.1, 0.1));
 }
 
 void ABoxActor::BeginPlay() {
 	Super::BeginPlay();
+
+	//spline->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
 
 	// Draw the lines
 	AddEdge(FVector(-50, -50, -50), FVector(50, -50, -50));
@@ -73,19 +85,19 @@ void ABoxActor::Tick(float DeltaTime) {
 	RunningTime += DeltaTime;
 	SetActorLocation(NewLocation);
 
-	// Updates the positions of the beams. Very resource intensive. 
-	FVector diff = NewLocation - OldLocation;
+	// Updates the positions of the beams. Likely to very resource intensive, but I can't get them to connect any other way 
+	//FVector diff = NewLocation - OldLocation;
 
-	for (UParticleSystemComponent *beam : beams) {
-		FVector source;
-		FVector target;
+	//for (UParticleSystemComponent *beam : beams) {
+	//	FVector source;
+	//	FVector target;
 
-		beam->GetBeamSourcePoint(0, 0, source);
-		beam->GetBeamEndPoint(0, target);
+	//	beam->GetBeamSourcePoint(0, 0, source);
+	//	beam->GetBeamEndPoint(0, target);
 
-		beam->SetBeamSourcePoint(0, source + diff, 0);
-		beam->SetBeamEndPoint(0, target + diff);
-	}
+	//	beam->SetBeamSourcePoint(0, source + diff, 0);
+	//	beam->SetBeamEndPoint(0, target + diff);
+	//}
 }
 
 
