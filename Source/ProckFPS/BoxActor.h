@@ -26,11 +26,13 @@ public:
 
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Beams")
 	std::vector<UParticleSystemComponent *> beams;
+	std::vector<USplineMeshComponent *> splines;
 
 	UParticleSystem *particleBeamComponent;
+	UStaticMesh *splineStaticMesh;
 
 	float RunningTime;
 
-	 UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SplineTest")
-	 USplineMeshComponent* spline;
+	 //UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SplineTest")
+	 //USplineMeshComponent* spline;
 };

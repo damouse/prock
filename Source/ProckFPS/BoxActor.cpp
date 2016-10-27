@@ -15,46 +15,37 @@ https://answers.unrealengine.com/questions/140298/attaching-particle-to-socket-o
 */
 
 ABoxActor::ABoxActor() {
-	root = CreateDefaultSubobject<UBoxComponent>(TEXT("RootComponent"));
-	RootComponent = root;
-	RootComponent->SetMobility(EComponentMobility::Movable);
-	//root->SetCollisionProfileName(TEXT("Pawn"));
-
-	UStaticMeshComponent* SphereVisual = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualRepresentation"));
-	SphereVisual->SetupAttachment(RootComponent);
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> SphereVisualAsset(TEXT("StaticMesh'/Game/Geometry/Meshes/1M_Cube.1M_Cube'"));
-
-	if (SphereVisualAsset.Succeeded()) {
-		SphereVisual->SetStaticMesh(SphereVisualAsset.Object);
-	}
-
-	// Load the particle beam and store the resulting object
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> SplinePipeAsset(TEXT("StaticMesh'/Game/Geometry/Meshes/S_Pipe_Spline.S_Pipe_Spline'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> cubeStaticMesh(TEXT("StaticMesh'/Game/Geometry/Meshes/1M_Cube.1M_Cube'"));
 	static ConstructorHelpers::FObjectFinder<UParticleSystem> beamClassFinder(TEXT("ParticleSystem'/Game/Particles/P_Beam.P_Beam'"));
-	particleBeamComponent = beamClassFinder.Object;
 
 	PrimaryActorTick.bCanEverTick = true;
 
-	// So this works. The mesh currently being used is not terribly useful, however
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> SplinePipeAsset(TEXT("StaticMesh'/Game/Geometry/Meshes/S_Pipe_Spline.S_Pipe_Spline'"));
-	spline = CreateDefaultSubobject<USplineMeshComponent>(TEXT("SplineTest"));
-	
-	spline->ForwardAxis = ESplineMeshAxis::Z;
-	spline->SetMobility(EComponentMobility::Movable);
-	spline->SetStaticMesh(SplinePipeAsset.Object);
-	spline->SetupAttachment(RootComponent);
+	root = CreateDefaultSubobject<UBoxComponent>(TEXT("RootComponent"));
+	RootComponent = root;
+	RootComponent->SetMobility(EComponentMobility::Movable);
+	//root->SetCollisionProfileName(TEXT("Pawn"));s
 
-	FVector start(0, 0, 100);
-	FVector end(100, 100, 100);
+	UStaticMeshComponent* cube = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualRepresentation"));
+	cube->SetupAttachment(RootComponent);
+	cube->SetMobility(EComponentMobility::Movable);
 
-	spline->SetStartAndEnd(start, FVector(0, 0, 0), end, FVector(0, 0, 0));
-	spline->SetStartScale(FVector2D(0.1, 0.1));
-	spline->SetEndScale(FVector2D(0.1, 0.1));
+	// Set the preloaded assets
+	if (cubeStaticMesh.Succeeded()) {
+		cube->SetStaticMesh(cubeStaticMesh.Object);
+	}
+
+	if (beamClassFinder.Succeeded()) {
+		particleBeamComponent = beamClassFinder.Object;
+	}
+
+	if (SplinePipeAsset.Succeeded()) {
+		splineStaticMesh = SplinePipeAsset.Object;
+	}
 }
 
 void ABoxActor::BeginPlay() {
 	Super::BeginPlay();
-
-	//spline->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
 
 	// Draw the lines
 	AddEdge(FVector(-50, -50, -50), FVector(50, -50, -50));
@@ -76,59 +67,58 @@ void ABoxActor::BeginPlay() {
 void ABoxActor::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
 
-	// Updates the positions of the beams
-	FVector OldLocation = GetActorLocation();
-
+	// Animate the box for testing purposes
 	FVector NewLocation = GetActorLocation();
 	float DeltaHeight = (FMath::Sin(RunningTime + DeltaTime) - FMath::Sin(RunningTime));
 	NewLocation.Z += DeltaHeight * 20.0f;       //Scale our height by a factor of 20
 	RunningTime += DeltaTime;
 	SetActorLocation(NewLocation);
 
-	// Updates the positions of the beams. Likely to very resource intensive, but I can't get them to connect any other way 
-	//FVector diff = NewLocation - OldLocation;
-
-	//for (UParticleSystemComponent *beam : beams) {
-	//	FVector source;
-	//	FVector target;
-
-	//	beam->GetBeamSourcePoint(0, 0, source);
-	//	beam->GetBeamEndPoint(0, target);
-
-	//	beam->SetBeamSourcePoint(0, source + diff, 0);
-	//	beam->SetBeamEndPoint(0, target + diff);
-	//}
+	// Update the beam to match the spline
+	// So help you god if the number of beams doesnt equal the number of splines
+	for (int i = 0; i < beams.size(); i++) {
+		beams[i]->SetBeamSourcePoint(0, splines[i]->GetStartPosition() + NewLocation, 0);
+		beams[i]->SetBeamEndPoint(0, splines[i]->GetEndPosition() + NewLocation);
+	}
 }
 
 
 // Draw a line (which must have already been instantiated in the constructor) at the given positions
 void ABoxActor::AddEdge(FVector start, FVector end) {
-	// Make a unique name for this beam
+	// Make a unique name for this beam and spline
 	char buffer[10];
-	sprintf(buffer, "Beam%d\0", (int)beams.size());
+	sprintf(buffer, "Spline%d\0", (int)beams.size());
 	FString name = FString(ANSI_TO_TCHAR(buffer));
 
+	// Create the spline
+	USplineMeshComponent *spline = NewObject<USplineMeshComponent>(this, FName(*(name)));
+	spline->SetMobility(EComponentMobility::Movable);
+	spline->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	spline->RegisterComponent();
+
+	spline->ForwardAxis = ESplineMeshAxis::Z;
+	spline->SetMobility(EComponentMobility::Movable);
+	spline->SetStartAndEnd(start, FVector(0, 0, 0), end, FVector(0, 0, 0));
+	spline->SetStartScale(FVector2D(0.1, 0.1));
+	spline->SetEndScale(FVector2D(0.1, 0.1));
+
+	// Comment this back in to make the spline 
+	//spline->SetStaticMesh(splineStaticMesh); // turn this on to 
+
 	// Create and initialize the beam
+	sprintf(buffer, "Beam%d\0", (int)beams.size());
+	name = FString(ANSI_TO_TCHAR(buffer));
+
 	UParticleSystemComponent *beam = NewObject<UParticleSystemComponent>(this, FName(*(name)));
-	beam->SetAutoAttachmentParameters(RootComponent, TEXT("Whatissocket"), EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative);
 	beam->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, true));
 	beam->RegisterComponent();
-
-	//particleBeamComponent->Emitt
 	beam->SetTemplate(particleBeamComponent);
 
-	// Works except that we don't want to connect to actors...
-	//beam->SetActorParameter("BeamSource", this);
-	//beam->SetActorParameter("BeamTarget", this);
-
-	// note that we're specifying the relatives here because I can't get the formal attachment to work. 
+	// Set intial position for this beam
 	beam->SetBeamSourcePoint(0, start + GetActorLocation(), 0);
 	beam->SetBeamEndPoint(0, end + GetActorLocation());
 
-	// Really should get them to work, its pointless overhead updating the beams
-	//beam->SetBeamSourcePoint(0, start, 0);
-	//beam->SetBeamEndPoint(0, end);
-
-	// Store the beam
+	// Store the beam and the spline
+	splines.push_back(spline);
 	beams.push_back(beam);
 }
