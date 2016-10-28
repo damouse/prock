@@ -37,7 +37,7 @@ void ABaseGameMode::InitGameState() {
 	
 	ABoxActor *box1 = GetWorld()->SpawnActor<ABoxActor>(ABoxActor::StaticClass(), FVector(0.f, 0.f, 200.f), FRotator::ZeroRotator);
 	ABoxActor *box2 = GetWorld()->SpawnActor<ABoxActor>(ABoxActor::StaticClass(), FVector(300.f, 0.f, 200.f), FRotator::ZeroRotator);
-
+	box2->SetActorScale3D(FVector(2, 2, 2));
 	//truebox->SetActorScale3D(FVector(10, 10, 10));
 
 	// Translation offset between blocks
