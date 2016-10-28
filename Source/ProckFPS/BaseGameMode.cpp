@@ -13,11 +13,11 @@ ABaseGameMode::ABaseGameMode() {
 }
 
 void ABaseGameMode::InitGameState() {
-	// Load the bindings, import code
+	// Load the bindings and import the code
 	peter = new Peter();
 	PythonNode *root = peter->LoadPython();
 
-	// Translation offset between blocks
+	// Draw a handful of boxes. Note that this kind of laying-out should not be handled here
 	FVector currOffset = FVector(0.f, 0.f, 0.f);
 	float offset = 500.f;
 
