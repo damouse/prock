@@ -6,46 +6,41 @@
 Peter::Peter() {}
 Peter::~Peter() {}
 
-void Peter::LoadRoom() {
-	// Need to specify which room to load. Assuming that null means to load the root
-	if (!prockRootNode) {
-		UE_LOG(LogProck, Error, TEXT("Root node not initialized"));
-		return;
-	}
-
-	for (ProckNode *node : prockRootNode->Children()) {
-		node->Resolve();
-
-		PythonNode *pyNode = (PythonNode *)node;
-
-		PythonNode *target = pyNode->GetTarget();
-		if (target) {
-			//target->Resolve();
-			UE_LOG(LogProck, Log, TEXT("Target: %s"), UTF8_TO_TCHAR(target->GetType()));
-		}
-
-		//UE_LOG(LogProck, Log, TEXT("%s"), UTF8_TO_TCHAR(pyNode->GetType()));'
-		//if (node->Type() != PNT_Endl)
-		//	UE_LOG(LogProck, Error, TEXT("Type exists"));
-
-		//if (node->Type() != PNT_Endl && node->Type() != PNT_Comment) {
-		//	node->Print();
-		//}
-	}
-}
-
 // Instantiate python bindings, import the code, and set the root ProckNode to the top level node returned by the import
-void Peter::LoadPython() {
+PythonNode * Peter::LoadPython() {
 	bindPython = new PythonBindings();
-	prockRootNode = (PythonNode *) bindPython->ImportCode();
-
-	if (!prockRootNode) {
-		UE_LOG(LogProck, Error, TEXT("An error occured loading the root ProckNode"));
-		return;
+	PyObject *ast = bindPython->ImportCode();
+	
+	if (!ast) {
+		UE_LOG(LogProck, Error, TEXT("Peter could not load python"));
+		return nullptr;
 	}
 
-	prockRootNode->Resolve();
-	prockRootNode->Print();
+	prockRootNode = new PythonNode(nullptr);
+	prockRootNode->InitRoot(ast);
+
+	//prockRootNode->Resolve();
+	//prockRootNode->Print();
+
+	//for (ProckNode *node : prockRootNode->Children()) {
+	//	PythonNode *pyNode = (PythonNode *)node;
+
+	//	PythonNode *target = pyNode->GetTarget();
+	//	if (target) {
+	//		//target->Resolve();
+	//		UE_LOG(LogProck, Log, TEXT("Target: %s"), UTF8_TO_TCHAR(target->GetType()));
+	//	}
+
+	//	//UE_LOG(LogProck, Log, TEXT("%s"), UTF8_TO_TCHAR(pyNode->GetType()));'
+	//	//if (node->Type() != PNT_Endl)
+	//	//	UE_LOG(LogProck, Error, TEXT("Type exists"));
+
+	//	//if (node->Type() != PNT_Endl && node->Type() != PNT_Comment) {
+	//	//	node->Print();
+	//	//}
+	//}
+
+	return prockRootNode;
 }
 
 void Peter::UnloadPython() {

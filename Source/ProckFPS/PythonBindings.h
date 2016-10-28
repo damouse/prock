@@ -16,9 +16,6 @@
 #include <include/structmember.h>
 #endif
 
-#include "ProckNode.h"
-#include "PythonNode.h"
-
 #include <list>
 
 
@@ -31,7 +28,7 @@ public:
 	~PythonBindings();
 
 	// Load the environment  then load the root node
-	ProckNode *ImportCode();
+	PyObject * ImportCode();
 
 private: 
 	void PythonGILAcquire();

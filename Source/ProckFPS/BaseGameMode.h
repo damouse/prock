@@ -20,13 +20,6 @@ public:
 
 	virtual void InitGameState();
 
-	// Stored static classes that reference blueprints for runtime instantiation
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "X")
-	TSubclassOf<AActor> boxBPClass;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "X")
-	TSubclassOf<AActor> operatorBPClass;
-
 private:
 	Peter *peter;
 };

@@ -9,7 +9,7 @@ from utils import log
 import files
 import nast
 
-def load_source(path="../../../../../../Code/unreal/ProckFPS 4.13/samplecode.py"):
+def load_source(path="../../../../../../Code/unreal/Prock/samplecode.py"):
     '''
     Load the source code. Note that we should be taking arguments here eventually. 
     Hardcoded for now.

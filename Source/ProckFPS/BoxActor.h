@@ -16,24 +16,30 @@ class PROCKFPS_API ABoxActor : public AActor
 public:
 	ABoxActor();
 
+	// Base overrides
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
 
-	void AddEdge(FVector start, FVector end);
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RootComponentSphere")
-	UBoxComponent* root;
+	// Connect another box using 0,0 as both source and target
+	void ConnectToBox(ABoxActor* other);
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Beams")
+	// Add a new line to this box
+	void AddEdge(FVector start, FVector end);
+
+	// Change the text displayed in this box. TODO: 
+	void SetText(char *text);
+	
+	// The lines of this box
 	std::vector<UParticleSystemComponent *> beams;
 	std::vector<USplineMeshComponent *> splines;
+	std::vector<UParticleSystemComponent *> connections;
 
+	// Stored in the constructor. Not needed if not building lines at runtime
 	UParticleSystem *particleBeamComponent;
+	UParticleSystem *particleBeamActorComponent; // Same beam with connection settings set to actors instead of points
 	UStaticMesh *splineStaticMesh;
 	UTextRenderComponent* mainLabel;
 
+	// Used to animate the box up and down for testing
 	float RunningTime;
-
-	 //UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SplineTest")
-	 //USplineMeshComponent* spline;
 };

@@ -57,7 +57,7 @@ PythonBindings::~PythonBindings() {
 }
 
 // Kick off the source code processing job
-ProckNode* PythonBindings::ImportCode() {
+PyObject* PythonBindings::ImportCode() {
 	PyObject *ast = PyObject_CallMethod(this->pypeter, (char *)"load_source", nullptr);
 	if (!ast) {
 		log_py_error();
@@ -70,9 +70,7 @@ ProckNode* PythonBindings::ImportCode() {
 		return nullptr;
 	}
 
-	PythonNode *root = new PythonNode(nullptr);
-	root->InitRoot(ast);
-	return root;
+	return ast;
 }
 
 /*
