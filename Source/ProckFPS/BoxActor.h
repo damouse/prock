@@ -30,6 +30,7 @@ public:
 
 	UParticleSystem *particleBeamComponent;
 	UStaticMesh *splineStaticMesh;
+	UTextRenderComponent* mainLabel;
 
 	float RunningTime;
 

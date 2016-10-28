@@ -22,17 +22,45 @@ ABoxActor::ABoxActor() {
 	PrimaryActorTick.bCanEverTick = true;
 
 	root = CreateDefaultSubobject<UBoxComponent>(TEXT("RootComponent"));
+	root->SetMobility(EComponentMobility::Movable);
+
+	// Box valls through if the cube doesn't have its static mesh turned on
+	root->SetSimulatePhysics(true);
+	root->SetEnableGravity(false);
+	root->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
+	// The purpose of this is to get the shape to hold its origin at 0,0.
+	// Unfortunatly, that messes with the collision boxes and causes all sorts of problems. 
+	// There may not be a lot of sense to committing to keeping things at 0, 0. 
+	// We're going to need programmatic dimensions anyway, might as well set 0, 0 as the center
+	//root->SetRelativeLocation(FVector(50, 50, 50));
+
 	RootComponent = root;
-	RootComponent->SetMobility(EComponentMobility::Movable);
-	//root->SetCollisionProfileName(TEXT("Pawn"));s
 
 	UStaticMeshComponent* cube = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualRepresentation"));
 	cube->SetupAttachment(RootComponent);
 	cube->SetMobility(EComponentMobility::Movable);
+	cube->SetRelativeLocation(FVector(50, 50, 50));
 
+	// Set up our text render
+	mainLabel = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Label"));
+	mainLabel->SetTextRenderColor(FColor::White);
+	mainLabel->SetText(FText::FromString(TEXT("Var")));
+	mainLabel->SetupAttachment(RootComponent);
+
+	// Try to center the text as much as possible. Todo: actually center the text
+	mainLabel->SetRelativeLocation(FVector(35, 50, 35));
+	mainLabel->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f)); // Rotate so text faces the positive y direction
+
+	//mainLabel->SetWorldSize(500);
+	//Text->SetRelativeLocation(FVector(-282.f, 100, 100.f));
+	//mainLabel->SetTextRenderColor(FColor::Red);
+	
 	// Set the preloaded assets
 	if (cubeStaticMesh.Succeeded()) {
-		cube->SetStaticMesh(cubeStaticMesh.Object);
+		// We actually do get collisions without the mesh, that comes from Root above
+		// This is just for visualization
+		//cube->SetStaticMesh(cubeStaticMesh.Object);
 	}
 
 	if (beamClassFinder.Succeeded()) {
@@ -48,20 +76,21 @@ void ABoxActor::BeginPlay() {
 	Super::BeginPlay();
 
 	// Draw the lines
-	AddEdge(FVector(-50, -50, -50), FVector(50, -50, -50));
-	AddEdge(FVector(-50, -50, -50), FVector(-50, 50, -50));
-	AddEdge(FVector(-50, 50, -50), FVector(50, 50, -50));
-	AddEdge(FVector(50, -50, -50), FVector(50, 50, -50));
+	// The way this is written now 
+	AddEdge(FVector(0, 0, 0), FVector(100, 0, 0));
+	AddEdge(FVector(0, 0, 0), FVector(0, 100, 0));
+	AddEdge(FVector(0, 100, 0), FVector(100, 100, 0));
+	AddEdge(FVector(100, 0, 0), FVector(100, 100, 0));
 
-	AddEdge(FVector(-50, -50, 50), FVector(50, -50, 50));
-	AddEdge(FVector(-50, -50, 50), FVector(-50, 50, 50));
-	AddEdge(FVector(-50, 50, 50), FVector(50, 50, 50));
-	AddEdge(FVector(50, -50, 50), FVector(50, 50, 50));
+	AddEdge(FVector(0, 0, 100), FVector(100, 0, 100));
+	AddEdge(FVector(0, 0, 100), FVector(0, 100, 100));
+	AddEdge(FVector(0, 100, 100), FVector(100, 100, 100));
+	AddEdge(FVector(100, 0, 100), FVector(100, 100, 100));
 
-	AddEdge(FVector(-50, -50, -50), FVector(-50, -50, 50));
-	AddEdge(FVector(-50, 50, -50), FVector(-50, 50, 50));
-	AddEdge(FVector(50, 50, -50), FVector(50, 50, 50));
-	AddEdge(FVector(50, -50, -50), FVector(50, -50, 50));
+	AddEdge(FVector(0, 0, 0), FVector(0, 0, 100));
+	AddEdge(FVector(0, 100, 0), FVector(0, 100, 100));
+	AddEdge(FVector(100, 100, 0), FVector(100, 100, 100));
+	AddEdge(FVector(100, 0, 0), FVector(100, 0, 100));
 }
 
 void ABoxActor::Tick(float DeltaTime) {
@@ -79,6 +108,8 @@ void ABoxActor::Tick(float DeltaTime) {
 	for (int i = 0; i < beams.size(); i++) {
 		beams[i]->SetBeamSourcePoint(0, splines[i]->GetStartPosition() + NewLocation, 0);
 		beams[i]->SetBeamEndPoint(0, splines[i]->GetEndPosition() + NewLocation);
+
+		// Rotation is not covered here
 	}
 }
 

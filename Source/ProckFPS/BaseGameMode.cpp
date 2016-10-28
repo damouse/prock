@@ -9,6 +9,12 @@
 ABaseGameMode::ABaseGameMode() {
 	  static ConstructorHelpers::FClassFinder<AActor> doorBPClassFinder(TEXT("Blueprint'/Game/Box'"));
 	  static ConstructorHelpers::FClassFinder<AActor> operatorBPFinder(TEXT("Blueprint'/Game/Operator'"));
+	
+	  // I'm not entirely sure this is needed, but the blueprint this was taken from had physical manipulation already
+	  static ConstructorHelpers::FClassFinder<APlayerController> playerBPFinder(TEXT("Blueprint'/Game/BasePlayerController'"));
+	  if (playerBPFinder.Class != NULL) {
+		  PlayerControllerClass = playerBPFinder.Class;
+	  }
 
 
 	  if (doorBPClassFinder.Class != nullptr) {
@@ -30,7 +36,7 @@ void ABaseGameMode::InitGameState() {
 	//delete peter;
 	
 	ABoxActor *box1 = GetWorld()->SpawnActor<ABoxActor>(ABoxActor::StaticClass(), FVector(0.f, 0.f, 200.f), FRotator::ZeroRotator);
-	ABoxActor *box2 = GetWorld()->SpawnActor<ABoxActor>(ABoxActor::StaticClass(), FVector(200.f, 0.f, 200.f), FRotator::ZeroRotator);
+	ABoxActor *box2 = GetWorld()->SpawnActor<ABoxActor>(ABoxActor::StaticClass(), FVector(300.f, 0.f, 200.f), FRotator::ZeroRotator);
 
 	//truebox->SetActorScale3D(FVector(10, 10, 10));
 
