@@ -7,6 +7,9 @@
 /**
  * Peter manages editting code: loading and reading, transforming the AST, 
  * saving, and more.
+ *
+ * Until we get a better idea of what "node transformations" actually mean this 
+ * class is going to be pretty light. 
  * 
  * Right now only python is supported so all the nodes are PythonNodes. Notes that the python heavy 
  * lifting is done by PythonBindings, not here. 

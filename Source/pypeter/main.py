@@ -9,6 +9,8 @@ from utils import log
 import files
 import nast
 
+from redbaron.nodes import *
+
 def load_source(path="../../../../../../Code/unreal/Prock/samplecode.py"):
     '''
     Load the source code. Note that we should be taking arguments here eventually. 
@@ -21,7 +23,9 @@ def test_source(path):
     ''' A demo function here to play with the AST graph '''
 
     ast = files.load_file(path)
-    # print ast.__dict__
+    print isinstance(ast, Node)
+    print type(ast)
+    return
     ast.help(deep=10)
 
     # Below are some random examples on how you could interact with the AST once its loaded

@@ -33,14 +33,13 @@ BinaryOperatorNode()
 
 PythonNode::PythonNode(PyObject *native) {
 	pythonNode = native;
-	resolved = false;
-	type = PNT_Unresolved;
+	parent = nullptr;
+	isRoot = false;
 }
 
 // TODO: cleanup python objects as needed
 PythonNode::~PythonNode() {
 	pythonNode = nullptr;
-	type = PNT_Unresolved;
 	parent = nullptr;
 }
 
@@ -54,74 +53,73 @@ void PythonNode::InitRoot(PyObject *astList) {
 			return;
 		}
 
-		children.push_back(new PythonNode(item));
+		list.push_back(new PythonNode(item));
 	}
 
-	type = PNT_Root;
-	resolved = true;
+	isRoot = true;
 }
+
 
 // Return this node's type as a string. TODO: change this to the enum directly
-char *PythonNode::GetType() {
+ProckNodeType PythonNode::Type() {
+	// Special case: baron doesn't return a CodeList for the root node so we have to intercept this type call
+	if (isRoot == true) {
+		return PNT_Root;
+	}
+
 	char *name = pyGetAttr(pythonNode, "type");
-	if (!name) {
-		UE_LOG(LogProck, Error, TEXT("Native node has no type field"));
-		return nullptr;
-	} else {
-		return pntToString(pntFromPyString(name));
-	}
+	return (name == nullptr) ? PNT_Unknown : pntFromPyString(name);
 }
 
-PythonNode *PythonNode::GetTarget() {
+PythonNode *PythonNode::Target() {
 	PyObject *keys = PyObject_GetAttrString(pythonNode, "target");
-	if (!keys) {
-		UE_LOG(LogProck, Error, TEXT("Native node has no field target"));
-		return nullptr;
-	} else {
-		return new PythonNode(keys);
-	}
+	return (keys == nullptr) ? nullptr : new PythonNode(keys);
 }
 
-PythonNode *PythonNode::GetValue() {
+// So... do we want to track the fetched node? Is that at all helpful? Certainly 
+// the boxes need to store the info, but do we have to save it here as well?
+PythonNode *PythonNode::Value() {
 	PyObject *keys = PyObject_GetAttrString(pythonNode, "value");
-	if (!keys) {
-		UE_LOG(LogProck, Error, TEXT("Native node has no field value"));
-		return nullptr;
-	} else {
-		return new PythonNode(keys);
-	}
+	return (keys == nullptr) ? nullptr : new PythonNode(keys);
 }
 
-PythonNode *PythonNode::GetFirst() {
+PythonNode *PythonNode::First() {
 	PyObject *keys = PyObject_GetAttrString(pythonNode, "first");
-	if (!keys) {
-		UE_LOG(LogProck, Error, TEXT("Native node has no field first"));
-		return nullptr;
-	} else {
-		return new PythonNode(keys);
-	}
+	return (keys == nullptr) ? nullptr : new PythonNode(keys);
 }
 
-PythonNode *PythonNode::GetSecond() {
+PythonNode *PythonNode::Second() {
 	PyObject *keys = PyObject_GetAttrString(pythonNode, "second");
-	if (!keys) {
-		UE_LOG(LogProck, Error, TEXT("Native node has no field second"));
-		return nullptr;
+	return (keys == nullptr) ? nullptr : new PythonNode(keys);
+}
+
+// Special case: baron doesn't return a CodeList for the root node so we have to intercept this type call
+std::vector<PythonNode *> PythonNode::RootList() {
+	if (isRoot) {
+		return list;
 	} else {
-		return new PythonNode(keys);
+		UE_LOG(LogProck, Error, TEXT("RootList is only available on the root node"));
+		return {};
 	}
 }
 
 void PythonNode::Print() {
-	char *val = "null\0";
-	char *typ = pntToString(type);
-
-	//if (value != nullptr) {
-	//	val = value;
-	//}
-
 	// Note that you must have null terminated strings here
-	UE_LOG(LogProck, Log, TEXT("Node: Type: %s, Value: %s, Children: %d"), UTF8_TO_TCHAR(typ), UTF8_TO_TCHAR(val), children.size());
+	UE_LOG(LogProck, Log, TEXT("Type: %s"), UTF8_TO_TCHAR(pntToString(Type())));
+}
+
+void PythonNode::PrintRaw() {
+	if (pythonNode) {
+		PyObject *dict = PyObject_GetAttrString(pythonNode, "__dict__");
+		if (dict) {
+			printpy(dict);
+		} else {
+			UE_LOG(LogProck, Error, TEXT("Unable to retrieve object __dict__, fallback to str()"));
+			printpy(pythonNode);
+		}
+	} else {
+		UE_LOG(LogProck, Error, TEXT("Native python object not set!"));
+	}
 }
 
 char *pntToString(ProckNodeType type) {
@@ -506,37 +504,3 @@ ProckNodeType pntFromPyString(char *t) {
 		return PNT_Unknown;
 	}
 }
-
-// Orphaned 
-/*
-// Resolve the fields for this node by querying the native nodes. Will run even if "resolved" is true.
-void PythonNode::Resolve() {
-// the root is always resolved if it exists
-if (type == PNT_Root) {
-resolved = true;
-return;
-}
-
-// Reset the resolved state. In the case of an error this node remains unresolved
-resolved = false;
-
-// Set our type
-char *name = pyGetAttr(pythonNode, "type");
-if (!name) {
-UE_LOG(LogProck, Error, TEXT("Native node has no type field"));
-return;
-} else {
-type = pntFromPyString(name);
-}
-
-// Play around with what we got
-//PyObject *keys = PyObject_GetAttrString(pythonNode, "_dict_keys");
-//if (!keys) {
-//	log_py_error();
-//} else {
-//	printpy(keys);
-//}
-
-resolved = true;
-}
-*/

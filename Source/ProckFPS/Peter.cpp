@@ -18,28 +18,6 @@ PythonNode * Peter::LoadPython() {
 
 	prockRootNode = new PythonNode(nullptr);
 	prockRootNode->InitRoot(ast);
-
-	//prockRootNode->Resolve();
-	//prockRootNode->Print();
-
-	//for (ProckNode *node : prockRootNode->Children()) {
-	//	PythonNode *pyNode = (PythonNode *)node;
-
-	//	PythonNode *target = pyNode->GetTarget();
-	//	if (target) {
-	//		//target->Resolve();
-	//		UE_LOG(LogProck, Log, TEXT("Target: %s"), UTF8_TO_TCHAR(target->GetType()));
-	//	}
-
-	//	//UE_LOG(LogProck, Log, TEXT("%s"), UTF8_TO_TCHAR(pyNode->GetType()));'
-	//	//if (node->Type() != PNT_Endl)
-	//	//	UE_LOG(LogProck, Error, TEXT("Type exists"));
-
-	//	//if (node->Type() != PNT_Endl && node->Type() != PNT_Comment) {
-	//	//	node->Print();
-	//	//}
-	//}
-
 	return prockRootNode;
 }
 

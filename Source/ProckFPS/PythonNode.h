@@ -1,17 +1,15 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "ProckFPS.h"
-#include "PythonBindings.h" // Don't really need to import this seperately, it just has the python headers
+#include "PythonBindings.h"
 
-#include <list>
+#include <vector>
 
-// See below
 enum ProckNodeType : int;
 
 /**
- * A C++ wrapper around a python AST node.  
+ * A C++ wrapper around a python AST node. Values are always resolved dynamically through 
+ * getters. 
  */
 class PROCKFPS_API PythonNode
 {
@@ -19,40 +17,36 @@ public:
 	PythonNode(PyObject *native);
 	~PythonNode();
 
-	// Called only once by PythonBindings when initializing the root of the AST.
-	// This is a little old, should instead be a NodeList wrapper
+	// Initialize the root of the tree since RedBaron returns the first result inconsistently
 	void InitRoot(PyObject *astList);
 
-	virtual void Print();
+	// Dynamic getters for node information
+	ProckNodeType Type();
+	PythonNode *Target();
+	PythonNode *Value();
+	PythonNode *First();
+	PythonNode *Second();
+	std::vector<PythonNode *> RootList();
 
-	// Version 2. Always-dynamic getters
-	char *GetType();
+	// Print this object in prock's representation and in raw python form, respectively
+	void Print();
+	void PrintRaw();
 
-	PythonNode *GetTarget();
-	PythonNode *GetValue();
-	PythonNode *GetFirst();
-	PythonNode *GetSecond();
-
-	// ifelse, operator, etc
-	//PythonNode *Get();
-	//ProckNode* Parent() { return parent; }
-	
-	// Next, previous, parent
 	PyObject *pythonNode;
 
-	// Print helper method. Pass the name of the subclass, like "PythonNode".
-	void print(char *subclass);
+private:
+	PythonNode *parent;
+	
+	std::vector<PythonNode *> list; // list of nodes, used by Root
 
-	bool resolved;
-	ProckNodeType type;
-	char * value;
-
-	std::list<PythonNode *> children;
-	PythonNode* parent;
+	// Special marker for root. Affects the return type of GetType
+	bool isRoot;
 };
 
-// Helper functions for converting types to and from strings
+// Convert a ProckNodeType to string
 char *pntToString(ProckNodeType type);
+
+// Create an appropriate python node type from a python string
 ProckNodeType pntFromPyString(char *t);
 
 // The abstract "type" of this node. May not be the same as the native AST node reports
@@ -63,6 +57,8 @@ enum ProckNodeType {
 	PNT_Root,
 	PNT_Unknown,
 	PNT_Unresolved,
+
+	// Actualy redbaron node types
 	PNT_ArgumentGeneratorComprehension,
 	PNT_Assert,
 	PNT_Assignment,
