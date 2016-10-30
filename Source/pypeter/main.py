@@ -11,6 +11,7 @@ import nast
 
 from redbaron.nodes import *
 
+
 def load_source(path="../../../../../../Code/unreal/Prock/samplecode.py"):
     '''
     Load the source code. Note that we should be taking arguments here eventually. 
@@ -19,14 +20,13 @@ def load_source(path="../../../../../../Code/unreal/Prock/samplecode.py"):
     ast = files.load_file(path)
     return [x for x in ast]
 
+
 def test_source(path):
     ''' A demo function here to play with the AST graph '''
 
     ast = files.load_file(path)
-    print isinstance(ast, Node)
-    print type(ast)
-    return
     ast.help(deep=10)
+    return
 
     # Below are some random examples on how you could interact with the AST once its loaded
     # Example for turning the ast back to source
@@ -54,7 +54,7 @@ def test_source(path):
             continue
 
         print x.__dict__
-        print "" 
+        print ""
         # Note that every node has _dict_keys, _str_keys, and _list_keys which define its attrs
         print x._dict_keys
         print x._str_keys
@@ -65,20 +65,20 @@ def test_source(path):
         # return
         # print "Type: " + x.type
 
-        # if hasattr(x, 'target'): 
+        # if hasattr(x, 'target'):
         #     print '\ttarget: ', x.target
 
-        # if hasattr(x, 'value'): 
+        # if hasattr(x, 'value'):
         #     print '\tvalue: ', x.value
         #     x.value.help()
 
-        # if hasattr(x, 'left'): 
+        # if hasattr(x, 'left'):
         #     print '\tleft: ', x.left
 
         # print ""
 
         # if x.type == "assignment":
-            # print "Target: " + str(x.target) + " Value: " + str(x.value)
+        # print "Target: " + str(x.target) + " Value: " + str(x.value)
 
     # Prints a human readable version of the nodes shown above. Each
     # enter here could have one of the following keys: [value, operator, target]
@@ -99,5 +99,3 @@ if __name__ == '__main__':
 
     # load the sample file (in this directory)
     ast = test_source('../../samplecode.py')
-
-
