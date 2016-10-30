@@ -57,6 +57,9 @@ void ABaseGameMode::InitGameState() {
 		ABoxActor *box2 = GetWorld()->SpawnActor<ABoxActor>(ABoxActor::StaticClass(), FVector(0.f, 0.f, 200.f) + currOffset, FRotator::ZeroRotator);
 		ABoxActor *op = GetWorld()->SpawnActor<ABoxActor>(ABoxActor::StaticClass(), FVector(200.f, 0.f, 100.f) + currOffset, FRotator::ZeroRotator);
 
+		//box1->SetActorScale3D(FVector(2, 2, 2));
+		box1->SetText("HELLO");
+
 		// Connect the operation to the boxes
 		op->ConnectToBox(box2);
 		op->ConnectToBox(box1);

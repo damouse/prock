@@ -23,9 +23,6 @@ def test_source(path):
     ''' A demo function here to play with the AST graph '''
 
     ast = files.load_file(path)
-    print isinstance(ast, Node)
-    print type(ast)
-    return
     ast.help(deep=10)
 
     # Below are some random examples on how you could interact with the AST once its loaded

@@ -6,18 +6,20 @@ from redbaron import nodes
 defs = []
 
 for name in list(filter(lambda x: x.endswith("Node"), dir(nodes))):
-    c = "PNT_" + name.replace("Node", "")
-    r = getattr(nodes, name).generate_identifiers()[0]
-    defs.append((c, r))
+	klass = getattr(nodes, name)
+	print klass(None, None)
+    # c = "PNT_" + name.replace("Node", "")
+    # r = getattr(nodes, name).generate_identifiers()[0]
+    # defs.append((c, r))
 
 # Enum
 # for c, r in defs: 
 #     print c + ","
 
 # Enum to String
-for c, r in defs:
-    print "\t} else if (strcmp(t, \"" + str(r) + "\") == 0) {"
-    print "\t\treturn " + str(c) + ";"
+# for c, r in defs:
+#     print "\t} else if (strcmp(t, \"" + str(r) + "\") == 0) {"
+#     print "\t\treturn " + str(c) + ";"
 
 # string to enum
 # for c, r in defs:
