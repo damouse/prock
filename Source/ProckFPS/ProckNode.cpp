@@ -3,10 +3,24 @@
 #include "ProckFPS.h"
 #include "ProckNode.h"
 
-ProckNode::ProckNode()
-{
+ProckNode::ProckNode(PyObject *native) {
+	astNode = native;
 }
 
-ProckNode::~ProckNode()
-{
+ProckNode::~ProckNode() {}
+
+void ProckNode::Spawn() {
+
+}
+
+char *ProckNode::GetAsString(char *name) {
+	return nullptr;
+}
+
+std::vector<ProckNode *> ProckNode::GetAsList(char *name) {
+	return {};
+}
+
+ProckNode *ProckNode::GetAsNode(char *name) {
+	return nullptr;
 }

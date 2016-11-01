@@ -11,8 +11,17 @@
 class PROCKFPS_API ProckNode
 {
 public:
-	ProckNode();
+	ProckNode(PyObject *native);
 	~ProckNode();
+
+	// Spawn the box for this node
+	void Spawn();
+
+protected:
+	// Generalized getters
+	char *GetAsString(char *name);
+	std::vector<ProckNode *> GetAsList(char *name);
+	ProckNode *GetAsNode(char *name);
 
 	ABoxActor *box;
 	PyObject *astNode;

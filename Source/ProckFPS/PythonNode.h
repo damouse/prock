@@ -21,10 +21,6 @@ public:
 	// Initialize the root of the tree since RedBaron returns the first result inconsistently
 	void InitRoot(PyObject *astList);
 
-	char *GetAsString(char *name);
-	std::vector<PythonNode> GetAsList(char *name);
-	PythonNode *GetAsNode(char *name);
-
 	// Dynamic getters for node information
 	ProckNodeType Type();
 	PythonNode *Target();
