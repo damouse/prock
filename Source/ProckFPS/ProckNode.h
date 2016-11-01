@@ -10,28 +10,32 @@
  */
 class PROCKFPS_API ProckNode {
 public:
-	// Factory Method. Do not use the default constructor
+	// Factory Method: creates the appropriate ProckNode subclass based on the given PyObject. 
+	// Don't use the default constructor to create new ProckNodes!
 	static ProckNode* NewNode(PyObject* astNode);
 
 	// Spawn the box for this node
 	void Spawn();
 
+	// Dump the underlying python object
+	void PrintRaw();
+
 protected:
 	// Generalized getters
 	char *GetAsString(char *name);
-	std::vector<ProckNode *> GetAsList(char *name);
+
+	// Note: this allocates a new list! Every time its called it will leak memory-- have to 
+	// cache the results on this node! 
+	std::vector<ProckNode *> *GetAsList(char *name); 
 	ProckNode *GetAsNode(char *name);
 
 	ABoxActor *box;
 	PyObject *astNode;
 };
 
-class PROCKFPS_API NodeList: public ProckNode
-{
-//public:
-//	std::vector<ProckNode *> List() {
-//		return GetAsList("node_list");
-//	}
+class PROCKFPS_API NodeList: public ProckNode {
+public:
+	std::vector<ProckNode *> *List() { return GetAsList("node_list"); }
 };
 
 

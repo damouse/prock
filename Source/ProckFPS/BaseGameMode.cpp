@@ -16,36 +16,15 @@ ABaseGameMode::ABaseGameMode() {
 void ABaseGameMode::InitGameState() {
 	// Load the bindings and import the code
 	peter = new Peter();
-	ProckNode *root = peter->LoadPython();
+	NodeList *root = (NodeList *) peter->LoadPython();
 
-	//root->Print();
+	//root->PrintRaw();
+	//std::vector<ProckNode *> *children = root->List();
 
-	//for (PythonNode *child : root->RootList()) {
-	//	// Ignore comments and endlines, though we may want to display comments at some point
-	//	if (child->Type() == PNT_Endl || child->Type() == PNT_Comment) {
-	//		continue;
-	//	}
+	for (ProckNode *child : *root->List()) {
+		child->PrintRaw();
+	}
 
-	//	if (child->Type() == PNT_Assignment) {
-	//		PythonNode *target = child->Target();
-	//		PythonNode *value = child->Value();
-
-	//		target->PrintRaw();
-	//		value->PrintRaw();
-
-	//		//if (target->Type() == PNT_Name) {
-	//		//	PythonNode *nam = target->Value();
-	//		//	nam->PrintRaw();
-	//		//}
-
-	//		//if (value->Type() == PNT_Int) {
-
-	//		//}
-	//	}
-
-	//	//child->Print();
-	//	//child->PrintRaw();
-	//}
 
 	// Draw a handful of boxes just for show. Note that this kind of laying-out should not be handled here
 	FVector currOffset = FVector(0.f, 0.f, 0.f);
