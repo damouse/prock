@@ -6,7 +6,7 @@ from string import Template
 from redbaron.nodes import *
 from redbaron import nodes, RedBaron
 
-WRITE_PATH = 'test.h'
+WRITE_PATH = '../ProckFPS/ProckNode.h'
 
 # Whole header file
 header_template = '''
@@ -207,52 +207,47 @@ def write_classes():
             dict=pretty_dict.replace('\n', '\n    ')
         )
 
+    foldAndWrite(WRITE_PATH, body)
+    return
+    
     with open(WRITE_PATH, 'w') as f:
         f.write(Template(header_template).substitute(body=body))
 
-    # # Debug logging
-    # for d in defs:
-    #     print d.name
-    #     print d.help_text
-    #     print str(d.python)
-    #     print str(d.description)
-    #     # print '\t' + str(d.example)
-    #     # print '\t' + str(d.node)
 
-    #     getters = ''
+# Replaces the exising lines with these new lines
+def foldLines(f, addition):
+    start_marker = '// Start Generated Code'
+    end_marker = '// End Generated Code'
+    ret = []
 
-    #     if hasattr(d.node, 'node_list'):
-    #         getters += Template(list_template).substitute(name='NodeList')
-    #         getters += '\n'
-    #     else:
-    #         for key, template in {'_str_keys': str_template, '_dict_keys': dict_template, '_list_keys': list_template}.iteritems():
-    #             for name in eval('d.node.' + key):
-    #                 getters += Template(str_template).substitute(name=''.join([x.title() for x in name.split('_')]))
+    with open(f) as inf:
+        ignoreLines = False
+        written = False
 
-    #             getters += '\n'
+        for line in inf:
+            if end_marker in line:
+                ignoreLines = False
+
+            if ignoreLines:
+                if not written:
+                    written = True
+                    [ret.append(x) for x in addition]
+            else:
+                ret.append(line)
+
+            if start_marker in line:
+                ignoreLines = True
+
+    return ret
 
 
+def foldAndWrite(fileName, lines):
+    ''' Opens a file and folds in the given string between the comment delimiters '''
+    fileName = os.path.join(outputPath, fileName)
+    lines = foldLines(fileName, lines)
 
-
-    #     # When assigning the c++ class:
-    #     # Check _class_ field and choose corresponding c++ class. Dont fuck with type.
-
-    #     # Building the c++ classes: 
-    #     # Create a new class with the given class name
-    #     # If node has a node_list field create bulk "children" field and continue
-    #     # Else check all _keys fields, create appropriate getters
-
-    #     print ''
-    #     pprint.pprint(d.node.__dict__)
-
-    #     try:
-    #         print d.node.type
-    #     except:
-    #         print "NODE HAS NO TYPE: ", d.node.__class__
-    #         print "isinstance of nodelist: ", isinstance(d.node, (nodes.NodeList, nodes.CommaProxyList))
-
-    #     print ''
-    # return
+    with open(fileName, 'w') as f:
+        [f.write(x) for x in lines]
 
 def print_enums():
     names = list(filter(lambda x: x.endswith("Node") or x.endswith("List"), dir(nodes)))

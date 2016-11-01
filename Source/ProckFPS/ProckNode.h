@@ -42,3 +42,5 @@ public:
 	std::vector<ProckNode *> *List() { return GetAsList("node_list"); }
 };
 
+// End Generated Code
+// Start Generated Code
