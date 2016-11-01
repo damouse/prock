@@ -2,6 +2,7 @@
 
 #include "BoxActor.h"
 #include "PythonBindings.h"
+#include <map>
 
 /**
  * Abstract base class for all ProckNodes. A ProckNode "glues" a BoxActor to a native
@@ -33,10 +34,11 @@ protected:
 	PyObject *astNode;
 };
 
+// Returns a constructed subclass of ProckNode that matches the given name
+ProckNode *nodeSubclassFromString(char *t);
+
 class PROCKFPS_API NodeList: public ProckNode {
 public:
 	std::vector<ProckNode *> *List() { return GetAsList("node_list"); }
 };
-
-
 

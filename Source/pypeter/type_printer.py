@@ -202,7 +202,7 @@ def write_classes():
             comment=d.description,
             python=d.python,
             description=d.help_text.replace('\n', '\n    '),
-            class_name=d.name,
+            class_name='PN' + d.name.replace("Node", ''),
             getters=getters,
             dict=pretty_dict.replace('\n', '\n    ')
         )
@@ -255,23 +255,12 @@ def write_classes():
     # return
 
 def print_enums():
-    defs = []
+    names = list(filter(lambda x: x.endswith("Node") or x.endswith("List"), dir(nodes)))
 
-    for name in list(filter(lambda x: x.endswith("Node"), dir(nodes))):
-        klass = getattr(nodes, name)
-        print klass(None, None)
-        c = "PNT_" + name.replace("Node", "")
-        r = getattr(nodes, name).generate_identifiers()[0]
-        defs.append((c, r))
-
-    # Enum
-    # for c, r in defs: 
-    #     print c + ","
-
-    # Enum to String
-    # for c, r in defs:
-    #     print "\t} else if (strcmp(t, \"" + str(r) + "\") == 0) {"
-    #     print "\t\treturn " + str(c) + ";"
+    # String to class:
+    for n in names:
+        print "\t} else if (strcmp(t, \"" + n + "\") == 0) {"
+        print "\t\treturn new PN" + n.replace('Node', '') + "();"
 
     # string to enum
     # for c, r in defs:
