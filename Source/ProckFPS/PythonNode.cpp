@@ -31,6 +31,12 @@ BinaryOperatorNode()
 			value='a'
 */
 
+PythonNode::PythonNode() {
+	pythonNode = nullptr;
+	parent = nullptr;
+	isRoot = false;
+}
+
 PythonNode::PythonNode(PyObject *native) {
 	pythonNode = native;
 	parent = nullptr;

@@ -5,11 +5,47 @@ environment and do imports as needed.
 
 import json
 
-from utils import log
-import files
-import nast
-
 from redbaron.nodes import *
+from redbaron import RedBaron
+
+from utils import log
+
+
+def load_file(path):
+    '''
+    Load the file by opening it as opposed to importing it. 
+    '''
+    with open(path, "r") as source_code:
+        ast = RedBaron(source_code.read())
+
+    return ast
+
+
+def import_file(s):
+    '''
+    Directly import the python code instead of loading the file. Should work, 
+    but doesn't-- redbaron is not happy with that
+    '''
+    # import sys
+    # sys.path.insert(0, u'../../../../../../Code/unreal/ProckFPS 4.13/')
+
+    # # Import the target module directly. Much better way to do things so that local dependencies resolve...
+    # import samplecode
+    # ue.log(samplecode)
+    pass
+
+
+def to_source(ast):
+    '''
+    Turn the given AST to formatted source code.
+    Returns a list of strings.
+    '''
+    return [str(x) for x in ast]
+
+
+def to_json(ast):
+    ''' returns the full AST as formatted json '''
+    return json.dumps(ast.fst(), indent=4)
 
 
 def load_source(path="../../../../../../Code/unreal/Prock/samplecode.py"):
@@ -17,15 +53,17 @@ def load_source(path="../../../../../../Code/unreal/Prock/samplecode.py"):
     Load the source code. Note that we should be taking arguments here eventually. 
     Hardcoded for now.
     '''
-    ast = files.load_file(path)
+    ast = load_file(path)
     return [x for x in ast]
 
 
 def test_source(path):
     ''' A demo function here to play with the AST graph '''
 
-    ast = files.load_file(path)
-    ast.help(deep=10)
+    ast = load_file(path)
+    import pprint
+    pprint.pprint(ast.__dict__)
+    # print ast.__class__
     return
 
     # Below are some random examples on how you could interact with the AST once its loaded

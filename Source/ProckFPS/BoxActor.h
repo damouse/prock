@@ -3,8 +3,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-// #include "SplineComponent.h"
- #include "Runtime/Engine/Classes/Components/SplineMeshComponent.h"
+#include "Runtime/Engine/Classes/Components/SplineMeshComponent.h"
 #include <vector>
 #include "BoxActor.generated.h"
 
