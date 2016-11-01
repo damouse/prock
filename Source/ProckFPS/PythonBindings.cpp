@@ -64,6 +64,8 @@ PyObject* PythonBindings::ImportCode() {
 		return nullptr;
 	}
 
+	return ast;
+
 	// Make sure we recieved a list
 	if (!PyList_Check(ast)) {
 		UE_LOG(LogProck, Error, TEXT("Did not recieve list as ast: %s"), UTF8_TO_TCHAR(PyString_AsString(PyObject_Str(ast))));

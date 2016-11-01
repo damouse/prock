@@ -2,7 +2,7 @@
 
 #pragma once
 #include "PythonBindings.h"
-#include "PythonNode.h"
+#include "ProckNode.h"
 
 /**
  * Peter manages editting code: loading and reading, transforming the AST, 
@@ -20,12 +20,12 @@ public:
 	Peter();
 	~Peter();
 	
-	PythonNode * LoadPython();
+	ProckNode * LoadPython();
 	void UnloadPython();
 
 private: 
 	PythonBindings *bindPython; // Don't know if this needs to stick around. Thinking the root node is enough
 
 	// The root of the loaded ast
-	PythonNode *prockRootNode;
+	ProckNode *prockRootNode;
 };

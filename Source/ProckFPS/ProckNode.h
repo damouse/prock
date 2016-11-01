@@ -8,11 +8,10 @@
  * Python AST Node as returned by RedBaron: it is neither an actor or an AST node, 
  * but it wraps AST nodes and spawns Boxes to represent them as needed
  */
-class PROCKFPS_API ProckNode
-{
+class PROCKFPS_API ProckNode {
 public:
-	ProckNode(PyObject *native);
-	~ProckNode();
+	// Factory Method. Do not use the default constructor
+	static ProckNode* NewNode(PyObject* astNode);
 
 	// Spawn the box for this node
 	void Spawn();
@@ -26,3 +25,14 @@ protected:
 	ABoxActor *box;
 	PyObject *astNode;
 };
+
+class PROCKFPS_API NodeList: public ProckNode
+{
+//public:
+//	std::vector<ProckNode *> List() {
+//		return GetAsList("node_list");
+//	}
+};
+
+
+

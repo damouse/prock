@@ -7,7 +7,7 @@ Peter::Peter() {}
 Peter::~Peter() {}
 
 // Instantiate python bindings, import the code, and set the root ProckNode to the top level node returned by the import
-PythonNode * Peter::LoadPython() {
+ProckNode *Peter::LoadPython() {
 	bindPython = new PythonBindings();
 	PyObject *ast = bindPython->ImportCode();
 	
@@ -16,8 +16,7 @@ PythonNode * Peter::LoadPython() {
 		return nullptr;
 	}
 
-	prockRootNode = new PythonNode(nullptr);
-	prockRootNode->InitRoot(ast);
+	prockRootNode = ProckNode::NewNode(ast);
 	return prockRootNode;
 }
 
