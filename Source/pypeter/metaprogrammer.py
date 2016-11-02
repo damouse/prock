@@ -10,7 +10,8 @@ from string import Template
 from redbaron.nodes import *
 from redbaron import nodes, RedBaron
 
-WRITE_PATH = '../ProckFPS/ProckNode.h'
+CLASS_FILE = '../ProckFPS/ProckNode.h'
+ENUM_FILE = '../ProckFPS/ProckNode.cpp'
 
 # single class 
 class_template = '''
@@ -38,7 +39,7 @@ $getters};
 anonymous_template = '''
 class PROCKFPS_API $class_name : public ProckNode {
 public: 
-    ProckNode *Value() { return GetAsNode("value"); }
+    char *Value() { return GetAsString("value"); }
 };
 '''
 
@@ -120,12 +121,10 @@ def read_baron_definitions():
 # Go through the RedBaron declarations and build a list of nodes. Ignore the nodes we've already heard about in docs
 def read_node_declarations(known):
     read = list(filter(lambda x: x.endswith("Node") or x.endswith("List"), dir(nodes)))
-    # for x in read:
-        # filter(lambda y: y.name == x, known)
-    return [x for x in read if len(list(filter(lambda y: y.name == x, known))) == 0]
+    decs = [x for x in read if len(list(filter(lambda y: y.name == x, known))) == 0]
 
-    # BUG: returns a blank one for some reason. Ends up as PN and Node, respectively
-    # ALSOBUG: PNList gets sent twice
+    # Filter out duplicats that appear later
+    return filter(lambda x: x != 'Node' and x != 'NodeList', decs)
 
 def template_unknowns(names):
     # Because the list of nodes returned here are just the class names and not the whole 
@@ -155,6 +154,7 @@ def parse_definitions():
     out.off()
     return [x for x in definitions if x.node is not None]
 
+# Should include a list of override types
 def write_classes():
     out = PrintInterceptor()
     defs = parse_definitions()
@@ -209,16 +209,21 @@ def write_classes():
     body += '\n\n//\n// Generalized, "primitive" nodes'
     body += template_unknowns(unknowns)
 
+    # Write out the header file definitions
+    foldAndWrite(CLASS_FILE, body)
+
+    enum = ''
+
     # TODO: write this out to the file instead of copy pasting
     for n in unknowns:
-        print "\t} else if (strcmp(t, \"" + n + "\") == 0) {"
-        print "\t\treturn new PN" + n.replace('Node', '') + "();"
+        enum +="\t} else if (strcmp(t, \"" + n + "\") == 0) {\n"
+        enum +="\t\treturn new PN" + n.replace('Node', '') + "();\n"
 
     for d in defs:
-        print "\t} else if (strcmp(t, \"" + d.name + "\") == 0) {"
-        print "\t\treturn new PN" + d.name.replace('Node', '') + "();"
+        enum +="\t} else if (strcmp(t, \"" + d.name + "\") == 0) {\n"
+        enum +="\t\treturn new PN" + d.name.replace('Node', '') + "();\n"
 
-    foldAndWrite(WRITE_PATH, body)
+    foldAndWrite(ENUM_FILE, enum)
 
 
 # Replaces the exising lines with these new lines
@@ -280,10 +285,6 @@ def foldAndWrite(fileName, addition):
 
             if start_marker in line:
                 ignoreLines = True
-
-    # return ret
-
-    # lines = foldLines(fileName, lines)
 
     with open(fileName, 'w') as f:
         [f.write(x) for x in ret]

@@ -16,25 +16,21 @@ ABaseGameMode::ABaseGameMode() {
 void ABaseGameMode::InitGameState() {
 	// Load the bindings and import the code
 	peter = new Peter();
-	NodeList *root = (NodeList *) peter->LoadPython();
+	PNList *root = (PNList *) peter->LoadPython();
 
 	//root->PrintRaw();
 	//std::vector<ProckNode *> *children = root->List();
 
-	for (ProckNode *child : *root->List()) {
-		//child->PrintRaw();
+	for (ProckNode *child : *root->NodeList()) {
+		child->PrintRaw();
 
 		if (PNAssignment *assign = static_cast<PNAssignment*>(child)) {
 			ProckNode *value = assign->Value();
 
-			if (value) {
-				//value->PrintRaw();
-			} else {
-				UE_LOG(LogProck, Log, TEXT("No value?"));
-				//assign->PrintRaw();
+			if (PNName *a = static_cast<PNName*>(child)) {
+				char *val = a->Value();
+				UE_LOG(LogProck, Log, TEXT("Value: %s"), UTF8_TO_TCHAR(val));
 			}
-			// debug message
-			
 		}
 	}
 
