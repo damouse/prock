@@ -26,9 +26,15 @@ void ABaseGameMode::InitGameState() {
 
 		if (PNAssignment *assign = static_cast<PNAssignment*>(child)) {
 			ProckNode *value = assign->Value();
-			value->PrintRaw();
+
+			if (value) {
+				//value->PrintRaw();
+			} else {
+				UE_LOG(LogProck, Log, TEXT("No value?"));
+				//assign->PrintRaw();
+			}
 			// debug message
-			UE_LOG(LogProck, Log, TEXT("Have assignment"))
+			
 		}
 	}
 

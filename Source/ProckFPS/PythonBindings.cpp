@@ -158,7 +158,11 @@ void log_py_error() {
 
 // Note that this isn't going to work for python 3. See the original bindings for the right method
 void printpy(PyObject* obj) {
-	UE_LOG(LogProck, Log, TEXT("%s"), UTF8_TO_TCHAR(PyString_AsString(PyObject_Str(obj))));
+	if (obj) {
+		UE_LOG(LogProck, Log, TEXT("%s"), UTF8_TO_TCHAR(PyString_AsString(PyObject_Str(obj))));
+	} else {
+		UE_LOG(LogProck, Error, TEXT("Asked to print null pyobject"));
+	}
 }
 
 char *pyGetAttr(PyObject* obj, char *attrName) {
