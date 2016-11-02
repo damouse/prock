@@ -33,7 +33,6 @@ Equivalent python:
 RedBaron .help() text:
 
     $description
-
 Python __dict__ dump:
 
     $dict
@@ -156,8 +155,7 @@ def parse_definitions():
 
     for d in definitions:
         eval(d.example)
-        d.help_text = out.clear()
-        d.help_text = ''.join(d.help_text)
+        d.help_text = '\n'.join(filter(lambda x: '#' not in x, out.clear()[0].split('\n')))
 
         s = d.example.replace('RedBaron("', '')
         d.python = s.split('")[0].')[0]

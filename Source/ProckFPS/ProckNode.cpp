@@ -4,23 +4,19 @@
 #include "ProckNode.h"
 
 ProckNode *ProckNode::NewNode(PyObject *native) {
-	// Type will resolve for everything Except 
 	PyObject *klass = PyObject_GetAttrString(native, "__class__");
-	
 	if (!klass) {
 		log_py_error();
 		return nullptr;
 	}	
 
 	PyObject *name = PyObject_GetAttrString(klass, "__name__");
-
 	if (!name) {
 		log_py_error();
 		return nullptr;
 	}
 
 	ProckNode *newNode = nodeSubclassFromString(PyString_AsString(name));
-
 	if (newNode) {
 		newNode->astNode = native;
 		return newNode;
