@@ -13,9 +13,17 @@ from redbaron import nodes, RedBaron
 CLASS_FILE = '../ProckFPS/ProckNode.h'
 ENUM_FILE = '../ProckFPS/ProckNode.cpp'
 
+# type enum
+enum_template = '''
+enum ProckNodeType {
+    PNT_Base,
+$body};
+
+// Begin Node Definition
+'''
+
 # single class 
-class_template = '''
-/*
+class_template = '''/*
 $comment
 
 Equivalent python:
@@ -33,6 +41,7 @@ Python __dict__ dump:
 class PROCKFPS_API $class_name : public ProckNode {
 public: 
     virtual char *Name() { return "$name\0"; }
+    virtual ProckNodeType Type() { return $type; }
 $getters};
 '''
 
@@ -41,6 +50,7 @@ anonymous_template = '''
 class PROCKFPS_API $class_name : public ProckNode {
 public: 
     virtual char *Name() { return "$name\0"; }
+    virtual ProckNodeType Type() { return $type; }
     char *Value() { return GetAsString("value"); }
 };
 '''
@@ -132,7 +142,11 @@ def template_unknowns(names):
     # Because the list of nodes returned here are just the class names and not the whole 
     # definition, have to fake the entries on this a little. 
     # Assuming that all these nodes return 'value'
-    return '\n'.join([Template(anonymous_template).substitute(class_name='PN' + x.replace('Node', ''), name=x.replace('Node', '')) for x in names])
+    return '\n'.join([Template(anonymous_template).substitute(
+        class_name='PN' + x.replace('Node', ''),
+        name=x.replace('Node', ''),
+        type='PNT_' + x.replace('Node', ''),
+    ) for x in names])
 
 def parse_definitions():
     ''' Reads in the redbaron types and builds definition objects for each '''
@@ -156,6 +170,17 @@ def parse_definitions():
     out.off()
     return [x for x in definitions if x.node is not None]
 
+def template_enums(defs, unknowns):
+    body = ''
+
+    for d in defs:
+        body += '\tPNT_' + d.name.replace("Node", '') + ',\n'
+
+    for n in unknowns:
+        body += '\tPNT_' + n.replace("Node", '') + ',\n'
+
+    return Template(enum_template).substitute(body=body)
+
 # Should include a list of override types
 def write_classes():
     out = PrintInterceptor()
@@ -178,6 +203,8 @@ def write_classes():
                     continue
 
                 for name in target_list:
+                    if name == 'type':
+                        continue
                     # We don't care about the formatting. Skip it for now
                     # EDIT: but it looks like in some cases it captures meaningful code, like comments
                     if '_formatting' in name: 
@@ -204,7 +231,8 @@ def write_classes():
             description=d.help_text.replace('\n', '\n    '),
             class_name=class_name,
             getters=getters,
-            dict=pretty_dict.replace('\n', '\n    ')
+            dict=pretty_dict.replace('\n', '\n    '),
+            type='PNT_' + d.name.replace("Node", '')
         )
 
     # Load the list of "Unknown" nodes, or nodes we know the name of but not the implementations
@@ -212,8 +240,11 @@ def write_classes():
     body += '\n\n//\n// Generalized, "primitive" nodes'
     body += template_unknowns(unknowns)
 
+    # Build the enum list from all node types
+    enums = template_enums(defs, unknowns)
+
     # Write out the header file definitions
-    foldAndWrite(CLASS_FILE, body)
+    foldAndWrite(CLASS_FILE, enums + body)
 
     enum = ''
 

@@ -45,6 +45,10 @@ char *ProckNode::Name() {
 	return "BASE CLASS PROCK NODE\0";
 }
 
+ProckNodeType ProckNode::Type() {
+	return PNT_Base;
+}
+
 std::vector<ProckNode *> *ProckNode::GetAsList(char *name) {
 	PyObject *r = PyObject_GetAttrString(astNode, name);
 
