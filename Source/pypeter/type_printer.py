@@ -1,5 +1,9 @@
-# Taken originally from the redbaron source: https://github.com/PyCQA/redbaron/blob/497a55f51a1902f67b30519c126469e60b4f569f/redbaron/base_nodes.py
+'''
+Metaprogrammer for AST Node Classes. 
 
+Looks through the RedBaron source for classes of Node and scrapes their documentation
+to build a list of examples and valid fields. Writes these out as c++ classes. 
+'''
 import sys, pprint, os
 from string import Template
 
@@ -30,22 +34,30 @@ public:
 $getters};
 '''
 
+# classes we know the name of but not any of the implementation details
+anonymous_template = '''
+class PROCKFPS_API $class_name : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+'''
+
 # getters
 list_template = '''\tstd::vector<ProckNode *> *$name() { return GetAsList("$key"); } '''
 str_template = '''\tchar *$name() { return GetAsString("$key"); } '''
 dict_template = '''\tProckNode *$name() { return GetAsNode("$key"); } '''
 
-
+# Data wrapper class
 class NodeDefinition():
     def __init__(self, name):
-        self.name = name # the name of the node
-        self.description = '' # baron's description
-        self.example = '' # raw python example
-        self.help_text = '' # result of calling .help(deep=True on the baron node)
-
+        self.name = name
+        self.description = ''
+        self.example = ''
+        self.help_text = ''
         self.python = ''
         self.node = None
 
+# Utility for capturing stdout
 class PrintInterceptor(object):
     def __init__(self):
         self.current = []
@@ -67,11 +79,9 @@ class PrintInterceptor(object):
 
     def write(self, message):
         self.current.append(message)
-        # self.stdout.write(message)
 
-
+# Constructs definitions of the node types from the baron documentation
 def read_baron_definitions():
-    ''' Constructs definitions of the node types from the baron documentation '''
     with open('barondoc.txt', 'r') as f:
         lines = f.readlines()
 
@@ -107,16 +117,21 @@ def read_baron_definitions():
         line = iterator.next()
         current_def.example += line.strip()
 
-def read_node_declarations():
-    ''' Go through the RedBaron declarations and build a list of nodes '''
-    names = list(filter(lambda x: x.endswith("Node") or x.endswith("List"), dir(nodes)))
+# Go through the RedBaron declarations and build a list of nodes. Ignore the nodes we've already heard about in docs
+def read_node_declarations(known):
+    read = list(filter(lambda x: x.endswith("Node") or x.endswith("List"), dir(nodes)))
+    # for x in read:
+        # filter(lambda y: y.name == x, known)
+    return [x for x in read if len(list(filter(lambda y: y.name == x, known))) == 0]
 
-    # TODO: make sure the entire list of nodes contains any ones missing from here
-    # String to class:
-    for n in names:
-        print "\t} else if (strcmp(t, \"" + n + "\") == 0) {"
-        print "\t\treturn new PN" + n.replace('Node', '') + "();"
+    # BUG: returns a blank one for some reason. Ends up as PN and Node, respectively
+    # ALSOBUG: PNList gets sent twice
 
+def template_unknowns(names):
+    # Because the list of nodes returned here are just the class names and not the whole 
+    # definition, have to fake the entries on this a little. 
+    # Assuming that all these nodes return 'value'
+    return '\n'.join([Template(anonymous_template).substitute(class_name='PN' + x.replace('Node', '')) for x in names])
 
 def parse_definitions():
     ''' Reads in the redbaron types and builds definition objects for each '''
@@ -149,14 +164,6 @@ def write_classes():
         getters = ''
         class_name = 'PN' + d.name.replace("Node", '')
 
-        # print d.help_text
-        # print str(d.python)
-        # print str(d.description)
-        # # print '\t' + str(d.example)
-        # # print '\t' + str(d.node)
-        # pprint.pprint(d.node.__dict__)
-        # print ''
-
         # Build a list of getters for these classes
         if hasattr(d.node, 'node_list'):
             getters += Template(list_template).substitute(name='NodeList', key='node_list')
@@ -170,6 +177,7 @@ def write_classes():
 
                 for name in target_list:
                     # We don't care about the formatting. Skip it for now
+                    # EDIT: but it looks like in some cases it captures meaningful code, like comments
                     if '_formatting' in name: 
                         continue
 
@@ -196,11 +204,19 @@ def write_classes():
             dict=pretty_dict.replace('\n', '\n    ')
         )
 
-    # String to class conversion
+    # Load the list of "Unknown" nodes, or nodes we know the name of but not the implementations
+    unknowns = read_node_declarations(defs)
+    body += '\n\n//\n// Generalized, "primitive" nodes'
+    body += template_unknowns(unknowns)
+
+    # TODO: write this out to the file instead of copy pasting
+    for n in unknowns:
+        print "\t} else if (strcmp(t, \"" + n + "\") == 0) {"
+        print "\t\treturn new PN" + n.replace('Node', '') + "();"
+
     for d in defs:
         print "\t} else if (strcmp(t, \"" + d.name + "\") == 0) {"
         print "\t\treturn new PN" + d.name.replace('Node', '') + "();"
-
 
     foldAndWrite(WRITE_PATH, body)
 

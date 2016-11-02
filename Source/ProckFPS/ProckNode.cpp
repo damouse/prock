@@ -124,7 +124,83 @@ void ProckNode::PrintRaw() {
 }
 
 ProckNode *nodeSubclassFromString(char *t) {
-    if (strcmp(t, "ArgumentGeneratorComprehensionNode") == 0) {
+    if (strcmp(t, "BinaryRawStringNode") == 0) {
+        return new PNBinaryRawString();
+    } else if (strcmp(t, "BinaryStringNode") == 0) {
+        return new PNBinaryString();
+    } else if (strcmp(t, "BreakNode") == 0) {
+        return new PNBreak();
+    } else if (strcmp(t, "CodeBlockNode") == 0) {
+        return new PNCodeBlock();
+    } else if (strcmp(t, "CommaProxyList") == 0) {
+        return new PNCommaProxyList();
+    } else if (strcmp(t, "CommentNode") == 0) {
+        return new PNComment();
+    } else if (strcmp(t, "ComparisonOperatorNode") == 0) {
+        return new PNComparisonOperator();
+    } else if (strcmp(t, "ComplexNode") == 0) {
+        return new PNComplex();
+    } else if (strcmp(t, "ContinueNode") == 0) {
+        return new PNContinue();
+    } else if (strcmp(t, "DefNode") == 0) {
+        return new PNDef();
+    } else if (strcmp(t, "DictitemNode") == 0) {
+        return new PNDictitem();
+    } else if (strcmp(t, "DotProxyList") == 0) {
+        return new PNDotProxyList();
+    } else if (strcmp(t, "DottedNameNode") == 0) {
+        return new PNDottedName();
+    } else if (strcmp(t, "EllipsisNode") == 0) {
+        return new PNEllipsis();
+    } else if (strcmp(t, "ElseAttributeNode") == 0) {
+        return new PNElseAttribute();
+    } else if (strcmp(t, "EndlNode") == 0) {
+        return new PNEndl();
+    } else if (strcmp(t, "FloatExponantComplexNode") == 0) {
+        return new PNFloatExponantComplex();
+    } else if (strcmp(t, "FloatExponantNode") == 0) {
+        return new PNFloatExponant();
+    } else if (strcmp(t, "FloatNode") == 0) {
+        return new PNFloat();
+    } else if (strcmp(t, "HexaNode") == 0) {
+        return new PNHexa();
+    } else if (strcmp(t, "IfElseBlockSiblingNode") == 0) {
+        return new PNIfElseBlockSibling();
+    } else if (strcmp(t, "IntNode") == 0) {
+        return new PNInt();
+    } else if (strcmp(t, "LeftParenthesisNode") == 0) {
+        return new PNLeftParenthesis();
+    } else if (strcmp(t, "LineProxyList") == 0) {
+        return new PNLineProxyList();
+    } else if (strcmp(t, "LongNode") == 0) {
+        return new PNLong();
+    } else if (strcmp(t, "NameNode") == 0) {
+        return new PNName();
+    //} else if (strcmp(t, "Node") == 0) {
+    //    return new PN();
+    } else if (strcmp(t, "NodeList") == 0) {
+        return new PNList();
+    } else if (strcmp(t, "OctaNode") == 0) {
+        return new PNOcta();
+    } else if (strcmp(t, "PassNode") == 0) {
+        return new PNPass();
+    } else if (strcmp(t, "RawStringNode") == 0) {
+        return new PNRawString();
+    } else if (strcmp(t, "RightParenthesisNode") == 0) {
+        return new PNRightParenthesis();
+    } else if (strcmp(t, "SemicolonNode") == 0) {
+        return new PNSemicolon();
+    } else if (strcmp(t, "SpaceNode") == 0) {
+        return new PNSpace();
+    } else if (strcmp(t, "StarNode") == 0) {
+        return new PNStar();
+    } else if (strcmp(t, "StringNode") == 0) {
+        return new PNString();
+    } else if (strcmp(t, "UnicodeRawStringNode") == 0) {
+        return new PNUnicodeRawString();
+    } else if (strcmp(t, "UnicodeStringNode") == 0) {
+        return new PNUnicodeString();
+    } else if (strcmp(t, "ArgumentGeneratorComprehensionNode") == 0) {
         return new PNArgumentGeneratorComprehension();
     } else if (strcmp(t, "AssertNode") == 0) {
         return new PNAssert();

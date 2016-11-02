@@ -43,6 +43,8 @@ public:
 };
 
 // Start Generated Code
+
+
 /*
 A node representing generator passed as an argument during a function call.
 
@@ -77,11 +79,11 @@ Python __dict__ dump:
     {'_dict_keys': ['result'],
      '_list_keys': ['generators'],
      '_str_keys': ['type'],
-     'generators': <NodeList [0, 'value', 1, 'value', 0, 'generators'], " for y in z" 75493048, on ArgumentGeneratorComprehensionNode 75492376>,
+     'generators': <NodeList [0, 'value', 1, 'value', 0, 'generators'], " for y in z" 76901456, on ArgumentGeneratorComprehensionNode 76901792>,
      'init': False,
      'on_attribute': 'value',
-     'parent': <CallNode path=[0, 'value', 1], "(x for y in z)" 75492656, on AtomtrailersNode 75497312>,
-     'result': <NameNode path=[0, 'value', 1, 'value', 0, 'result'], "x" 75493160, on ArgumentGeneratorComprehensionNode 75492376>,
+     'parent': <CallNode path=[0, 'value', 1], "(x for y in z)" 76902072, on AtomtrailersNode 76898992>,
+     'result': <NameNode path=[0, 'value', 1, 'value', 0, 'result'], "x" 76901960, on ArgumentGeneratorComprehensionNode 76901792>,
      'type': 'argument_generator_comprehension'}
     
 */
@@ -119,15 +121,15 @@ Python __dict__ dump:
     {'_dict_keys': ['value', 'message'],
      '_list_keys': ['first_formatting', 'second_formatting', 'third_formatting'],
      '_str_keys': ['type'],
-     'first_formatting': <NodeList [0, 'first_formatting'], " " 75568912, on AssertNode 75569080>,
+     'first_formatting': <NodeList [0, 'first_formatting'], " " 76970136, on AssertNode 76970304>,
      'init': False,
-     'message': <NameNode path=[0, 'message'], "message" 75568856, on AssertNode 75569080>,
+     'message': <NameNode path=[0, 'message'], "message" 76970080, on AssertNode 76970304>,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "assert test, message" 75568744, on NoneType 1961454680>,
-     'second_formatting': <NodeList [0, 'second_formatting'], "" 75569136, on AssertNode 75569080>,
-     'third_formatting': <NodeList [0, 'third_formatting'], " " 75569192, on AssertNode 75569080>,
+     'parent': <RedBaron [], "assert test, message" 76969968, on NoneType 1961454680>,
+     'second_formatting': <NodeList [0, 'second_formatting'], "" 76970360, on AssertNode 76970304>,
+     'third_formatting': <NodeList [0, 'third_formatting'], " " 76970416, on AssertNode 76970304>,
      'type': 'assert',
-     'value': <NameNode path=[0, 'value'], "test" 75569360, on AssertNode 75569080>}
+     'value': <NameNode path=[0, 'value'], "test" 76970584, on AssertNode 76970304>}
     
 */
 class PROCKFPS_API PNAssert : public ProckNode {
@@ -165,15 +167,15 @@ Python __dict__ dump:
     {'_dict_keys': ['target', 'value'],
      '_list_keys': ['first_formatting', 'second_formatting'],
      '_str_keys': ['type', 'operator'],
-     'first_formatting': <NodeList [0, 'first_formatting'], " " 75491144, on AssignmentNode 75490864>,
+     'first_formatting': <NodeList [0, 'first_formatting'], " " 76900560, on AssignmentNode 76900280>,
      'init': False,
      'on_attribute': 'root',
      'operator': '',
-     'parent': <RedBaron [], "a = b" 75491368, on NoneType 1961454680>,
-     'second_formatting': <NodeList [0, 'second_formatting'], " " 75491256, on AssignmentNode 75490864>,
-     'target': <NameNode path=[0, 'target'], "a" 75490192, on AssignmentNode 75490864>,
+     'parent': <RedBaron [], "a = b" 76900784, on NoneType 1961454680>,
+     'second_formatting': <NodeList [0, 'second_formatting'], " " 76900672, on AssignmentNode 76900280>,
+     'target': <NameNode path=[0, 'target'], "a" 76898600, on AssignmentNode 76900280>,
      'type': 'assignment',
-     'value': <NameNode path=[0, 'value'], "b" 75490696, on AssignmentNode 75490864>}
+     'value': <NameNode path=[0, 'value'], "b" 76900112, on AssignmentNode 76900280>}
     
 */
 class PROCKFPS_API PNAssignment : public ProckNode {
@@ -210,15 +212,15 @@ Python __dict__ dump:
                     'third_formatting',
                     'fourth_formatting'],
      '_str_keys': ['type'],
-     'first_formatting': <NodeList [0, 'first_formatting'], "" 75489856, on AssociativeParenthesisNode 75490024>,
-     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 75568352, on AssociativeParenthesisNode 75490024>,
+     'first_formatting': <NodeList [0, 'first_formatting'], "" 76899328, on AssociativeParenthesisNode 76899496>,
+     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 76969576, on AssociativeParenthesisNode 76899496>,
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "(foo)" 73432200, on NoneType 1961454680>,
-     'second_formatting': <NodeList [0, 'second_formatting'], "" 75492880, on AssociativeParenthesisNode 75490024>,
-     'third_formatting': <NodeList [0, 'third_formatting'], "" 75490976, on AssociativeParenthesisNode 75490024>,
+     'parent': <RedBaron [], "(foo)" 76889056, on NoneType 1961454680>,
+     'second_formatting': <NodeList [0, 'second_formatting'], "" 76902296, on AssociativeParenthesisNode 76899496>,
+     'third_formatting': <NodeList [0, 'third_formatting'], "" 76900392, on AssociativeParenthesisNode 76899496>,
      'type': 'associative_parenthesis',
-     'value': <NameNode path=[0, 'value'], "foo" 75489968, on AssociativeParenthesisNode 75490024>}
+     'value': <NameNode path=[0, 'value'], "foo" 76899440, on AssociativeParenthesisNode 76899496>}
     
 */
 class PROCKFPS_API PNAssociativeParenthesis : public ProckNode {
@@ -268,15 +270,15 @@ Python __dict__ dump:
                     'third_formatting',
                     'fourth_formatting'],
      '_str_keys': ['type'],
-     'first_formatting': <NodeList [0, 'first_formatting'], "" 75489856, on AssociativeParenthesisNode 75490024>,
-     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 75568352, on AssociativeParenthesisNode 75490024>,
+     'first_formatting': <NodeList [0, 'first_formatting'], "" 76899328, on AssociativeParenthesisNode 76899496>,
+     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 76969576, on AssociativeParenthesisNode 76899496>,
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "(foo)" 73432200, on NoneType 1961454680>,
-     'second_formatting': <NodeList [0, 'second_formatting'], "" 75492880, on AssociativeParenthesisNode 75490024>,
-     'third_formatting': <NodeList [0, 'third_formatting'], "" 75490976, on AssociativeParenthesisNode 75490024>,
+     'parent': <RedBaron [], "(foo)" 76889056, on NoneType 1961454680>,
+     'second_formatting': <NodeList [0, 'second_formatting'], "" 76902296, on AssociativeParenthesisNode 76899496>,
+     'third_formatting': <NodeList [0, 'third_formatting'], "" 76900392, on AssociativeParenthesisNode 76899496>,
      'type': 'associative_parenthesis',
-     'value': <NameNode path=[0, 'value'], "foo" 75489968, on AssociativeParenthesisNode 75490024>}
+     'value': <NameNode path=[0, 'value'], "foo" 76899440, on AssociativeParenthesisNode 76899496>}
     
 */
 class PROCKFPS_API PNAtomtrailers : public ProckNode {
@@ -306,7 +308,7 @@ Python __dict__ dump:
      '_str_keys': ['type', 'value'],
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "0b10101" 78544568, on NoneType 1961454680>,
+     'parent': <RedBaron [], "0b10101" 77139920, on NoneType 1961454680>,
      'type': 'binary',
      'value': '0b10101'}
     
@@ -345,13 +347,13 @@ Python __dict__ dump:
     {'_dict_keys': ['first', 'second'],
      '_list_keys': ['first_formatting', 'second_formatting'],
      '_str_keys': ['type', 'value'],
-     'first': <IntNode path=[0, 'first'], "1" 78578296, on BinaryOperatorNode 78544624>,
-     'first_formatting': <NodeList [0, 'first_formatting'], " " 78578128, on BinaryOperatorNode 78544624>,
+     'first': <IntNode path=[0, 'first'], "1" 77173760, on BinaryOperatorNode 77172920>,
+     'first_formatting': <NodeList [0, 'first_formatting'], " " 77173592, on BinaryOperatorNode 77172920>,
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "1 + 1" 78542328, on NoneType 1961454680>,
-     'second': <IntNode path=[0, 'second'], "1" 78578576, on BinaryOperatorNode 78544624>,
-     'second_formatting': <NodeList [0, 'second_formatting'], " " 78578632, on BinaryOperatorNode 78544624>,
+     'parent': <RedBaron [], "1 + 1" 77137792, on NoneType 1961454680>,
+     'second': <IntNode path=[0, 'second'], "1" 77174040, on BinaryOperatorNode 77172920>,
+     'second_formatting': <NodeList [0, 'second_formatting'], " " 77174096, on BinaryOperatorNode 77172920>,
      'type': 'binary_operator',
      'value': '+'}
     
@@ -392,13 +394,13 @@ Python __dict__ dump:
     {'_dict_keys': ['first', 'second'],
      '_list_keys': ['first_formatting', 'second_formatting'],
      '_str_keys': ['type', 'value'],
-     'first': <NameNode path=[0, 'first'], "x" 78579920, on BooleanOperatorNode 78578800>,
-     'first_formatting': <NodeList [0, 'first_formatting'], " " 78579416, on BooleanOperatorNode 78578800>,
+     'first': <NameNode path=[0, 'first'], "x" 77175384, on BooleanOperatorNode 77174264>,
+     'first_formatting': <NodeList [0, 'first_formatting'], " " 77174880, on BooleanOperatorNode 77174264>,
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "x and y" 78579528, on NoneType 1961454680>,
-     'second': <NameNode path=[0, 'second'], "y" 78544792, on BooleanOperatorNode 78578800>,
-     'second_formatting': <NodeList [0, 'second_formatting'], " " 78544736, on BooleanOperatorNode 78578800>,
+     'parent': <RedBaron [], "x and y" 77174992, on NoneType 1961454680>,
+     'second': <NameNode path=[0, 'second'], "y" 77139640, on BooleanOperatorNode 77174264>,
+     'second_formatting': <NodeList [0, 'second_formatting'], " " 77139864, on BooleanOperatorNode 77174264>,
      'type': 'boolean_operator',
      'value': 'and'}
     
@@ -449,13 +451,13 @@ Python __dict__ dump:
     {'_dict_keys': ['first', 'second'],
      '_list_keys': ['first_formatting', 'second_formatting'],
      '_str_keys': ['type', 'value'],
-     'first': <NameNode path=[0, 'first'], "x" 78579920, on BooleanOperatorNode 78578800>,
-     'first_formatting': <NodeList [0, 'first_formatting'], " " 78579416, on BooleanOperatorNode 78578800>,
+     'first': <NameNode path=[0, 'first'], "x" 77175384, on BooleanOperatorNode 77174264>,
+     'first_formatting': <NodeList [0, 'first_formatting'], " " 77174880, on BooleanOperatorNode 77174264>,
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "x and y" 78579528, on NoneType 1961454680>,
-     'second': <NameNode path=[0, 'second'], "y" 78544792, on BooleanOperatorNode 78578800>,
-     'second_formatting': <NodeList [0, 'second_formatting'], " " 78544736, on BooleanOperatorNode 78578800>,
+     'parent': <RedBaron [], "x and y" 77174992, on NoneType 1961454680>,
+     'second': <NameNode path=[0, 'second'], "y" 77139640, on BooleanOperatorNode 77174264>,
+     'second_formatting': <NodeList [0, 'second_formatting'], " " 77139864, on BooleanOperatorNode 77174264>,
      'type': 'boolean_operator',
      'value': 'and'}
     
@@ -490,14 +492,14 @@ Python __dict__ dump:
     {'_dict_keys': ['target', 'value'],
      '_list_keys': ['first_formatting', 'second_formatting'],
      '_str_keys': ['type'],
-     'first_formatting': <NodeList [0, 'value', 1, 'value', 0, 'first_formatting'], "" 78611568, on CallArgumentNode 78580760>,
+     'first_formatting': <NodeList [0, 'value', 1, 'value', 0, 'first_formatting'], "" 77207032, on CallArgumentNode 77176224>,
      'init': False,
      'on_attribute': 'value',
-     'parent': <CallNode path=[0, 'value', 1], "(b, c=d)" 78611064, on AtomtrailersNode 78577792>,
-     'second_formatting': <NodeList [0, 'value', 1, 'value', 0, 'second_formatting'], "" 78611792, on CallArgumentNode 78580760>,
+     'parent': <CallNode path=[0, 'value', 1], "(b, c=d)" 77206528, on AtomtrailersNode 77172808>,
+     'second_formatting': <NodeList [0, 'value', 1, 'value', 0, 'second_formatting'], "" 77207256, on CallArgumentNode 77176224>,
      'target': None,
      'type': 'call_argument',
-     'value': <NameNode path=[0, 'value', 1, 'value', 0, 'value'], "b" 78611232, on CallArgumentNode 78580760>}
+     'value': <NameNode path=[0, 'value', 1, 'value', 0, 'value'], "b" 77206696, on CallArgumentNode 77176224>}
     
 */
 class PROCKFPS_API PNCallArgument : public ProckNode {
@@ -547,14 +549,14 @@ Python __dict__ dump:
     {'_dict_keys': ['target', 'value'],
      '_list_keys': ['first_formatting', 'second_formatting'],
      '_str_keys': ['type'],
-     'first_formatting': <NodeList [0, 'value', 1, 'value', 0, 'first_formatting'], "" 78611568, on CallArgumentNode 78580760>,
+     'first_formatting': <NodeList [0, 'value', 1, 'value', 0, 'first_formatting'], "" 77207032, on CallArgumentNode 77176224>,
      'init': False,
      'on_attribute': 'value',
-     'parent': <CallNode path=[0, 'value', 1], "(b, c=d)" 78611064, on AtomtrailersNode 78577792>,
-     'second_formatting': <NodeList [0, 'value', 1, 'value', 0, 'second_formatting'], "" 78611792, on CallArgumentNode 78580760>,
+     'parent': <CallNode path=[0, 'value', 1], "(b, c=d)" 77206528, on AtomtrailersNode 77172808>,
+     'second_formatting': <NodeList [0, 'value', 1, 'value', 0, 'second_formatting'], "" 77207256, on CallArgumentNode 77176224>,
      'target': None,
      'type': 'call_argument',
-     'value': <NameNode path=[0, 'value', 1, 'value', 0, 'value'], "b" 78611232, on CallArgumentNode 78580760>}
+     'value': <NameNode path=[0, 'value', 1, 'value', 0, 'value'], "b" 77206696, on CallArgumentNode 77176224>}
     
 */
 class PROCKFPS_API PNClass : public ProckNode {
@@ -581,11 +583,11 @@ Python __dict__ dump:
     {'_dict_keys': [],
      '_list_keys': ['first_formatting', 'second_formatting'],
      '_str_keys': ['type'],
-     'first_formatting': <NodeList [0, 'value', 1, 'first_formatting'], "" 78644784, on CommaNode 78645456>,
+     'first_formatting': <NodeList [0, 'value', 1, 'first_formatting'], "" 77244344, on CommaNode 77245016>,
      'init': False,
      'on_attribute': 'value',
-     'parent': <ListNode path=[0], "[1, 2, 3]" 78645064, on RedBaron 78577904>,
-     'second_formatting': <NodeList [0, 'value', 1, 'second_formatting'], " " 78645568, on CommaNode 78645456>,
+     'parent': <ListNode path=[0], "[1, 2, 3]" 77244624, on RedBaron 77175776>,
+     'second_formatting': <NodeList [0, 'value', 1, 'second_formatting'], " " 77245128, on CommaNode 77245016>,
      'type': 'comma'}
     
 */
@@ -626,15 +628,15 @@ Python __dict__ dump:
     {'_dict_keys': ['first', 'value', 'second'],
      '_list_keys': ['first_formatting', 'second_formatting'],
      '_str_keys': ['type'],
-     'first': <IntNode path=[0, 'first'], "42" 78676432, on ComparisonNode 78645176>,
-     'first_formatting': <NodeList [0, 'first_formatting'], " " 78676264, on ComparisonNode 78645176>,
+     'first': <IntNode path=[0, 'first'], "42" 77271840, on ComparisonNode 77271392>,
+     'first_formatting': <NodeList [0, 'first_formatting'], " " 77271616, on ComparisonNode 77271392>,
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "42 > 30" 78647136, on NoneType 1961454680>,
-     'second': <IntNode path=[0, 'second'], "30" 78676488, on ComparisonNode 78645176>,
-     'second_formatting': <NodeList [0, 'second_formatting'], " " 78676040, on ComparisonNode 78645176>,
+     'parent': <RedBaron [], "42 > 30" 77244736, on NoneType 1961454680>,
+     'second': <IntNode path=[0, 'second'], "30" 77271952, on ComparisonNode 77271392>,
+     'second_formatting': <NodeList [0, 'second_formatting'], " " 77271560, on ComparisonNode 77271392>,
      'type': 'comparison',
-     'value': <ComparisonOperatorNode path=[0, 'value'], ">" 78646688, on ComparisonNode 78645176>}
+     'value': <ComparisonOperatorNode path=[0, 'value'], ">" 77246248, on ComparisonNode 77271392>}
     
 */
 class PROCKFPS_API PNComparison : public ProckNode {
@@ -668,13 +670,13 @@ Python __dict__ dump:
     {'_dict_keys': ['value'],
      '_list_keys': ['first_formatting', 'second_formatting'],
      '_str_keys': ['type'],
-     'first_formatting': <NodeList [0, 'generators', 0, 'ifs', 0, 'first_formatting'], " " 78643608, on ComprehensionIfNode 78643888>,
+     'first_formatting': <NodeList [0, 'generators', 0, 'ifs', 0, 'first_formatting'], " " 77243672, on ComprehensionIfNode 77243280>,
      'init': False,
      'on_attribute': 'ifs',
-     'parent': <ComprehensionLoopNode path=[0, 'generators', 0], " for x in x if c...n" 78646912, on ListComprehensionNode 78644560>,
-     'second_formatting': <NodeList [0, 'generators', 0, 'ifs', 0, 'second_formatting'], " " 78643720, on ComprehensionIfNode 78643888>,
+     'parent': <ComprehensionLoopNode path=[0, 'generators', 0], " for x in x if c...n" 77245912, on ListComprehensionNode 77243784>,
+     'second_formatting': <NodeList [0, 'generators', 0, 'ifs', 0, 'second_formatting'], " " 77244288, on ComprehensionIfNode 77243280>,
      'type': 'comprehension_if',
-     'value': <NameNode path=[0, 'generators', 0, 'ifs', 0, 'value'], "condition" 78644112, on ComprehensionIfNode 78643888>}
+     'value': <NameNode path=[0, 'generators', 0, 'ifs', 0, 'value'], "condition" 77137008, on ComprehensionIfNode 77243280>}
     
 */
 class PROCKFPS_API PNComprehensionIf : public ProckNode {
@@ -715,16 +717,16 @@ Python __dict__ dump:
                     'fourth_formatting',
                     'ifs'],
      '_str_keys': ['type'],
-     'first_formatting': <NodeList [0, 'generators', 0, 'first_formatting'], " " 78678560, on ComprehensionLoopNode 78646968>,
-     'fourth_formatting': <NodeList [0, 'generators', 0, 'fourth_formatting'], " " 78679344, on ComprehensionLoopNode 78646968>,
-     'ifs': <NodeList [0, 'generators', 0, 'ifs'], "" 78679512, on ComprehensionLoopNode 78646968>,
+     'first_formatting': <NodeList [0, 'generators', 0, 'first_formatting'], " " 77274192, on ComprehensionLoopNode 77172864>,
+     'fourth_formatting': <NodeList [0, 'generators', 0, 'fourth_formatting'], " " 77274808, on ComprehensionLoopNode 77172864>,
+     'ifs': <NodeList [0, 'generators', 0, 'ifs'], "" 77274976, on ComprehensionLoopNode 77172864>,
      'init': False,
-     'iterator': <NameNode path=[0, 'generators', 0, 'iterator'], "y" 78676152, on ComprehensionLoopNode 78646968>,
+     'iterator': <NameNode path=[0, 'generators', 0, 'iterator'], "y" 77271280, on ComprehensionLoopNode 77172864>,
      'on_attribute': 'generators',
-     'parent': <ListComprehensionNode path=[0], "[x for y in z]" 78544176, on RedBaron 78646576>,
-     'second_formatting': <NodeList [0, 'generators', 0, 'second_formatting'], " " 78678672, on ComprehensionLoopNode 78646968>,
-     'target': <NameNode path=[0, 'generators', 0, 'target'], "z" 78679456, on ComprehensionLoopNode 78646968>,
-     'third_formatting': <NodeList [0, 'generators', 0, 'third_formatting'], " " 78679232, on ComprehensionLoopNode 78646968>,
+     'parent': <ListComprehensionNode path=[0], "[x for y in z]" 77136392, on RedBaron 77246360>,
+     'second_formatting': <NodeList [0, 'generators', 0, 'second_formatting'], " " 77274304, on ComprehensionLoopNode 77172864>,
+     'target': <NameNode path=[0, 'generators', 0, 'target'], "z" 77274920, on ComprehensionLoopNode 77172864>,
+     'third_formatting': <NodeList [0, 'generators', 0, 'third_formatting'], " " 77274696, on ComprehensionLoopNode 77172864>,
      'type': 'comprehension_loop'}
     
 */
@@ -777,12 +779,12 @@ Python __dict__ dump:
     {'_dict_keys': ['value', 'call'],
      '_list_keys': [],
      '_str_keys': ['type'],
-     'call': <CallNode path=[0, 'decorators', 0, 'call'], "(*a)" 78716432, on DecoratorNode 78716712>,
+     'call': <CallNode path=[0, 'decorators', 0, 'call'], "(*a)" 80780816, on DecoratorNode 80781208>,
      'init': False,
      'on_attribute': 'decorators',
-     'parent': <DefNode path=[0], "@stuff.plop(*a)\...n" 78716768, on RedBaron 78679008>,
+     'parent': <DefNode path=[0], "@stuff.plop(*a)\...n" 80780928, on RedBaron 77274080>,
      'type': 'decorator',
-     'value': <DottedNameNode path=[0, 'decorators', 0, 'value'], "stuff.plop" 78716600, on DecoratorNode 78716712>}
+     'value': <DottedNameNode path=[0, 'decorators', 0, 'value'], "stuff.plop" 80781264, on DecoratorNode 80781208>}
     
 */
 class PROCKFPS_API PNDecorator : public ProckNode {
@@ -832,12 +834,12 @@ Python __dict__ dump:
     {'_dict_keys': ['value', 'call'],
      '_list_keys': [],
      '_str_keys': ['type'],
-     'call': <CallNode path=[0, 'decorators', 0, 'call'], "(*a)" 78716432, on DecoratorNode 78716712>,
+     'call': <CallNode path=[0, 'decorators', 0, 'call'], "(*a)" 80780816, on DecoratorNode 80781208>,
      'init': False,
      'on_attribute': 'decorators',
-     'parent': <DefNode path=[0], "@stuff.plop(*a)\...n" 78716768, on RedBaron 78679008>,
+     'parent': <DefNode path=[0], "@stuff.plop(*a)\...n" 80780928, on RedBaron 77274080>,
      'type': 'decorator',
-     'value': <DottedNameNode path=[0, 'decorators', 0, 'value'], "stuff.plop" 78716600, on DecoratorNode 78716712>}
+     'value': <DottedNameNode path=[0, 'decorators', 0, 'value'], "stuff.plop" 80781264, on DecoratorNode 80781208>}
     
 */
 class PROCKFPS_API PNDefArgument : public ProckNode {
@@ -868,12 +870,12 @@ Python __dict__ dump:
     {'_dict_keys': ['value'],
      '_list_keys': ['formatting'],
      '_str_keys': ['type'],
-     'formatting': <NodeList [0, 'formatting'], " " 78644448, on DelNode 79040408>,
+     'formatting': <NodeList [0, 'formatting'], " " 80847368, on DelNode 80847536>,
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "del stuff" 78679960, on NoneType 1961454680>,
+     'parent': <RedBaron [], "del stuff" 77175440, on NoneType 1961454680>,
      'type': 'del',
-     'value': <NameNode path=[0, 'value'], "stuff" 79069256, on DelNode 79040408>}
+     'value': <NameNode path=[0, 'value'], "stuff" 80847424, on DelNode 80847536>}
     
 */
 class PROCKFPS_API PNDel : public ProckNode {
@@ -906,12 +908,12 @@ Python __dict__ dump:
     {'_dict_keys': ['value'],
      '_list_keys': ['formatting'],
      '_str_keys': ['type'],
-     'formatting': <NodeList [0, 'value', 1, 'value', 0, 'formatting'], "" 79071944, on DictArgumentNode 79070040>,
+     'formatting': <NodeList [0, 'value', 1, 'value', 0, 'formatting'], "" 80850000, on DictArgumentNode 80848096>,
      'init': False,
      'on_attribute': 'value',
-     'parent': <CallNode path=[0, 'value', 1], "(**b)" 79071552, on AtomtrailersNode 79069592>,
+     'parent': <CallNode path=[0, 'value', 1], "(**b)" 80849608, on AtomtrailersNode 80847648>,
      'type': 'dict_argument',
-     'value': <NameNode path=[0, 'value', 1, 'value', 0, 'value'], "b" 79071832, on DictArgumentNode 79070040>}
+     'value': <NameNode path=[0, 'value', 1, 'value', 0, 'value'], "b" 80849888, on DictArgumentNode 80848096>}
     
 */
 class PROCKFPS_API PNDictArgument : public ProckNode {
@@ -971,12 +973,12 @@ Python __dict__ dump:
     {'_dict_keys': ['value'],
      '_list_keys': ['formatting'],
      '_str_keys': ['type'],
-     'formatting': <NodeList [0, 'value', 1, 'value', 0, 'formatting'], "" 79071944, on DictArgumentNode 79070040>,
+     'formatting': <NodeList [0, 'value', 1, 'value', 0, 'formatting'], "" 80850000, on DictArgumentNode 80848096>,
      'init': False,
      'on_attribute': 'value',
-     'parent': <CallNode path=[0, 'value', 1], "(**b)" 79071552, on AtomtrailersNode 79069592>,
+     'parent': <CallNode path=[0, 'value', 1], "(**b)" 80849608, on AtomtrailersNode 80847648>,
      'type': 'dict_argument',
-     'value': <NameNode path=[0, 'value', 1, 'value', 0, 'value'], "b" 79071832, on DictArgumentNode 79070040>}
+     'value': <NameNode path=[0, 'value', 1, 'value', 0, 'value'], "b" 80849888, on DictArgumentNode 80848096>}
     
 */
 class PROCKFPS_API PNDict : public ProckNode {
@@ -1030,15 +1032,15 @@ Python __dict__ dump:
                     'third_formatting',
                     'fourth_formatting'],
      '_str_keys': ['type'],
-     'first_formatting': <NodeList [0, 'first_formatting'], "" 79107128, on DictComprehensionNode 78713968>,
-     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 79108416, on DictComprehensionNode 78713968>,
-     'generators': <NodeList [0, 'generators'], " for c in d" 79106960, on DictComprehensionNode 78713968>,
+     'first_formatting': <NodeList [0, 'first_formatting'], "" 80885184, on DictComprehensionNode 80780592>,
+     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 80886472, on DictComprehensionNode 80780592>,
+     'generators': <NodeList [0, 'generators'], " for c in d" 80885016, on DictComprehensionNode 80780592>,
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "{a: b for c in d}" 79039512, on NoneType 1961454680>,
-     'result': <DictitemNode path=[0, 'result'], "a: b" 79107688, on DictComprehensionNode 78713968>,
-     'second_formatting': <NodeList [0, 'second_formatting'], "" 79107464, on DictComprehensionNode 78713968>,
-     'third_formatting': <NodeList [0, 'third_formatting'], "" 79107744, on DictComprehensionNode 78713968>,
+     'parent': <RedBaron [], "{a: b for c in d}" 80780984, on NoneType 1961454680>,
+     'result': <DictitemNode path=[0, 'result'], "a: b" 80885744, on DictComprehensionNode 80780592>,
+     'second_formatting': <NodeList [0, 'second_formatting'], "" 80885520, on DictComprehensionNode 80780592>,
+     'third_formatting': <NodeList [0, 'third_formatting'], "" 80885800, on DictComprehensionNode 80780592>,
      'type': 'dict_comprehension'}
     
 */
@@ -1083,15 +1085,15 @@ Python __dict__ dump:
                     'third_formatting',
                     'fourth_formatting'],
      '_str_keys': ['type'],
-     'first_formatting': <NodeList [0, 'first_formatting'], "" 79107128, on DictComprehensionNode 78713968>,
-     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 79108416, on DictComprehensionNode 78713968>,
-     'generators': <NodeList [0, 'generators'], " for c in d" 79106960, on DictComprehensionNode 78713968>,
+     'first_formatting': <NodeList [0, 'first_formatting'], "" 80885184, on DictComprehensionNode 80780592>,
+     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 80886472, on DictComprehensionNode 80780592>,
+     'generators': <NodeList [0, 'generators'], " for c in d" 80885016, on DictComprehensionNode 80780592>,
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "{a: b for c in d}" 79039512, on NoneType 1961454680>,
-     'result': <DictitemNode path=[0, 'result'], "a: b" 79107688, on DictComprehensionNode 78713968>,
-     'second_formatting': <NodeList [0, 'second_formatting'], "" 79107464, on DictComprehensionNode 78713968>,
-     'third_formatting': <NodeList [0, 'third_formatting'], "" 79107744, on DictComprehensionNode 78713968>,
+     'parent': <RedBaron [], "{a: b for c in d}" 80780984, on NoneType 1961454680>,
+     'result': <DictitemNode path=[0, 'result'], "a: b" 80885744, on DictComprehensionNode 80780592>,
+     'second_formatting': <NodeList [0, 'second_formatting'], "" 80885520, on DictComprehensionNode 80780592>,
+     'third_formatting': <NodeList [0, 'third_formatting'], "" 80885800, on DictComprehensionNode 80780592>,
      'type': 'dict_comprehension'}
     
 */
@@ -1122,7 +1124,7 @@ Python __dict__ dump:
      '_str_keys': ['type', 'value'],
      'init': False,
      'on_attribute': 'value',
-     'parent': <AtomtrailersNode path=[0], "a.b" 79106512, on RedBaron 78713800>,
+     'parent': <AtomtrailersNode path=[0], "a.b" 80884288, on RedBaron 80779080>,
      'type': 'name',
      'value': 'b'}
     
@@ -1161,7 +1163,7 @@ Python __dict__ dump:
      '_str_keys': ['type', 'value'],
      'init': False,
      'on_attribute': 'value',
-     'parent': <AtomtrailersNode path=[0], "a.b" 79106512, on RedBaron 78713800>,
+     'parent': <AtomtrailersNode path=[0], "a.b" 80884288, on RedBaron 80779080>,
      'type': 'name',
      'value': 'b'}
     
@@ -1195,7 +1197,7 @@ Python __dict__ dump:
      '_str_keys': ['type', 'value'],
      'init': False,
      'on_attribute': 'value',
-     'parent': <AtomtrailersNode path=[0], "a.b" 79106512, on RedBaron 78713800>,
+     'parent': <AtomtrailersNode path=[0], "a.b" 80884288, on RedBaron 80779080>,
      'type': 'name',
      'value': 'b'}
     
@@ -1240,7 +1242,7 @@ Python __dict__ dump:
      '_str_keys': ['type', 'value'],
      'init': False,
      'on_attribute': 'value',
-     'parent': <AtomtrailersNode path=[0], "a.b" 79106512, on RedBaron 78713800>,
+     'parent': <AtomtrailersNode path=[0], "a.b" 80884288, on RedBaron 80779080>,
      'type': 'name',
      'value': 'b'}
     
@@ -1285,18 +1287,18 @@ Python __dict__ dump:
                     'fourth_formatting',
                     'fifth_formatting'],
      '_str_keys': ['type'],
-     'fifth_formatting': <NodeList [0, 'fifth_formatting'], " " 79073232, on ExecNode 79070264>,
-     'first_formatting': <NodeList [0, 'first_formatting'], " " 79070768, on ExecNode 79070264>,
-     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 79070320, on ExecNode 79070264>,
-     'globals': <NameNode path=[0, 'globals'], "a" 79070712, on ExecNode 79070264>,
+     'fifth_formatting': <NodeList [0, 'fifth_formatting'], " " 80884120, on ExecNode 80849832>,
+     'first_formatting': <NodeList [0, 'first_formatting'], " " 80886864, on ExecNode 80849832>,
+     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 80884848, on ExecNode 80849832>,
+     'globals': <NameNode path=[0, 'globals'], "a" 80883952, on ExecNode 80849832>,
      'init': False,
-     'locals': <NameNode path=[0, 'locals'], "b" 79069928, on ExecNode 79070264>,
+     'locals': <NameNode path=[0, 'locals'], "b" 80883896, on ExecNode 80849832>,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "exec '1 + 1' in a, b" 79069648, on NoneType 1961454680>,
-     'second_formatting': <NodeList [0, 'second_formatting'], " " 79070824, on ExecNode 79070264>,
-     'third_formatting': <NodeList [0, 'third_formatting'], " " 79071104, on ExecNode 79070264>,
+     'parent': <RedBaron [], "exec '1 + 1' in a, b" 80848320, on NoneType 1961454680>,
+     'second_formatting': <NodeList [0, 'second_formatting'], " " 80887648, on ExecNode 80849832>,
+     'third_formatting': <NodeList [0, 'third_formatting'], " " 80884232, on ExecNode 80849832>,
      'type': 'exec',
-     'value': <StringNode path=[0, 'value'], "'1 + 1'" 79070992, on ExecNode 79070264>}
+     'value': <StringNode path=[0, 'value'], "'1 + 1'" 80884064, on ExecNode 80849832>}
     
 */
 class PROCKFPS_API PNExec : public ProckNode {
@@ -1333,18 +1335,18 @@ Python __dict__ dump:
                     'fourth_formatting',
                     'fifth_formatting'],
      '_str_keys': ['type'],
-     'fifth_formatting': <NodeList [0, 'fifth_formatting'], " " 79073232, on ExecNode 79070264>,
-     'first_formatting': <NodeList [0, 'first_formatting'], " " 79070768, on ExecNode 79070264>,
-     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 79070320, on ExecNode 79070264>,
-     'globals': <NameNode path=[0, 'globals'], "a" 79070712, on ExecNode 79070264>,
+     'fifth_formatting': <NodeList [0, 'fifth_formatting'], " " 80884120, on ExecNode 80849832>,
+     'first_formatting': <NodeList [0, 'first_formatting'], " " 80886864, on ExecNode 80849832>,
+     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 80884848, on ExecNode 80849832>,
+     'globals': <NameNode path=[0, 'globals'], "a" 80883952, on ExecNode 80849832>,
      'init': False,
-     'locals': <NameNode path=[0, 'locals'], "b" 79069928, on ExecNode 79070264>,
+     'locals': <NameNode path=[0, 'locals'], "b" 80883896, on ExecNode 80849832>,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "exec '1 + 1' in a, b" 79069648, on NoneType 1961454680>,
-     'second_formatting': <NodeList [0, 'second_formatting'], " " 79070824, on ExecNode 79070264>,
-     'third_formatting': <NodeList [0, 'third_formatting'], " " 79071104, on ExecNode 79070264>,
+     'parent': <RedBaron [], "exec '1 + 1' in a, b" 80848320, on NoneType 1961454680>,
+     'second_formatting': <NodeList [0, 'second_formatting'], " " 80887648, on ExecNode 80849832>,
+     'third_formatting': <NodeList [0, 'third_formatting'], " " 80884232, on ExecNode 80849832>,
      'type': 'exec',
-     'value': <StringNode path=[0, 'value'], "'1 + 1'" 79070992, on ExecNode 79070264>}
+     'value': <StringNode path=[0, 'value'], "'1 + 1'" 80884064, on ExecNode 80849832>}
     
 */
 class PROCKFPS_API PNFinally : public ProckNode {
@@ -1388,18 +1390,18 @@ Python __dict__ dump:
                     'fourth_formatting',
                     'fifth_formatting'],
      '_str_keys': ['type'],
-     'fifth_formatting': <NodeList [0, 'fifth_formatting'], " " 79073232, on ExecNode 79070264>,
-     'first_formatting': <NodeList [0, 'first_formatting'], " " 79070768, on ExecNode 79070264>,
-     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 79070320, on ExecNode 79070264>,
-     'globals': <NameNode path=[0, 'globals'], "a" 79070712, on ExecNode 79070264>,
+     'fifth_formatting': <NodeList [0, 'fifth_formatting'], " " 80884120, on ExecNode 80849832>,
+     'first_formatting': <NodeList [0, 'first_formatting'], " " 80886864, on ExecNode 80849832>,
+     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 80884848, on ExecNode 80849832>,
+     'globals': <NameNode path=[0, 'globals'], "a" 80883952, on ExecNode 80849832>,
      'init': False,
-     'locals': <NameNode path=[0, 'locals'], "b" 79069928, on ExecNode 79070264>,
+     'locals': <NameNode path=[0, 'locals'], "b" 80883896, on ExecNode 80849832>,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "exec '1 + 1' in a, b" 79069648, on NoneType 1961454680>,
-     'second_formatting': <NodeList [0, 'second_formatting'], " " 79070824, on ExecNode 79070264>,
-     'third_formatting': <NodeList [0, 'third_formatting'], " " 79071104, on ExecNode 79070264>,
+     'parent': <RedBaron [], "exec '1 + 1' in a, b" 80848320, on NoneType 1961454680>,
+     'second_formatting': <NodeList [0, 'second_formatting'], " " 80887648, on ExecNode 80849832>,
+     'third_formatting': <NodeList [0, 'third_formatting'], " " 80884232, on ExecNode 80849832>,
      'type': 'exec',
-     'value': <StringNode path=[0, 'value'], "'1 + 1'" 79070992, on ExecNode 79070264>}
+     'value': <StringNode path=[0, 'value'], "'1 + 1'" 80884064, on ExecNode 80849832>}
     
 */
 class PROCKFPS_API PNFor : public ProckNode {
@@ -1440,18 +1442,18 @@ Python __dict__ dump:
                     'fourth_formatting',
                     'fifth_formatting'],
      '_str_keys': ['type'],
-     'fifth_formatting': <NodeList [0, 'fifth_formatting'], " " 79073232, on ExecNode 79070264>,
-     'first_formatting': <NodeList [0, 'first_formatting'], " " 79070768, on ExecNode 79070264>,
-     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 79070320, on ExecNode 79070264>,
-     'globals': <NameNode path=[0, 'globals'], "a" 79070712, on ExecNode 79070264>,
+     'fifth_formatting': <NodeList [0, 'fifth_formatting'], " " 80884120, on ExecNode 80849832>,
+     'first_formatting': <NodeList [0, 'first_formatting'], " " 80886864, on ExecNode 80849832>,
+     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 80884848, on ExecNode 80849832>,
+     'globals': <NameNode path=[0, 'globals'], "a" 80883952, on ExecNode 80849832>,
      'init': False,
-     'locals': <NameNode path=[0, 'locals'], "b" 79069928, on ExecNode 79070264>,
+     'locals': <NameNode path=[0, 'locals'], "b" 80883896, on ExecNode 80849832>,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "exec '1 + 1' in a, b" 79069648, on NoneType 1961454680>,
-     'second_formatting': <NodeList [0, 'second_formatting'], " " 79070824, on ExecNode 79070264>,
-     'third_formatting': <NodeList [0, 'third_formatting'], " " 79071104, on ExecNode 79070264>,
+     'parent': <RedBaron [], "exec '1 + 1' in a, b" 80848320, on NoneType 1961454680>,
+     'second_formatting': <NodeList [0, 'second_formatting'], " " 80887648, on ExecNode 80849832>,
+     'third_formatting': <NodeList [0, 'third_formatting'], " " 80884232, on ExecNode 80849832>,
      'type': 'exec',
-     'value': <StringNode path=[0, 'value'], "'1 + 1'" 79070992, on ExecNode 79070264>}
+     'value': <StringNode path=[0, 'value'], "'1 + 1'" 80884064, on ExecNode 80849832>}
     
 */
 class PROCKFPS_API PNFromImport : public ProckNode {
@@ -1489,18 +1491,18 @@ Python __dict__ dump:
                     'fourth_formatting',
                     'fifth_formatting'],
      '_str_keys': ['type'],
-     'fifth_formatting': <NodeList [0, 'fifth_formatting'], " " 79073232, on ExecNode 79070264>,
-     'first_formatting': <NodeList [0, 'first_formatting'], " " 79070768, on ExecNode 79070264>,
-     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 79070320, on ExecNode 79070264>,
-     'globals': <NameNode path=[0, 'globals'], "a" 79070712, on ExecNode 79070264>,
+     'fifth_formatting': <NodeList [0, 'fifth_formatting'], " " 80884120, on ExecNode 80849832>,
+     'first_formatting': <NodeList [0, 'first_formatting'], " " 80886864, on ExecNode 80849832>,
+     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 80884848, on ExecNode 80849832>,
+     'globals': <NameNode path=[0, 'globals'], "a" 80883952, on ExecNode 80849832>,
      'init': False,
-     'locals': <NameNode path=[0, 'locals'], "b" 79069928, on ExecNode 79070264>,
+     'locals': <NameNode path=[0, 'locals'], "b" 80883896, on ExecNode 80849832>,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "exec '1 + 1' in a, b" 79069648, on NoneType 1961454680>,
-     'second_formatting': <NodeList [0, 'second_formatting'], " " 79070824, on ExecNode 79070264>,
-     'third_formatting': <NodeList [0, 'third_formatting'], " " 79071104, on ExecNode 79070264>,
+     'parent': <RedBaron [], "exec '1 + 1' in a, b" 80848320, on NoneType 1961454680>,
+     'second_formatting': <NodeList [0, 'second_formatting'], " " 80887648, on ExecNode 80849832>,
+     'third_formatting': <NodeList [0, 'third_formatting'], " " 80884232, on ExecNode 80849832>,
      'type': 'exec',
-     'value': <StringNode path=[0, 'value'], "'1 + 1'" 79070992, on ExecNode 79070264>}
+     'value': <StringNode path=[0, 'value'], "'1 + 1'" 80884064, on ExecNode 80849832>}
     
 */
 class PROCKFPS_API PNFuncdef : public ProckNode {
@@ -1547,15 +1549,15 @@ Python __dict__ dump:
                     'third_formatting',
                     'fourth_formatting'],
      '_str_keys': ['type'],
-     'first_formatting': <NodeList [0, 'first_formatting'], "" 79251496, on GeneratorComprehensionNode 79251384>,
-     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 79252616, on GeneratorComprehensionNode 79251384>,
-     'generators': <NodeList [0, 'generators'], " for y in z" 79251664, on GeneratorComprehensionNode 79251384>,
+     'first_formatting': <NodeList [0, 'first_formatting'], "" 81025456, on GeneratorComprehensionNode 81025344>,
+     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 81026576, on GeneratorComprehensionNode 81025344>,
+     'generators': <NodeList [0, 'generators'], " for y in z" 81025624, on GeneratorComprehensionNode 81025344>,
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "(x for y in z)" 79069760, on NoneType 1961454680>,
-     'result': <NameNode path=[0, 'result'], "x" 79251720, on GeneratorComprehensionNode 79251384>,
-     'second_formatting': <NodeList [0, 'second_formatting'], "" 79252280, on GeneratorComprehensionNode 79251384>,
-     'third_formatting': <NodeList [0, 'third_formatting'], "" 79251832, on GeneratorComprehensionNode 79251384>,
+     'parent': <RedBaron [], "(x for y in z)" 80780760, on NoneType 1961454680>,
+     'result': <NameNode path=[0, 'result'], "x" 81025680, on GeneratorComprehensionNode 81025344>,
+     'second_formatting': <NodeList [0, 'second_formatting'], "" 81026240, on GeneratorComprehensionNode 81025344>,
+     'third_formatting': <NodeList [0, 'third_formatting'], "" 81025792, on GeneratorComprehensionNode 81025344>,
      'type': 'generator_comprehension'}
     
 */
@@ -1592,15 +1594,15 @@ Python __dict__ dump:
                     'third_formatting',
                     'fourth_formatting'],
      '_str_keys': ['type'],
-     'first_formatting': <NodeList [0, 'value', 1, 'first_formatting'], "" 79565600, on GetitemNode 79565096>,
-     'fourth_formatting': <NodeList [0, 'value', 1, 'fourth_formatting'], "" 79565992, on GetitemNode 79565096>,
+     'first_formatting': <NodeList [0, 'value', 1, 'first_formatting'], "" 81339560, on GetitemNode 81339056>,
+     'fourth_formatting': <NodeList [0, 'value', 1, 'fourth_formatting'], "" 81339952, on GetitemNode 81339056>,
      'init': False,
      'on_attribute': 'value',
-     'parent': <AtomtrailersNode path=[0], "a[b]" 79252896, on RedBaron 79252168>,
-     'second_formatting': <NodeList [0, 'value', 1, 'second_formatting'], "" 79565376, on GetitemNode 79565096>,
-     'third_formatting': <NodeList [0, 'value', 1, 'third_formatting'], "" 79565936, on GetitemNode 79565096>,
+     'parent': <AtomtrailersNode path=[0], "a[b]" 81026856, on RedBaron 81026128>,
+     'second_formatting': <NodeList [0, 'value', 1, 'second_formatting'], "" 81339336, on GetitemNode 81339056>,
+     'third_formatting': <NodeList [0, 'value', 1, 'third_formatting'], "" 81339896, on GetitemNode 81339056>,
      'type': 'getitem',
-     'value': <NameNode path=[0, 'value', 1, 'value'], "b" 79565432, on GetitemNode 79565096>}
+     'value': <NameNode path=[0, 'value', 1, 'value'], "b" 81339392, on GetitemNode 81339056>}
     
 */
 class PROCKFPS_API PNGetitem : public ProckNode {
@@ -1635,15 +1637,15 @@ Python __dict__ dump:
                     'third_formatting',
                     'fourth_formatting'],
      '_str_keys': ['type'],
-     'first_formatting': <NodeList [0, 'value', 1, 'first_formatting'], "" 79565600, on GetitemNode 79565096>,
-     'fourth_formatting': <NodeList [0, 'value', 1, 'fourth_formatting'], "" 79565992, on GetitemNode 79565096>,
+     'first_formatting': <NodeList [0, 'value', 1, 'first_formatting'], "" 81339560, on GetitemNode 81339056>,
+     'fourth_formatting': <NodeList [0, 'value', 1, 'fourth_formatting'], "" 81339952, on GetitemNode 81339056>,
      'init': False,
      'on_attribute': 'value',
-     'parent': <AtomtrailersNode path=[0], "a[b]" 79252896, on RedBaron 79252168>,
-     'second_formatting': <NodeList [0, 'value', 1, 'second_formatting'], "" 79565376, on GetitemNode 79565096>,
-     'third_formatting': <NodeList [0, 'value', 1, 'third_formatting'], "" 79565936, on GetitemNode 79565096>,
+     'parent': <AtomtrailersNode path=[0], "a[b]" 81026856, on RedBaron 81026128>,
+     'second_formatting': <NodeList [0, 'value', 1, 'second_formatting'], "" 81339336, on GetitemNode 81339056>,
+     'third_formatting': <NodeList [0, 'value', 1, 'third_formatting'], "" 81339896, on GetitemNode 81339056>,
      'type': 'getitem',
-     'value': <NameNode path=[0, 'value', 1, 'value'], "b" 79565432, on GetitemNode 79565096>}
+     'value': <NameNode path=[0, 'value', 1, 'value'], "b" 81339392, on GetitemNode 81339056>}
     
 */
 class PROCKFPS_API PNGlobal : public ProckNode {
@@ -1680,15 +1682,15 @@ Python __dict__ dump:
                     'third_formatting',
                     'fourth_formatting'],
      '_str_keys': ['type'],
-     'first_formatting': <NodeList [0, 'value', 1, 'first_formatting'], "" 79565600, on GetitemNode 79565096>,
-     'fourth_formatting': <NodeList [0, 'value', 1, 'fourth_formatting'], "" 79565992, on GetitemNode 79565096>,
+     'first_formatting': <NodeList [0, 'value', 1, 'first_formatting'], "" 81339560, on GetitemNode 81339056>,
+     'fourth_formatting': <NodeList [0, 'value', 1, 'fourth_formatting'], "" 81339952, on GetitemNode 81339056>,
      'init': False,
      'on_attribute': 'value',
-     'parent': <AtomtrailersNode path=[0], "a[b]" 79252896, on RedBaron 79252168>,
-     'second_formatting': <NodeList [0, 'value', 1, 'second_formatting'], "" 79565376, on GetitemNode 79565096>,
-     'third_formatting': <NodeList [0, 'value', 1, 'third_formatting'], "" 79565936, on GetitemNode 79565096>,
+     'parent': <AtomtrailersNode path=[0], "a[b]" 81026856, on RedBaron 81026128>,
+     'second_formatting': <NodeList [0, 'value', 1, 'second_formatting'], "" 81339336, on GetitemNode 81339056>,
+     'third_formatting': <NodeList [0, 'value', 1, 'third_formatting'], "" 81339896, on GetitemNode 81339056>,
      'type': 'getitem',
-     'value': <NameNode path=[0, 'value', 1, 'value'], "b" 79565432, on GetitemNode 79565096>}
+     'value': <NameNode path=[0, 'value', 1, 'value'], "b" 81339392, on GetitemNode 81339056>}
     
 */
 class PROCKFPS_API PNIf : public ProckNode {
@@ -1741,9 +1743,9 @@ Python __dict__ dump:
      '_str_keys': ['type'],
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "if a: pass\nelif...n" 79565040, on NoneType 1961454680>,
+     'parent': <RedBaron [], "if a: pass\nelif...n" 81338944, on NoneType 1961454680>,
      'type': 'ifelseblock',
-     'value': <NodeList [0, 'value'], "if a: pass\nelif...n" 79607456, on IfelseblockNode 79250656>}
+     'value': <NodeList [0, 'value'], "if a: pass\nelif...n" 81373224, on IfelseblockNode 81371376>}
     
 */
 class PROCKFPS_API PNIfelseblock : public ProckNode {
@@ -1782,9 +1784,9 @@ Python __dict__ dump:
      '_str_keys': ['type'],
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "if a: pass\nelif...n" 79565040, on NoneType 1961454680>,
+     'parent': <RedBaron [], "if a: pass\nelif...n" 81338944, on NoneType 1961454680>,
      'type': 'ifelseblock',
-     'value': <NodeList [0, 'value'], "if a: pass\nelif...n" 79607456, on IfelseblockNode 79250656>}
+     'value': <NodeList [0, 'value'], "if a: pass\nelif...n" 81373224, on IfelseblockNode 81371376>}
     
 */
 class PROCKFPS_API PNImport : public ProckNode {
@@ -1830,15 +1832,15 @@ Python __dict__ dump:
                     'second_formatting',
                     'third_formatting'],
      '_str_keys': ['type'],
-     'arguments': <CommaProxyList [0, 'arguments'], "x" 79568288, on LambdaNode 79568176>,
-     'first_formatting': <NodeList [0, 'first_formatting'], " " 79566944, on LambdaNode 79568176>,
+     'arguments': <CommaProxyList [0, 'arguments'], "x" 81023384, on LambdaNode 81024728>,
+     'first_formatting': <NodeList [0, 'first_formatting'], " " 81024672, on LambdaNode 81024728>,
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "lambda x: y" 79566552, on NoneType 1961454680>,
-     'second_formatting': <NodeList [0, 'second_formatting'], "" 79223776, on LambdaNode 79568176>,
-     'third_formatting': <NodeList [0, 'third_formatting'], " " 79224224, on LambdaNode 79568176>,
+     'parent': <RedBaron [], "lambda x: y" 77209496, on NoneType 1961454680>,
+     'second_formatting': <NodeList [0, 'second_formatting'], "" 81026968, on LambdaNode 81024728>,
+     'third_formatting': <NodeList [0, 'third_formatting'], " " 81023216, on LambdaNode 81024728>,
      'type': 'lambda',
-     'value': <NameNode path=[0, 'value'], "y" 79223944, on LambdaNode 79568176>}
+     'value': <NameNode path=[0, 'value'], "y" 81026744, on LambdaNode 81024728>}
     
 */
 class PROCKFPS_API PNLambda : public ProckNode {
@@ -1871,12 +1873,12 @@ Python __dict__ dump:
     {'_dict_keys': ['value'],
      '_list_keys': ['formatting'],
      '_str_keys': ['type'],
-     'formatting': <NodeList [0, 'arguments', 0, 'formatting'], "" 79642016, on ListArgumentNode 79638600>,
+     'formatting': <NodeList [0, 'arguments', 0, 'formatting'], "" 81415976, on ListArgumentNode 81413792>,
      'init': False,
      'on_attribute': 'arguments',
-     'parent': <DefNode path=[0], "def a(*b): pass\n" 79641232, on RedBaron 79567056>,
+     'parent': <DefNode path=[0], "def a(*b): pass\n" 81415192, on RedBaron 81025008>,
      'type': 'list_argument',
-     'value': <NameNode path=[0, 'arguments', 0, 'value'], "b" 79642072, on ListArgumentNode 79638600>}
+     'value': <NameNode path=[0, 'arguments', 0, 'value'], "b" 81416032, on ListArgumentNode 81413792>}
     
 */
 class PROCKFPS_API PNListArgument : public ProckNode {
@@ -1925,15 +1927,15 @@ Python __dict__ dump:
                     'third_formatting',
                     'fourth_formatting'],
      '_str_keys': ['type'],
-     'first_formatting': <NodeList [0, 'first_formatting'], "" 79674056, on ListComprehensionNode 79672096>,
-     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 79674392, on ListComprehensionNode 79672096>,
-     'generators': <NodeList [0, 'generators'], " for y in z" 79673328, on ListComprehensionNode 79672096>,
+     'first_formatting': <NodeList [0, 'first_formatting'], "" 81443920, on ListComprehensionNode 81441960>,
+     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 81444256, on ListComprehensionNode 81441960>,
+     'generators': <NodeList [0, 'generators'], " for y in z" 81443192, on ListComprehensionNode 81441960>,
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "[x for y in z]" 79641568, on NoneType 1961454680>,
-     'result': <NameNode path=[0, 'result'], "x" 79674112, on ListComprehensionNode 79672096>,
-     'second_formatting': <NodeList [0, 'second_formatting'], "" 79673552, on ListComprehensionNode 79672096>,
-     'third_formatting': <NodeList [0, 'third_formatting'], "" 79673496, on ListComprehensionNode 79672096>,
+     'parent': <RedBaron [], "[x for y in z]" 81415528, on NoneType 1961454680>,
+     'result': <NameNode path=[0, 'result'], "x" 81443976, on ListComprehensionNode 81441960>,
+     'second_formatting': <NodeList [0, 'second_formatting'], "" 81443416, on ListComprehensionNode 81441960>,
+     'third_formatting': <NodeList [0, 'third_formatting'], "" 81443360, on ListComprehensionNode 81441960>,
      'type': 'list_comprehension'}
     
 */
@@ -1977,15 +1979,15 @@ Python __dict__ dump:
                     'third_formatting',
                     'fourth_formatting'],
      '_str_keys': ['type'],
-     'first_formatting': <NodeList [0, 'first_formatting'], "" 79674056, on ListComprehensionNode 79672096>,
-     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 79674392, on ListComprehensionNode 79672096>,
-     'generators': <NodeList [0, 'generators'], " for y in z" 79673328, on ListComprehensionNode 79672096>,
+     'first_formatting': <NodeList [0, 'first_formatting'], "" 81443920, on ListComprehensionNode 81441960>,
+     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 81444256, on ListComprehensionNode 81441960>,
+     'generators': <NodeList [0, 'generators'], " for y in z" 81443192, on ListComprehensionNode 81441960>,
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "[x for y in z]" 79641568, on NoneType 1961454680>,
-     'result': <NameNode path=[0, 'result'], "x" 79674112, on ListComprehensionNode 79672096>,
-     'second_formatting': <NodeList [0, 'second_formatting'], "" 79673552, on ListComprehensionNode 79672096>,
-     'third_formatting': <NodeList [0, 'third_formatting'], "" 79673496, on ListComprehensionNode 79672096>,
+     'parent': <RedBaron [], "[x for y in z]" 81415528, on NoneType 1961454680>,
+     'result': <NameNode path=[0, 'result'], "x" 81443976, on ListComprehensionNode 81441960>,
+     'second_formatting': <NodeList [0, 'second_formatting'], "" 81443416, on ListComprehensionNode 81441960>,
+     'third_formatting': <NodeList [0, 'third_formatting'], "" 81443360, on ListComprehensionNode 81441960>,
      'type': 'list_comprehension'}
     
 */
@@ -2018,7 +2020,7 @@ Python __dict__ dump:
      'first_formatting': [' '],
      'init': False,
      'on_attribute': 'targets',
-     'parent': <FromImportNode path=[0], "from x import a as d" 79672656, on RedBaron 79640672>,
+     'parent': <FromImportNode path=[0], "from x import a as d" 80919576, on RedBaron 77272344>,
      'second_formatting': [' '],
      'target': 'd',
      'type': 'name_as_name',
@@ -2063,7 +2065,7 @@ Python __dict__ dump:
      'first_formatting': [' '],
      'init': False,
      'on_attribute': 'targets',
-     'parent': <FromImportNode path=[0], "from x import a as d" 79672656, on RedBaron 79640672>,
+     'parent': <FromImportNode path=[0], "from x import a as d" 80919576, on RedBaron 77272344>,
      'second_formatting': [' '],
      'target': 'd',
      'type': 'name_as_name',
@@ -2116,18 +2118,18 @@ Python __dict__ dump:
                     'fourth_formatting',
                     'fifth_formatting'],
      '_str_keys': ['type'],
-     'fifth_formatting': <NodeList [0, 'fifth_formatting'], " " 79711928, on RaiseNode 79709576>,
-     'first_formatting': <NodeList [0, 'first_formatting'], " " 79712152, on RaiseNode 79709576>,
-     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 79710528, on RaiseNode 79709576>,
+     'fifth_formatting': <NodeList [0, 'fifth_formatting'], " " 81480112, on RaiseNode 81480000>,
+     'first_formatting': <NodeList [0, 'first_formatting'], " " 81481568, on RaiseNode 81480000>,
+     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 81480056, on RaiseNode 81480000>,
      'init': False,
-     'instance': <NameNode path=[0, 'instance'], "foo" 79711816, on RaiseNode 79709576>,
+     'instance': <NameNode path=[0, 'instance'], "foo" 81479888, on RaiseNode 81480000>,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "raise Exception(...r" 79712096, on NoneType 1961454680>,
-     'second_formatting': <NodeList [0, 'second_formatting'], "" 79711648, on RaiseNode 79709576>,
-     'third_formatting': <NodeList [0, 'third_formatting'], " " 79710640, on RaiseNode 79709576>,
-     'traceback': <NameNode path=[0, 'traceback'], "bar" 79712040, on RaiseNode 79709576>,
+     'parent': <RedBaron [], "raise Exception(...r" 81479552, on NoneType 1961454680>,
+     'second_formatting': <NodeList [0, 'second_formatting'], "" 81481344, on RaiseNode 81480000>,
+     'third_formatting': <NodeList [0, 'third_formatting'], " " 81481456, on RaiseNode 81480000>,
+     'traceback': <NameNode path=[0, 'traceback'], "bar" 81477928, on RaiseNode 81480000>,
      'type': 'raise',
-     'value': <AtomtrailersNode path=[0, 'value'], "Exception()" 79710416, on RaiseNode 79709576>}
+     'value': <AtomtrailersNode path=[0, 'value'], "Exception()" 81480280, on RaiseNode 81480000>}
     
 */
 class PROCKFPS_API PNRaise : public ProckNode {
@@ -2165,18 +2167,18 @@ Python __dict__ dump:
                     'fourth_formatting',
                     'fifth_formatting'],
      '_str_keys': ['type'],
-     'fifth_formatting': <NodeList [0, 'fifth_formatting'], " " 79711928, on RaiseNode 79709576>,
-     'first_formatting': <NodeList [0, 'first_formatting'], " " 79712152, on RaiseNode 79709576>,
-     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 79710528, on RaiseNode 79709576>,
+     'fifth_formatting': <NodeList [0, 'fifth_formatting'], " " 81480112, on RaiseNode 81480000>,
+     'first_formatting': <NodeList [0, 'first_formatting'], " " 81481568, on RaiseNode 81480000>,
+     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 81480056, on RaiseNode 81480000>,
      'init': False,
-     'instance': <NameNode path=[0, 'instance'], "foo" 79711816, on RaiseNode 79709576>,
+     'instance': <NameNode path=[0, 'instance'], "foo" 81479888, on RaiseNode 81480000>,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "raise Exception(...r" 79712096, on NoneType 1961454680>,
-     'second_formatting': <NodeList [0, 'second_formatting'], "" 79711648, on RaiseNode 79709576>,
-     'third_formatting': <NodeList [0, 'third_formatting'], " " 79710640, on RaiseNode 79709576>,
-     'traceback': <NameNode path=[0, 'traceback'], "bar" 79712040, on RaiseNode 79709576>,
+     'parent': <RedBaron [], "raise Exception(...r" 81479552, on NoneType 1961454680>,
+     'second_formatting': <NodeList [0, 'second_formatting'], "" 81481344, on RaiseNode 81480000>,
+     'third_formatting': <NodeList [0, 'third_formatting'], " " 81481456, on RaiseNode 81480000>,
+     'traceback': <NameNode path=[0, 'traceback'], "bar" 81477928, on RaiseNode 81480000>,
      'type': 'raise',
-     'value': <AtomtrailersNode path=[0, 'value'], "Exception()" 79710416, on RaiseNode 79709576>}
+     'value': <AtomtrailersNode path=[0, 'value'], "Exception()" 81480280, on RaiseNode 81480000>}
     
 */
 class PROCKFPS_API PNRepr : public ProckNode {
@@ -2207,12 +2209,12 @@ Python __dict__ dump:
     {'_dict_keys': ['value'],
      '_list_keys': ['formatting'],
      '_str_keys': ['type'],
-     'formatting': <NodeList [0, 'formatting'], " " 79672992, on ReturnNode 79605832>,
+     'formatting': <NodeList [0, 'formatting'], " " 81413008, on ReturnNode 81414632>,
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "return stuff" 79673048, on NoneType 1961454680>,
+     'parent': <RedBaron [], "return stuff" 77274360, on NoneType 1961454680>,
      'type': 'return',
-     'value': <NameNode path=[0, 'value'], "stuff" 79564984, on ReturnNode 79605832>}
+     'value': <NameNode path=[0, 'value'], "stuff" 81413512, on ReturnNode 81414632>}
     
 */
 class PROCKFPS_API PNReturn : public ProckNode {
@@ -2251,12 +2253,12 @@ Python __dict__ dump:
     {'_dict_keys': ['value'],
      '_list_keys': ['formatting'],
      '_str_keys': ['type'],
-     'formatting': <NodeList [0, 'formatting'], " " 79672992, on ReturnNode 79605832>,
+     'formatting': <NodeList [0, 'formatting'], " " 81413008, on ReturnNode 81414632>,
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "return stuff" 79673048, on NoneType 1961454680>,
+     'parent': <RedBaron [], "return stuff" 77274360, on NoneType 1961454680>,
      'type': 'return',
-     'value': <NameNode path=[0, 'value'], "stuff" 79564984, on ReturnNode 79605832>}
+     'value': <NameNode path=[0, 'value'], "stuff" 81413512, on ReturnNode 81414632>}
     
 */
 class PROCKFPS_API PNSet : public ProckNode {
@@ -2303,15 +2305,15 @@ Python __dict__ dump:
                     'third_formatting',
                     'fourth_formatting'],
      '_str_keys': ['type'],
-     'first_formatting': <NodeList [0, 'first_formatting'], "" 79757264, on SetComprehensionNode 79755752>,
-     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 79782744, on SetComprehensionNode 79755752>,
-     'generators': <NodeList [0, 'generators'], " for y in z" 79757208, on SetComprehensionNode 79755752>,
+     'first_formatting': <NodeList [0, 'first_formatting'], "" 81556368, on SetComprehensionNode 81529712>,
+     'fourth_formatting': <NodeList [0, 'fourth_formatting'], "" 81556704, on SetComprehensionNode 81529712>,
+     'generators': <NodeList [0, 'generators'], " for y in z" 81555640, on SetComprehensionNode 81529712>,
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "{x for y in z}" 79756872, on NoneType 1961454680>,
-     'result': <NameNode path=[0, 'result'], "x" 79754744, on SetComprehensionNode 79755752>,
-     'second_formatting': <NodeList [0, 'second_formatting'], "" 79757152, on SetComprehensionNode 79755752>,
-     'third_formatting': <NodeList [0, 'third_formatting'], "" 79782240, on SetComprehensionNode 79755752>,
+     'parent': <RedBaron [], "{x for y in z}" 81530832, on NoneType 1961454680>,
+     'result': <NameNode path=[0, 'result'], "x" 81556424, on SetComprehensionNode 81529712>,
+     'second_formatting': <NodeList [0, 'second_formatting'], "" 81555864, on SetComprehensionNode 81529712>,
+     'third_formatting': <NodeList [0, 'third_formatting'], "" 81555808, on SetComprehensionNode 81529712>,
      'type': 'set_comprehension'}
     
 */
@@ -2361,18 +2363,18 @@ Python __dict__ dump:
                     'third_formatting',
                     'fourth_formatting'],
      '_str_keys': ['type', 'has_two_colons'],
-     'first_formatting': <NodeList [0, 'value', 1, 'value', 'first_formatting'], "" 79566048, on SliceNode 79567168>,
-     'fourth_formatting': <NodeList [0, 'value', 1, 'value', 'fourth_formatting'], "" 79673160, on SliceNode 79567168>,
+     'first_formatting': <NodeList [0, 'value', 1, 'value', 'first_formatting'], "" 81414800, on SliceNode 81527640>,
+     'fourth_formatting': <NodeList [0, 'value', 1, 'value', 'fourth_formatting'], "" 81413400, on SliceNode 81527640>,
      'has_two_colons': True,
      'init': False,
-     'lower': <IntNode path=[0, 'value', 1, 'value', 'lower'], "1" 79564872, on SliceNode 79567168>,
+     'lower': <IntNode path=[0, 'value', 1, 'value', 'lower'], "1" 81527808, on SliceNode 81527640>,
      'on_attribute': 'value',
-     'parent': <GetitemNode path=[0, 'value', 1], "[1:-1:2]" 79753400, on AtomtrailersNode 79756928>,
-     'second_formatting': <NodeList [0, 'value', 1, 'value', 'second_formatting'], "" 79566160, on SliceNode 79567168>,
-     'step': <IntNode path=[0, 'value', 1, 'value', 'step'], "2" 79606280, on SliceNode 79567168>,
-     'third_formatting': <NodeList [0, 'value', 1, 'value', 'third_formatting'], "" 79565880, on SliceNode 79567168>,
+     'parent': <GetitemNode path=[0, 'value', 1], "[1:-1:2]" 81527192, on AtomtrailersNode 81443024>,
+     'second_formatting': <NodeList [0, 'value', 1, 'value', 'second_formatting'], "" 81413904, on SliceNode 81527640>,
+     'step': <IntNode path=[0, 'value', 1, 'value', 'step'], "2" 81413064, on SliceNode 81527640>,
+     'third_formatting': <NodeList [0, 'value', 1, 'value', 'third_formatting'], "" 81414016, on SliceNode 81527640>,
      'type': 'slice',
-     'upper': <UnitaryOperatorNode path=[0, 'value', 1, 'value', 'upper'], "-1" 79673664, on SliceNode 79567168>}
+     'upper': <UnitaryOperatorNode path=[0, 'value', 1, 'value', 'upper'], "-1" 81413120, on SliceNode 81527640>}
     
 */
 class PROCKFPS_API PNSlice : public ProckNode {
@@ -2418,9 +2420,9 @@ Python __dict__ dump:
      '_str_keys': ['type'],
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "'a' r'b' b'c'" 79710752, on NoneType 1961454680>,
+     'parent': <RedBaron [], "'a' r'b' b'c'" 81557936, on NoneType 1961454680>,
      'type': 'string_chain',
-     'value': <NodeList [0, 'value'], "'a' r'b' b'c'" 79783584, on StringChainNode 79784760>}
+     'value': <NodeList [0, 'value'], "'a' r'b' b'c'" 81557600, on StringChainNode 81558720>}
     
 */
 class PROCKFPS_API PNStringChain : public ProckNode {
@@ -2463,17 +2465,17 @@ Python __dict__ dump:
                     'third_formatting',
                     'fourth_formatting'],
      '_str_keys': ['type'],
-     'first': <NameNode path=[0, 'first'], "a" 79823480, on TernaryOperatorNode 79785320>,
-     'first_formatting': <NodeList [0, 'first_formatting'], " " 79823648, on TernaryOperatorNode 79785320>,
-     'fourth_formatting': <NodeList [0, 'fourth_formatting'], " " 79823256, on TernaryOperatorNode 79785320>,
+     'first': <NameNode path=[0, 'first'], "a" 81589248, on TernaryOperatorNode 81559280>,
+     'first_formatting': <NodeList [0, 'first_formatting'], " " 81589416, on TernaryOperatorNode 81559280>,
+     'fourth_formatting': <NodeList [0, 'fourth_formatting'], " " 81589024, on TernaryOperatorNode 81559280>,
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "a if b else c" 79784424, on NoneType 1961454680>,
-     'second': <NameNode path=[0, 'second'], "c" 79823816, on TernaryOperatorNode 79785320>,
-     'second_formatting': <NodeList [0, 'second_formatting'], " " 79823312, on TernaryOperatorNode 79785320>,
-     'third_formatting': <NodeList [0, 'third_formatting'], " " 79823368, on TernaryOperatorNode 79785320>,
+     'parent': <RedBaron [], "a if b else c" 81558384, on NoneType 1961454680>,
+     'second': <NameNode path=[0, 'second'], "c" 81589584, on TernaryOperatorNode 81559280>,
+     'second_formatting': <NodeList [0, 'second_formatting'], " " 81589080, on TernaryOperatorNode 81559280>,
+     'third_formatting': <NodeList [0, 'third_formatting'], " " 81589136, on TernaryOperatorNode 81559280>,
      'type': 'ternary_operator',
-     'value': <NameNode path=[0, 'value'], "b" 79823704, on TernaryOperatorNode 79785320>}
+     'value': <NameNode path=[0, 'value'], "b" 81589472, on TernaryOperatorNode 81559280>}
     
 */
 class PROCKFPS_API PNTernaryOperator : public ProckNode {
@@ -2546,17 +2548,17 @@ Python __dict__ dump:
                     'third_formatting',
                     'fourth_formatting'],
      '_str_keys': ['type'],
-     'first': <NameNode path=[0, 'first'], "a" 79823480, on TernaryOperatorNode 79785320>,
-     'first_formatting': <NodeList [0, 'first_formatting'], " " 79823648, on TernaryOperatorNode 79785320>,
-     'fourth_formatting': <NodeList [0, 'fourth_formatting'], " " 79823256, on TernaryOperatorNode 79785320>,
+     'first': <NameNode path=[0, 'first'], "a" 81589248, on TernaryOperatorNode 81559280>,
+     'first_formatting': <NodeList [0, 'first_formatting'], " " 81589416, on TernaryOperatorNode 81559280>,
+     'fourth_formatting': <NodeList [0, 'fourth_formatting'], " " 81589024, on TernaryOperatorNode 81559280>,
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "a if b else c" 79784424, on NoneType 1961454680>,
-     'second': <NameNode path=[0, 'second'], "c" 79823816, on TernaryOperatorNode 79785320>,
-     'second_formatting': <NodeList [0, 'second_formatting'], " " 79823312, on TernaryOperatorNode 79785320>,
-     'third_formatting': <NodeList [0, 'third_formatting'], " " 79823368, on TernaryOperatorNode 79785320>,
+     'parent': <RedBaron [], "a if b else c" 81558384, on NoneType 1961454680>,
+     'second': <NameNode path=[0, 'second'], "c" 81589584, on TernaryOperatorNode 81559280>,
+     'second_formatting': <NodeList [0, 'second_formatting'], " " 81589080, on TernaryOperatorNode 81559280>,
+     'third_formatting': <NodeList [0, 'third_formatting'], " " 81589136, on TernaryOperatorNode 81559280>,
      'type': 'ternary_operator',
-     'value': <NameNode path=[0, 'value'], "b" 79823704, on TernaryOperatorNode 79785320>}
+     'value': <NameNode path=[0, 'value'], "b" 81589472, on TernaryOperatorNode 81559280>}
     
 */
 class PROCKFPS_API PNTry : public ProckNode {
@@ -2597,17 +2599,17 @@ Python __dict__ dump:
                     'third_formatting',
                     'fourth_formatting'],
      '_str_keys': ['type'],
-     'first': <NameNode path=[0, 'first'], "a" 79823480, on TernaryOperatorNode 79785320>,
-     'first_formatting': <NodeList [0, 'first_formatting'], " " 79823648, on TernaryOperatorNode 79785320>,
-     'fourth_formatting': <NodeList [0, 'fourth_formatting'], " " 79823256, on TernaryOperatorNode 79785320>,
+     'first': <NameNode path=[0, 'first'], "a" 81589248, on TernaryOperatorNode 81559280>,
+     'first_formatting': <NodeList [0, 'first_formatting'], " " 81589416, on TernaryOperatorNode 81559280>,
+     'fourth_formatting': <NodeList [0, 'fourth_formatting'], " " 81589024, on TernaryOperatorNode 81559280>,
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "a if b else c" 79784424, on NoneType 1961454680>,
-     'second': <NameNode path=[0, 'second'], "c" 79823816, on TernaryOperatorNode 79785320>,
-     'second_formatting': <NodeList [0, 'second_formatting'], " " 79823312, on TernaryOperatorNode 79785320>,
-     'third_formatting': <NodeList [0, 'third_formatting'], " " 79823368, on TernaryOperatorNode 79785320>,
+     'parent': <RedBaron [], "a if b else c" 81558384, on NoneType 1961454680>,
+     'second': <NameNode path=[0, 'second'], "c" 81589584, on TernaryOperatorNode 81559280>,
+     'second_formatting': <NodeList [0, 'second_formatting'], " " 81589080, on TernaryOperatorNode 81559280>,
+     'third_formatting': <NodeList [0, 'third_formatting'], " " 81589136, on TernaryOperatorNode 81559280>,
      'type': 'ternary_operator',
-     'value': <NameNode path=[0, 'value'], "b" 79823704, on TernaryOperatorNode 79785320>}
+     'value': <NameNode path=[0, 'value'], "b" 81589472, on TernaryOperatorNode 81559280>}
     
 */
 class PROCKFPS_API PNTuple : public ProckNode {
@@ -2639,11 +2641,11 @@ Python __dict__ dump:
     {'_dict_keys': ['target'],
      '_list_keys': ['formatting'],
      '_str_keys': ['type', 'value'],
-     'formatting': <NodeList [0, 'formatting'], "" 79895408, on UnitaryOperatorNode 79895128>,
+     'formatting': <NodeList [0, 'formatting'], "" 81665272, on UnitaryOperatorNode 81664992>,
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "-1" 79894848, on NoneType 1961454680>,
-     'target': <IntNode path=[0, 'target'], "1" 79893728, on UnitaryOperatorNode 79895128>,
+     'parent': <RedBaron [], "-1" 81664712, on NoneType 1961454680>,
+     'target': <IntNode path=[0, 'target'], "1" 81663592, on UnitaryOperatorNode 81664992>,
      'type': 'unitary_operator',
      'value': '-'}
     
@@ -2679,12 +2681,12 @@ Python __dict__ dump:
     {'_dict_keys': ['value'],
      '_list_keys': ['formatting'],
      '_str_keys': ['type'],
-     'formatting': <NodeList [0, 'formatting'], " " 79867352, on YieldNode 79867128>,
+     'formatting': <NodeList [0, 'formatting'], " " 81632392, on YieldNode 81632840>,
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "yield 42" 79867800, on NoneType 1961454680>,
+     'parent': <RedBaron [], "yield 42" 81632672, on NoneType 1961454680>,
      'type': 'yield',
-     'value': <IntNode path=[0, 'value'], "42" 79867184, on YieldNode 79867128>}
+     'value': <IntNode path=[0, 'value'], "42" 81632336, on YieldNode 81632840>}
     
 */
 class PROCKFPS_API PNYield : public ProckNode {
@@ -2717,14 +2719,14 @@ Python __dict__ dump:
     {'_dict_keys': ['value'],
      '_list_keys': ['first_formatting', 'second_formatting', 'third_formatting'],
      '_str_keys': ['type'],
-     'first_formatting': <NodeList [0, 'first_formatting'], "" 79606168, on YieldAtomNode 79826840>,
+     'first_formatting': <NodeList [0, 'first_formatting'], "" 81478320, on YieldAtomNode 81478376>,
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "(yield 42)" 78578072, on NoneType 1961454680>,
-     'second_formatting': <NodeList [0, 'second_formatting'], " " 79864944, on YieldAtomNode 79826840>,
-     'third_formatting': <NodeList [0, 'third_formatting'], "" 79867408, on YieldAtomNode 79826840>,
+     'parent': <RedBaron [], "(yield 42)" 81629648, on NoneType 1961454680>,
+     'second_formatting': <NodeList [0, 'second_formatting'], " " 81633120, on YieldAtomNode 81478376>,
+     'third_formatting': <NodeList [0, 'third_formatting'], "" 81557824, on YieldAtomNode 81478376>,
      'type': 'yield_atom',
-     'value': <IntNode path=[0, 'value'], "42" 79864888, on YieldAtomNode 79826840>}
+     'value': <IntNode path=[0, 'value'], "42" 81557488, on YieldAtomNode 81478376>}
     
 */
 class PROCKFPS_API PNYieldAtom : public ProckNode {
@@ -2761,14 +2763,14 @@ Python __dict__ dump:
     {'_dict_keys': ['value'],
      '_list_keys': ['first_formatting', 'second_formatting', 'third_formatting'],
      '_str_keys': ['type'],
-     'first_formatting': <NodeList [0, 'first_formatting'], "" 79606168, on YieldAtomNode 79826840>,
+     'first_formatting': <NodeList [0, 'first_formatting'], "" 81478320, on YieldAtomNode 81478376>,
      'init': False,
      'on_attribute': 'root',
-     'parent': <RedBaron [], "(yield 42)" 78578072, on NoneType 1961454680>,
-     'second_formatting': <NodeList [0, 'second_formatting'], " " 79864944, on YieldAtomNode 79826840>,
-     'third_formatting': <NodeList [0, 'third_formatting'], "" 79867408, on YieldAtomNode 79826840>,
+     'parent': <RedBaron [], "(yield 42)" 81629648, on NoneType 1961454680>,
+     'second_formatting': <NodeList [0, 'second_formatting'], " " 81633120, on YieldAtomNode 81478376>,
+     'third_formatting': <NodeList [0, 'third_formatting'], "" 81557824, on YieldAtomNode 81478376>,
      'type': 'yield_atom',
-     'value': <IntNode path=[0, 'value'], "42" 79864888, on YieldAtomNode 79826840>}
+     'value': <IntNode path=[0, 'value'], "42" 81557488, on YieldAtomNode 81478376>}
     
 */
 class PROCKFPS_API PNWhile : public ProckNode {
@@ -2803,14 +2805,14 @@ Python __dict__ dump:
     {'_dict_keys': ['value', 'as'],
      '_list_keys': ['first_formatting', 'second_formatting'],
      '_str_keys': ['type'],
-     'as': <NameNode path=[0, 'contexts', 0, 'as'], "b" 79940184, on WithContextItemNode 79937720>,
-     'first_formatting': <NodeList [0, 'contexts', 0, 'first_formatting'], " " 79939568, on WithContextItemNode 79937720>,
+     'as': <NameNode path=[0, 'contexts', 0, 'as'], "b" 81697760, on WithContextItemNode 81695352>,
+     'first_formatting': <NodeList [0, 'contexts', 0, 'first_formatting'], " " 81697144, on WithContextItemNode 81695352>,
      'init': False,
      'on_attribute': 'contexts',
-     'parent': <WithNode path=[0], "with a as b: pass\n" 79939400, on RedBaron 79895632>,
-     'second_formatting': <NodeList [0, 'contexts', 0, 'second_formatting'], " " 79939456, on WithContextItemNode 79937720>,
+     'parent': <WithNode path=[0], "with a as b: pass\n" 81696976, on RedBaron 81665496>,
+     'second_formatting': <NodeList [0, 'contexts', 0, 'second_formatting'], " " 81697032, on WithContextItemNode 81695352>,
      'type': 'with_context_item',
-     'value': <NameNode path=[0, 'contexts', 0, 'value'], "a" 79939680, on WithContextItemNode 79937720>}
+     'value': <NameNode path=[0, 'contexts', 0, 'value'], "a" 81697256, on WithContextItemNode 81695352>}
     
 */
 class PROCKFPS_API PNWithContextItem : public ProckNode {
@@ -2861,18 +2863,248 @@ Python __dict__ dump:
     {'_dict_keys': ['value', 'as'],
      '_list_keys': ['first_formatting', 'second_formatting'],
      '_str_keys': ['type'],
-     'as': <NameNode path=[0, 'contexts', 0, 'as'], "b" 79940184, on WithContextItemNode 79937720>,
-     'first_formatting': <NodeList [0, 'contexts', 0, 'first_formatting'], " " 79939568, on WithContextItemNode 79937720>,
+     'as': <NameNode path=[0, 'contexts', 0, 'as'], "b" 81697760, on WithContextItemNode 81695352>,
+     'first_formatting': <NodeList [0, 'contexts', 0, 'first_formatting'], " " 81697144, on WithContextItemNode 81695352>,
      'init': False,
      'on_attribute': 'contexts',
-     'parent': <WithNode path=[0], "with a as b: pass\n" 79939400, on RedBaron 79895632>,
-     'second_formatting': <NodeList [0, 'contexts', 0, 'second_formatting'], " " 79939456, on WithContextItemNode 79937720>,
+     'parent': <WithNode path=[0], "with a as b: pass\n" 81696976, on RedBaron 81665496>,
+     'second_formatting': <NodeList [0, 'contexts', 0, 'second_formatting'], " " 81697032, on WithContextItemNode 81695352>,
      'type': 'with_context_item',
-     'value': <NameNode path=[0, 'contexts', 0, 'value'], "a" 79939680, on WithContextItemNode 79937720>}
+     'value': <NameNode path=[0, 'contexts', 0, 'value'], "a" 81697256, on WithContextItemNode 81695352>}
     
 */
 class PROCKFPS_API PNWith : public ProckNode {
 public: 
 	std::vector<ProckNode *> *NodeList() { return GetAsList("node_list"); } 
+};
+
+
+//
+// Generalized, "primitive" nodes
+class PROCKFPS_API PNBinaryRawString : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNBinaryString : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNBreak : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNCodeBlock : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNCommaProxyList : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNComment : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNComparisonOperator : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNComplex : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNContinue : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNDef : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNDictitem : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNDotProxyList : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNDottedName : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNEllipsis : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNElseAttribute : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNEndl : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNFloatExponantComplex : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNFloatExponant : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNFloat : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNHexa : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNIfElseBlockSibling : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNInt : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNLeftParenthesis : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNLineProxyList : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNLong : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNName : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+// class PROCKFPS_API PN : public ProckNode {
+// public: 
+//     ProckNode *Value() { return GetAsNode("value"); }
+// };
+
+
+// class PROCKFPS_API PNList : public ProckNode {
+// public: 
+//     ProckNode *Value() { return GetAsNode("value"); }
+// };
+
+
+class PROCKFPS_API PNOcta : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNPass : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNRawString : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNRightParenthesis : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNSemicolon : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNSpace : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNStar : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNString : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNUnicodeRawString : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
+};
+
+
+class PROCKFPS_API PNUnicodeString : public ProckNode {
+public: 
+    ProckNode *Value() { return GetAsNode("value"); }
 };
 // End Generated Code

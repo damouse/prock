@@ -22,7 +22,14 @@ void ABaseGameMode::InitGameState() {
 	//std::vector<ProckNode *> *children = root->List();
 
 	for (ProckNode *child : *root->List()) {
-		child->PrintRaw();
+		//child->PrintRaw();
+
+		if (PNAssignment *assign = static_cast<PNAssignment*>(child)) {
+			ProckNode *value = assign->Value();
+			value->PrintRaw();
+			// debug message
+			UE_LOG(LogProck, Log, TEXT("Have assignment"))
+		}
 	}
 
 
