@@ -64,8 +64,9 @@ list_template = '''\tstd::vector<ProckNode *> *$name() { return GetAsList("$key"
 str_template = '''\tchar *$name() { return GetAsString("$key"); } '''
 dict_template = '''\tProckNode *$name() { return GetAsNode("$key"); } '''
 
-# Constructs definitions of the node types from the baron documentation
-def read_baron_definitions():
+
+# Reads in the redbaron types and builds definition objects for each
+def parse_definitions():
     with open('barondoc.txt', 'r') as f:
         lines = f.readlines()
 
@@ -78,7 +79,7 @@ def read_baron_definitions():
         try:
             line = iterator.next()
         except:
-            return defs
+            break
 
         if len(line) == 1:
             continue
@@ -101,32 +102,13 @@ def read_baron_definitions():
         line = iterator.next()
         current_def.example += line.strip()
 
-# Go through the RedBaron declarations and build a list of nodes. Ignore the nodes we've already heard about in docs
-def read_node_declarations(known):
-    read = list(filter(lambda x: x.endswith("Node") or x.endswith("List"), dir(nodes)))
-    decs = [x for x in read if len(list(filter(lambda y: y.name == x, known))) == 0]
-
-    # Filter out duplicats that appear later
-    return filter(lambda x: x != 'Node' and x != 'NodeList', decs)
-
-def template_unknowns(names):
-    # Because the list of nodes returned here are just the class names and not the whole 
-    # definition, have to fake the entries on this a little. 
-    # Assuming that all these nodes return 'value'
-    
-    return '\n'.join([Template(anonymous_template).substitute(
-        class_name='PN' + x.replace('Node', ''),
-        name=x.replace('Node', ''),
-        type='PNT_' + x.replace('Node', ''),
-    ) for x in names])
-
-# Reads in the redbaron types and builds definition objects for each
-def parse_definitions():
-    definitions = read_baron_definitions()
+    # The .help() method on redbaron objects is extremely informative but prints its results
+    # instead of returning them. This captures stdout of the eval(d.example) statement below
+    # so we can include this information
     out = PrintInterceptor()
     out.on()
 
-    for d in definitions:
+    for d in defs:
         eval(d.example)
         d.help_text = '\n'.join(filter(lambda x: '#' not in x, out.clear()[0].split('\n')))
         d.python = d.example.replace('RedBaron("', '').split('")[0].')[0]
@@ -134,18 +116,29 @@ def parse_definitions():
         d.node = eval(d.example)
 
     out.off()
-    return [x for x in definitions if x.node is not None]
+    return [x for x in defs if x.node is not None]
+
+# Go through the RedBaron declarations and build a list of node names. Ignore the nodes that appear in the list of NodeDefinitions 
+def read_node_declarations(known):
+    read = list(filter(lambda x: x.endswith("Node") or x.endswith("List"), dir(nodes)))
+    decs = [x for x in read if len(list(filter(lambda y: y.name == x, known))) == 0]
+
+    # Filter out spcific duplicates.
+    return filter(lambda x: x != 'Node' and x != 'NodeList', decs)
+
+# Scrape all the publically declared nodes in RedBaron to catch any nodes not seen in barondoc.txt, 
+# the documentation. Because we only have node names here we assume all these nodes return "value"
+def template_unknowns(names):
+    return '\n'.join([Template(anonymous_template).substitute(
+        class_name='PN' + x.replace('Node', ''),
+        name=x.replace('Node', ''),
+        type='PNT_' + x.replace('Node', ''),
+    ) for x in names])
 
 def template_enums(defs, unknowns):
-    body = ''
-
-    for d in defs:
-        body += '\tPNT_' + d.name.replace("Node", '') + ',\n'
-
-    for n in unknowns:
-        body += '\tPNT_' + n.replace("Node", '') + ',\n'
-
-    return Template(enum_template).substitute(body=body)
+    body = ['\tPNT_' + d.name.replace("Node", '') + ',\n' for d in defs]
+    body += ['\tPNT_' + n.replace("Node", '') + ',\n' for n in unknowns]
+    return Template(enum_template).substitute(body=''.join(body))
 
 # Should include a list of override types
 def write_classes():
@@ -197,24 +190,15 @@ def write_classes():
     body += '\n\n//\n// Generalized, "primitive" nodes'
     body += template_unknowns(unknowns)
 
-    # Build the enum list from all node types
+    # Build the enum list from all node types and write the whole body out
     enums = template_enums(defs, unknowns)
-
-    # Write out the header file definitions
     foldAndWrite(CLASS_FILE, enums + body)
 
-    # Build a list of enums to write to the enum file
-    enum = ''
-
-    for n in unknowns:
-        enum +="\t} else if (strcmp(t, \"" + n + "\") == 0) {\n"
-        enum +="\t\treturn new PN" + n.replace('Node', '') + "();\n"
-
-    for d in defs:
-        enum +="\t} else if (strcmp(t, \"" + d.name + "\") == 0) {\n"
-        enum +="\t\treturn new PN" + d.name.replace('Node', '') + "();\n"
-
-    foldAndWrite(ENUM_FILE, enum)
+    # Create and write string to class conversions
+    enum = ["\t} else if (strcmp(t, \"" + n + "\") == 0) {\n\t\treturn new PN" + n.replace('Node', '') + "();\n" for n in unknowns]
+    enum += ["\t} else if (strcmp(t, \"" + d.name + "\") == 0) {\n\t\treturn new PN" + d.name.replace('Node', '') + "();\n" for d in defs]
+    
+    foldAndWrite(ENUM_FILE, ''.join(enum))
 
 # Writes "addition" into the named file between the two delimiters hardcoded into the method
 def foldAndWrite(fileName, addition):

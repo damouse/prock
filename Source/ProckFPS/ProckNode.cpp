@@ -38,7 +38,7 @@ char *ProckNode::GetAsString(char *name) {
 
 // This is most likely an error
 char *ProckNode::Name() {
-	return "BASE CLASS PROCK NODE\0";
+	return "Base\0";
 }
 
 ProckNodeType ProckNode::Type() {
@@ -47,15 +47,12 @@ ProckNodeType ProckNode::Type() {
 
 std::vector<ProckNode *> *ProckNode::GetAsList(char *name) {
 	PyObject *r = PyObject_GetAttrString(astNode, name);
-
-	// Make sure we recieved a list
 	if (!PyIter_Check(r)) {
 		UE_LOG(LogProck, Error, TEXT("Did not recieve list in node request"));
 		return nullptr;
 	}
 
 	PyObject *iterator = PyObject_GetIter(r);
-
 	if (iterator == NULL) {
 		UE_LOG(LogProck, Error, TEXT("Could not iterate over node list"));
 		return nullptr;
@@ -66,7 +63,6 @@ std::vector<ProckNode *> *ProckNode::GetAsList(char *name) {
 
 	while (item) {
 		ProckNode *a = ProckNode::NewNode(item);
-
 		if (!a) {
 			UE_LOG(LogProck, Error, TEXT("Unable to create node for %s"), UTF8_TO_TCHAR(PyString_AsString(PyObject_Str(item))));
 			delete result;
