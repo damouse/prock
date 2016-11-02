@@ -3,6 +3,9 @@ Metaprogrammer for AST Node Classes.
 
 Looks through the RedBaron source for classes of Node and scrapes their documentation
 to build a list of examples and valid fields. Writes these out as c++ classes. 
+
+Usage: run this file. Results are written to CLASS_FILE and ENUM_FILE 
+between comment delimiters. 
 '''
 import sys, pprint, os
 from string import Template
@@ -41,6 +44,7 @@ class PROCKFPS_API $class_name : public ProckNode {
 public: 
     virtual char *Name() { return "$name\0"; }
     virtual ProckNodeType Type() { return $type; }
+
 $getters};
 '''
 
@@ -50,6 +54,7 @@ class PROCKFPS_API $class_name : public ProckNode {
 public: 
     virtual char *Name() { return "$name\0"; }
     virtual ProckNodeType Type() { return $type; }
+
     char *Value() { return GetAsString("value"); }
 };
 '''
@@ -58,39 +63,6 @@ public:
 list_template = '''\tstd::vector<ProckNode *> *$name() { return GetAsList("$key"); } '''
 str_template = '''\tchar *$name() { return GetAsString("$key"); } '''
 dict_template = '''\tProckNode *$name() { return GetAsNode("$key"); } '''
-
-# Data wrapper class
-class NodeDefinition():
-    def __init__(self, name):
-        self.name = name
-        self.description = ''
-        self.example = ''
-        self.help_text = ''
-        self.python = ''
-        self.node = None
-
-# Utility for capturing stdout
-class PrintInterceptor(object):
-    def __init__(self):
-        self.current = []
-        self.stdout = sys.stdout
-
-    def off(self):
-        sys.stdout = self.stdout
-
-    def on(self):
-        sys.stdout = self
-
-    def tprint(self, message):
-        self.stdout.write(str(message) + '\n')
-
-    def clear(self):
-        r = self.current
-        self.current = []
-        return r
-
-    def write(self, message):
-        self.current.append(message)
 
 # Constructs definitions of the node types from the baron documentation
 def read_baron_definitions():
@@ -141,14 +113,15 @@ def template_unknowns(names):
     # Because the list of nodes returned here are just the class names and not the whole 
     # definition, have to fake the entries on this a little. 
     # Assuming that all these nodes return 'value'
+    
     return '\n'.join([Template(anonymous_template).substitute(
         class_name='PN' + x.replace('Node', ''),
         name=x.replace('Node', ''),
         type='PNT_' + x.replace('Node', ''),
     ) for x in names])
 
+# Reads in the redbaron types and builds definition objects for each
 def parse_definitions():
-    ''' Reads in the redbaron types and builds definition objects for each '''
     definitions = read_baron_definitions()
     out = PrintInterceptor()
     out.on()
@@ -156,13 +129,8 @@ def parse_definitions():
     for d in definitions:
         eval(d.example)
         d.help_text = '\n'.join(filter(lambda x: '#' not in x, out.clear()[0].split('\n')))
-
-        s = d.example.replace('RedBaron("', '')
-        d.python = s.split('")[0].')[0]
-
+        d.python = d.example.replace('RedBaron("', '').split('")[0].')[0]
         d.example = d.example.replace('.help(deep=True)', '')
-
-        # TODO: check if None!
         d.node = eval(d.example)
 
     out.off()
@@ -191,8 +159,7 @@ def write_classes():
 
         # Build a list of getters for these classes
         if hasattr(d.node, 'node_list'):
-            getters += Template(list_template).substitute(name='NodeList', key='node_list')
-            getters += '\n'
+            getters += Template(list_template).substitute(name='NodeList', key='node_list') + '\n'
         else:
             for key, template in {'_str_keys': str_template, '_dict_keys': dict_template, '_list_keys': list_template}.iteritems():
                 target_list = eval('d.node.' + key)
@@ -201,19 +168,11 @@ def write_classes():
                     continue
 
                 for name in target_list:
-                    if name == 'type':
-                        continue
                     # We don't care about the formatting. Skip it for now
-                    # EDIT: but it looks like in some cases it captures meaningful code, like comments
-                    if '_formatting' in name: 
+                    if name == 'type' or '_formatting' in name:
                         continue
 
-                    getters += Template(template).substitute(
-                        name=''.join([x.title() for x in name.split('_')]),
-                        key=name,
-                    ) + '\n'
-
-                # getters += '\n'
+                    getters += Template(template).substitute(name=''.join([x.title() for x in name.split('_')]), key=name) + '\n'
 
             # Print the object's dictionary for future reference
             out.on()
@@ -244,9 +203,9 @@ def write_classes():
     # Write out the header file definitions
     foldAndWrite(CLASS_FILE, enums + body)
 
+    # Build a list of enums to write to the enum file
     enum = ''
 
-    # TODO: write this out to the file instead of copy pasting
     for n in unknowns:
         enum +="\t} else if (strcmp(t, \"" + n + "\") == 0) {\n"
         enum +="\t\treturn new PN" + n.replace('Node', '') + "();\n"
@@ -257,85 +216,54 @@ def write_classes():
 
     foldAndWrite(ENUM_FILE, enum)
 
-
-# Replaces the exising lines with these new lines
-def foldLines(f, addition):
-    start_marker = '// Start Generated Code'
-    end_marker = '// End Generated Code'
-    ret = []
-
-    with open(f) as inf:
-        ignoreLines = False
-        written = False
-
-        for line in inf:
-            # print line
-
-            if end_marker in line:
-                ignoreLines = False
-
-            if ignoreLines:
-                if not written:
-                    # print 'WRITING: ', addition
-                    written = True
-                    ret.append(addition)
-                    # [ret.append(x) for x in addition]
-            else:
-                ret.append(line)
-
-            if start_marker in line:
-                ignoreLines = True
-
-    return ret
-
-
+# Writes "addition" into the named file between the two delimiters hardcoded into the method
 def foldAndWrite(fileName, addition):
-    ''' Opens a file and folds in the given string between the comment delimiters '''
-    # fileName = os.path.join(outputPath, fileName)
-    start_marker = '// Start Generated Code'
-    end_marker = '// End Generated Code'
+    start_marker = '// Start Generated Code\n'
+    end_marker = '// End Generated Code\n'
     ret = []
 
     with open(fileName) as inf:
-        ignoreLines = False
-        written = False
-
-        for line in inf:
-            # print line
-
-            if end_marker in line:
-                ignoreLines = False
-
-            if ignoreLines:
-                if not written:
-                    # print 'WRITING: ', addition
-                    written = True
-                    ret.append(addition)
-                    # [ret.append(x) for x in addition]
-            else:
-                ret.append(line)
-
-            if start_marker in line:
-                ignoreLines = True
+        lines = inf.readlines()
+        ret = lines[:lines.index(start_marker) + 1] + lines[lines.index(end_marker):]
+        ret.insert(lines.index(start_marker) + 1, addition)
 
     with open(fileName, 'w') as f:
         [f.write(x) for x in ret]
 
-def print_enums():
-    '''
-    Import all of the Node classes from redbaron and write out factory constructors for them
-    Note that not all of the classes we'd
-    '''
+# Data wrapper class
+class NodeDefinition():
+    def __init__(self, name):
+        self.name = name
+        self.description = ''
+        self.example = ''
+        self.help_text = ''
+        self.python = ''
+        self.node = None
 
-    names = list(filter(lambda x: x.endswith("Node") or x.endswith("List"), dir(nodes)))
+# Utility for capturing stdout
+class PrintInterceptor(object):
+    def __init__(self):
+        self.current = []
+        self.stdout = sys.stdout
 
-    # String to class:
-    for n in names:
-        print "\t} else if (strcmp(t, \"" + n + "\") == 0) {"
-        print "\t\treturn new PN" + n.replace('Node', '') + "();"
+    def off(self):
+        sys.stdout = self.stdout
+
+    def on(self):
+        sys.stdout = self
+
+    def tprint(self, message):
+        self.stdout.write(str(message) + '\n')
+
+    def clear(self):
+        r = self.current
+        self.current = []
+        return r
+
+    def write(self, message):
+        self.current.append(message)
 
 if __name__ == '__main__':
-    # print_enums()
     write_classes()
 
 
