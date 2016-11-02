@@ -32,6 +32,7 @@ Python __dict__ dump:
 */
 class PROCKFPS_API $class_name : public ProckNode {
 public: 
+    virtual char *Name() { return "$name\0"; }
 $getters};
 '''
 
@@ -39,6 +40,7 @@ $getters};
 anonymous_template = '''
 class PROCKFPS_API $class_name : public ProckNode {
 public: 
+    virtual char *Name() { return "$name\0"; }
     char *Value() { return GetAsString("value"); }
 };
 '''
@@ -130,7 +132,7 @@ def template_unknowns(names):
     # Because the list of nodes returned here are just the class names and not the whole 
     # definition, have to fake the entries on this a little. 
     # Assuming that all these nodes return 'value'
-    return '\n'.join([Template(anonymous_template).substitute(class_name='PN' + x.replace('Node', '')) for x in names])
+    return '\n'.join([Template(anonymous_template).substitute(class_name='PN' + x.replace('Node', ''), name=x.replace('Node', '')) for x in names])
 
 def parse_definitions():
     ''' Reads in the redbaron types and builds definition objects for each '''
@@ -196,6 +198,7 @@ def write_classes():
 
         # Write out this class
         body += '\n' + Template(class_template).substitute(
+            name=d.name.replace("Node", ''),
             comment=d.description,
             python=d.python,
             description=d.help_text.replace('\n', '\n    '),

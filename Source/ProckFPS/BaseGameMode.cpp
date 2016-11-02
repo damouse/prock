@@ -20,65 +20,54 @@ void ABaseGameMode::InitGameState() {
 
 	//root->PrintRaw();
 	//std::vector<ProckNode *> *children = root->List();
+	float offset = 500.f;
+	float currOffset = 0.f;
 
 	for (ProckNode *child : *root->NodeList()) {
-		child->PrintRaw();
+		UE_LOG(LogProck, Log, TEXT("Child type: %s"), UTF8_TO_TCHAR(child->Name()));
 
-		if (PNAssignment *assign = static_cast<PNAssignment*>(child)) {
-			ProckNode *value = assign->Value();
-
-			if (PNName *a = static_cast<PNName*>(child)) {
-				char *val = a->Value();
-				UE_LOG(LogProck, Log, TEXT("Value: %s"), UTF8_TO_TCHAR(val));
-			}
+		if (dynamic_cast <PNEndl*>(child) || dynamic_cast<PNComment*>(child)) {
+			UE_LOG(LogProck, Log, TEXT("SKIPPED"));
+			continue;
 		}
+
+		child->PrintRaw();
+		child->Spawn(GetWorld(), FVector(currOffset, 0, 100));
+		currOffset = currOffset + offset;
+
+		//if (PNAssignment *assign = static_cast<PNAssignment*>(child)) {
+		//	ProckNode *value = assign->Value();
+
+		//	if (PNName *a = static_cast<PNName*>(child)) {
+		//		char *val = a->Value();
+		//		UE_LOG(LogProck, Log, TEXT("Value: %s"), UTF8_TO_TCHAR(val));
+		//	}
+		//}
 	}
 
 
 	// Draw a handful of boxes just for show. Note that this kind of laying-out should not be handled here
-	FVector currOffset = FVector(0.f, 0.f, 0.f);
-	float offset = 500.f;
+	//FVector currOffset = FVector(0.f, 0.f, 0.f);
+	//float offset = 500.f;
 
-	for (int i = 0; i < 4; i++) {
-		currOffset = FVector(i * offset, 0.f, 0.f);
+	//for (int i = 0; i < 4; i++) {
+	//	currOffset = FVector(i * offset, 0.f, 0.f);
 
-		ABoxActor *box1 = GetWorld()->SpawnActor<ABoxActor>(ABoxActor::StaticClass(), FVector(0, 0, 0) + currOffset, FRotator::ZeroRotator);
-		ABoxActor *box2 = GetWorld()->SpawnActor<ABoxActor>(ABoxActor::StaticClass(), FVector(0.f, 0.f, 200.f) + currOffset, FRotator::ZeroRotator);
-		ABoxActor *op = GetWorld()->SpawnActor<ABoxActor>(ABoxActor::StaticClass(), FVector(200.f, 0.f, 100.f) + currOffset, FRotator::ZeroRotator);
+	//	ABoxActor *box1 = GetWorld()->SpawnActor<ABoxActor>(ABoxActor::StaticClass(), FVector(0, 0, 0) + currOffset, FRotator::ZeroRotator);
+	//	ABoxActor *box2 = GetWorld()->SpawnActor<ABoxActor>(ABoxActor::StaticClass(), FVector(0.f, 0.f, 200.f) + currOffset, FRotator::ZeroRotator);
+	//	ABoxActor *op = GetWorld()->SpawnActor<ABoxActor>(ABoxActor::StaticClass(), FVector(200.f, 0.f, 100.f) + currOffset, FRotator::ZeroRotator);
 
-		//box1->SetActorScale3D(FVector(2, 2, 2));
-		box1->SetText("HELLO");
+	//	//box1->SetActorScale3D(FVector(2, 2, 2));
+	//	box1->SetText("HELLO");
 
-		// Connect the operation to the boxes
-		op->ConnectToBox(box2);
-		op->ConnectToBox(box1);
-	}
+	//	// Connect the operation to the boxes
+	//	op->ConnectToBox(box2);
+	//	op->ConnectToBox(box1);
+	//}
 
 	//// Spawn a nested box in the coordinate space of its parent (for nesting boxes)
 	//ABoxTest *child = (ABoxTest *)GetWorld()->SpawnActor<AActor>(boxBPClass);
 	//child->AttachToComponent(box->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
 	//child->SetActorScale3D(FVector(0.5f, 0.5f, 0.5f));
-
-
-	//prockRootNode->Resolve();
-	//prockRootNode->Print();
-
-	//for (ProckNode *node : prockRootNode->Children()) {
-	//	PythonNode *pyNode = (PythonNode *)node;
-
-	//	PythonNode *target = pyNode->GetTarget();
-	//	if (target) {
-	//		//target->Resolve();
-	//		UE_LOG(LogProck, Log, TEXT("Target: %s"), UTF8_TO_TCHAR(target->GetType()));
-	//	}
-
-	//	//UE_LOG(LogProck, Log, TEXT("%s"), UTF8_TO_TCHAR(pyNode->GetType()));'
-	//	//if (node->Type() != PNT_Endl)
-	//	//	UE_LOG(LogProck, Error, TEXT("Type exists"));
-
-	//	//if (node->Type() != PNT_Endl && node->Type() != PNT_Comment) {
-	//	//	node->Print();
-	//	//}
-	//}
 }
 

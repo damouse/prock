@@ -3,8 +3,6 @@
 #include "ProckFPS.h"
 #include "PythonBindings.h"
 
-#include "PythonNode.h"
-
 PyDoc_STRVAR(unreal_engine_py_doc, "Unreal Engine Python module.");
 
 // Initialize the python environment and import the native peter components

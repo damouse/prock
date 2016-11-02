@@ -16,7 +16,10 @@ public class ProckFPS : ModuleRules {
 
     public ProckFPS(TargetInfo Target)
 	{
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "ProceduralMeshComponent" });
+        // turn on RTTI so dynamic_cast works. Is there a performance penalty associated with this?
+        bUseRTTI = true; 
+
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "ProceduralMeshComponent" });
 
         //PrivateDependencyModuleNames.AddRange(new string[] { "CustomMeshComponent" });
         PrivateIncludePathModuleNames.AddRange(new string[] { "ProceduralMeshComponent" });

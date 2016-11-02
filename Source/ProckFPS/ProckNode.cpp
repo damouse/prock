@@ -30,13 +30,19 @@ ProckNode *ProckNode::NewNode(PyObject *native) {
 	return nullptr;
 }
 
-void ProckNode::Spawn() {
-
+void ProckNode::Spawn(UWorld *world, FVector pos) {
+	box = world->SpawnActor<ABoxActor>(ABoxActor::StaticClass(), pos, FRotator::ZeroRotator);
+	box->SetText(Name());
 }
 
 char *ProckNode::GetAsString(char *name) {
 	PyObject *r = PyObject_GetAttrString(astNode, name);
 	return (r == nullptr) ? nullptr : PyString_AsString(PyObject_Str(r));
+}
+
+// This is most likely an error
+char *ProckNode::Name() {
+	return "BASE CLASS PROCK NODE\0";
 }
 
 std::vector<ProckNode *> *ProckNode::GetAsList(char *name) {
@@ -73,26 +79,6 @@ std::vector<ProckNode *> *ProckNode::GetAsList(char *name) {
 		// Py_DECREF(item);
 	}
 
-	//for (int i = 0; i < PyList_Size(r); i++) {
-	//	PyObject *item = PyList_GetItem(r, i);
-
-	//	if (!item) {
-	//		UE_LOG(LogProck, Error, TEXT("Unable to get item from list: %s"), UTF8_TO_TCHAR(PyString_AsString(PyObject_Str(item))));
-	//		delete result;
-	//		return nullptr;
-	//	}
-
-	//	ProckNode *a = ProckNode::NewNode(item);
-
-	//	if (!a) {
-	//		UE_LOG(LogProck, Error, TEXT("Unable to create node for %s"), UTF8_TO_TCHAR(PyString_AsString(PyObject_Str(item))));
-	//		delete result;
-	//		return nullptr;
-	//	}
-
-	//	result->push_back(a);
-	//}
-
 	Py_DECREF(iterator);
 	return result;
 }
@@ -117,10 +103,13 @@ void ProckNode::PrintRaw() {
 }
 
 ProckNode *nodeSubclassFromString(char *t) {
+	// These top ones are manually added conversions
 	if (strcmp(t, "RedBaron") == 0) {
 		return new PNList();
 	} else if (strcmp(t, "NodeList") == 0) {
 		return new PNList();
+	} else if (strcmp(t, "str") == 0) {
+		return new PNName();
 
 	// Start Generated Code
 	} else if (strcmp(t, "BinaryRawStringNode") == 0) {
@@ -314,8 +303,7 @@ ProckNode *nodeSubclassFromString(char *t) {
 	} else if (strcmp(t, "WithNode") == 0) {
 		return new PNWith();
     // End Generated Code
-	} else if (strcmp(t, "str") == 0) {
-		return new PNName();
+
 	} else {
 		UE_LOG(LogProck, Error, TEXT("Unknown node type: %s"), ANSI_TO_TCHAR(t));
 		return nullptr;
