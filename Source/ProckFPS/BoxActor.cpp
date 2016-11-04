@@ -19,7 +19,7 @@ ABoxActor::ABoxActor() {
 	static ConstructorHelpers::FObjectFinder<UParticleSystem> beamActorClassFinder(TEXT("ParticleSystem'/Game/Particles/P_Beam_Actor.P_Beam_Actor'"));
 	static ConstructorHelpers::FObjectFinder<UFont> fontAssetFinder(TEXT("Font'/Game/Inconsolata.Inconsolata'"));
 	static ConstructorHelpers::FObjectFinder<UMaterial> fontMaterialFinder(TEXT("Material'/Game/M_Label.M_Label'"));
-	
+
 	PrimaryActorTick.bCanEverTick = true;
 	//UBoxComponent* root = CreateDefaultSubobject<UBoxComponent>(TEXT("RootComponent"));
 	//root->SetMobility(EComponentMobility::Movable);
@@ -29,15 +29,15 @@ ABoxActor::ABoxActor() {
 	//RootComponent = root;
 
 	UStaticMeshComponent* cube = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualRepresentation"));
-	//cube->SetupAttachment(RootComponent);
-	//cube->SetMobility(EComponentMobility::Movable);
 	cube->SetMobility(EComponentMobility::Movable);
 	cube->SetSimulatePhysics(true);
 	cube->SetEnableGravity(false);
 	cube->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	RootComponent = cube;
+	//cube->SetupAttachment(RootComponent);
+	//cube->SetMobility(EComponentMobility::Movable);
 
-	// Set up our text render
+	// Main central label
 	mainLabel = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Label"));
 	mainLabel->SetTextRenderColor(FColor::White);
 	mainLabel->SetText(FText::FromString(TEXT("MainLabel")));
@@ -47,13 +47,12 @@ ABoxActor::ABoxActor() {
 	// Set the preloaded assets
 	if (cubeStaticMesh.Succeeded()) {
 		cube->SetStaticMesh(cubeStaticMesh.Object);
-		cube->SetRelativeScale3D(FVector(1, 5, 1)); // The normal box is a little too big
 	}
 
 	if (beamClassFinder.Succeeded()) {
 		particleBeamComponent = beamClassFinder.Object;
 	}
-	
+
 	if (beamActorClassFinder.Succeeded()) {
 		particleBeamActorComponent = beamActorClassFinder.Object;
 	}
@@ -110,10 +109,11 @@ FVector ABoxActor::SizeFitContents() {
 	r->GetLocalBounds(min, max);
 
 	// Move the label to its new location
-	FVector labelPosition(min.X + LABEL_MARGIN, 0, - (labelSize.Z / 2));
+	FVector labelPosition(min.X + LABEL_MARGIN, 0, -(labelSize.Z / 2));
 	mainLabel->SetRelativeLocation(labelPosition);
 
 	// Return our new dimensions
+	//UE_LOG(LogProck, Log, TEXT("Label Size: %s, Current: %s, Target: %s, Scale: %s"), *labelSize.ToString(), *current.ToString(), *target.ToString(), *scale.ToString());
 	return max - min;
 }
 
@@ -126,8 +126,8 @@ void ABoxActor::Tick(float DeltaTime) {
 
 	// Update the beam to match the spline. TODO: rotation
 	//for (int i = 0; i < beams.size(); i++) {
-	//	beams[i]->SetBeamSourcePoint(0, splines[i]->GetStartPosition()* GetActorScale() + GetActorLocation(), 0);
-	//	beams[i]->SetBeamEndPoint(0, splines[i]->GetEndPosition()* GetActorScale() + GetActorLocation());
+	//  beams[i]->SetBeamSourcePoint(0, splines[i]->GetStartPosition()* GetActorScale() + GetActorLocation(), 0);
+	//  beams[i]->SetBeamEndPoint(0, splines[i]->GetEndPosition()* GetActorScale() + GetActorLocation());
 	//}
 
 	// Animate the box for testing purposes
