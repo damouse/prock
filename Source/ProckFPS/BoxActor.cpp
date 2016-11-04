@@ -17,7 +17,9 @@ ABoxActor::ABoxActor() {
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> cubeStaticMesh(TEXT("StaticMesh'/Game/Geometry/Meshes/1M_Cube.1M_Cube'"));
 	static ConstructorHelpers::FObjectFinder<UParticleSystem> beamClassFinder(TEXT("ParticleSystem'/Game/Particles/P_Beam.P_Beam'"));
 	static ConstructorHelpers::FObjectFinder<UParticleSystem> beamActorClassFinder(TEXT("ParticleSystem'/Game/Particles/P_Beam_Actor.P_Beam_Actor'"));
-
+	static ConstructorHelpers::FObjectFinder<UFont> fontAssetFinder(TEXT("Font'/Game/Inconsolata.Inconsolata'"));
+	static ConstructorHelpers::FObjectFinder<UMaterial> fontMaterialFinder(TEXT("Material'/Game/M_Label.M_Label'"));
+	
 	PrimaryActorTick.bCanEverTick = true;
 
 	UBoxComponent* root = CreateDefaultSubobject<UBoxComponent>(TEXT("RootComponent"));
@@ -42,8 +44,7 @@ ABoxActor::ABoxActor() {
 
 	// Set the preloaded assets
 	if (cubeStaticMesh.Succeeded()) {
-		// This is just for visualization
-		//cube->SetStaticMesh(cubeStaticMesh.Object);
+		cube->SetStaticMesh(cubeStaticMesh.Object);
 	}
 
 	if (beamClassFinder.Succeeded()) {
@@ -56,6 +57,14 @@ ABoxActor::ABoxActor() {
 
 	if (SplinePipeAsset.Succeeded()) {
 		splineStaticMesh = SplinePipeAsset.Object;
+	}
+
+	if (fontAssetFinder.Succeeded()) {
+		mainLabel->SetFont(fontAssetFinder.Object);
+	}
+
+	if (fontMaterialFinder.Succeeded()) {
+		mainLabel->SetTextMaterial(fontMaterialFinder.Object);
 	}
 
 	// Create the lines
@@ -149,4 +158,7 @@ void ABoxActor::ConnectToBox(ABoxActor* other) {
 
 void ABoxActor::SetText(char *text) {
 	mainLabel->SetText(FString(ANSI_TO_TCHAR(text)));
+	FVector size = mainLabel->GetTextLocalSize();
+
+	UE_LOG(LogProck, Log, TEXT("Size: %s"), *size.ToString());
 }
