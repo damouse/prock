@@ -14,49 +14,33 @@ https://answers.unrealengine.com/questions/140298/attaching-particle-to-socket-o
 
 ABoxActor::ABoxActor() {
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> SplinePipeAsset(TEXT("StaticMesh'/Game/Geometry/Meshes/S_Pipe_Spline.S_Pipe_Spline'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> cubeStaticMesh(TEXT("StaticMesh'/Game/Geometry/Meshes/1M_Cube.1M_Cube'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> cubeStaticMesh(TEXT("StaticMesh'/Game/Geometry/Meshes/Cube.Cube'"));
 	static ConstructorHelpers::FObjectFinder<UParticleSystem> beamClassFinder(TEXT("ParticleSystem'/Game/Particles/P_Beam.P_Beam'"));
 	static ConstructorHelpers::FObjectFinder<UParticleSystem> beamActorClassFinder(TEXT("ParticleSystem'/Game/Particles/P_Beam_Actor.P_Beam_Actor'"));
 	static ConstructorHelpers::FObjectFinder<UFont> fontAssetFinder(TEXT("Font'/Game/Inconsolata.Inconsolata'"));
 	static ConstructorHelpers::FObjectFinder<UMaterial> fontMaterialFinder(TEXT("Material'/Game/M_Label.M_Label'"));
 	
-	PrimaryActorTick.bCanEverTick = true;
-
-	UBoxComponent* root = CreateDefaultSubobject<UBoxComponent>(TEXT("RootComponent"));
-	root->SetMobility(EComponentMobility::Movable);
-	root->SetSimulatePhysics(true);
-	root->SetEnableGravity(false);
-	root->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	RootComponent = root;
+	//PrimaryActorTick.bCanEverTick = true;
 
 	UStaticMeshComponent* cube = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualRepresentation"));
-	cube->SetupAttachment(RootComponent);
 	cube->SetMobility(EComponentMobility::Movable);
-	cube->SetRelativeLocation(FVector(50, 50, 50));
+	cube->SetSimulatePhysics(true);
+	cube->SetEnableGravity(false);
+	cube->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	
+	RootComponent = cube;
 
 	// Set up our text render
 	mainLabel = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Label"));
 	mainLabel->SetTextRenderColor(FColor::White);
 	mainLabel->SetText(FText::FromString(TEXT("Var")));
 	mainLabel->SetupAttachment(RootComponent);
-	mainLabel->SetRelativeLocation(FVector(35, 50, 35)); 	// Try to center the text as much as possible. Todo: actually center the text
+	//mainLabel->SetRelativeLocation(FVector(35, 50, 35)); 	// Try to center the text as much as possible. Todo: actually center the text
 	mainLabel->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f)); // Rotate so text faces the positive y direction
 
 	// Set the preloaded assets
 	if (cubeStaticMesh.Succeeded()) {
 		cube->SetStaticMesh(cubeStaticMesh.Object);
-	}
-
-	if (beamClassFinder.Succeeded()) {
-		particleBeamComponent = beamClassFinder.Object;
-	}
-	
-	if (beamActorClassFinder.Succeeded()) {
-		particleBeamActorComponent = beamActorClassFinder.Object;
-	}
-
-	if (SplinePipeAsset.Succeeded()) {
-		splineStaticMesh = SplinePipeAsset.Object;
 	}
 
 	if (fontAssetFinder.Succeeded()) {
@@ -67,21 +51,33 @@ ABoxActor::ABoxActor() {
 		mainLabel->SetTextMaterial(fontMaterialFinder.Object);
 	}
 
+	//if (beamClassFinder.Succeeded()) {
+	//	particleBeamComponent = beamClassFinder.Object;
+	//}
+	//
+	//if (beamActorClassFinder.Succeeded()) {
+	//	particleBeamActorComponent = beamActorClassFinder.Object;
+	//}
+
+	//if (SplinePipeAsset.Succeeded()) {
+	//	splineStaticMesh = SplinePipeAsset.Object;
+	//}
+
 	// Create the lines
-	AddEdge(FVector(0, 0, 0), FVector(100, 0, 0));
-	AddEdge(FVector(0, 0, 0), FVector(0, 100, 0));
-	AddEdge(FVector(0, 100, 0), FVector(100, 100, 0));
-	AddEdge(FVector(100, 0, 0), FVector(100, 100, 0));
+	//AddEdge(FVector(0, 0, 0), FVector(100, 0, 0));
+	//AddEdge(FVector(0, 0, 0), FVector(0, 100, 0));
+	//AddEdge(FVector(0, 100, 0), FVector(100, 100, 0));
+	//AddEdge(FVector(100, 0, 0), FVector(100, 100, 0));
 
-	AddEdge(FVector(0, 0, 100), FVector(100, 0, 100));
-	AddEdge(FVector(0, 0, 100), FVector(0, 100, 100));
-	AddEdge(FVector(0, 100, 100), FVector(100, 100, 100));
-	AddEdge(FVector(100, 0, 100), FVector(100, 100, 100));
+	//AddEdge(FVector(0, 0, 100), FVector(100, 0, 100));
+	//AddEdge(FVector(0, 0, 100), FVector(0, 100, 100));
+	//AddEdge(FVector(0, 100, 100), FVector(100, 100, 100));
+	//AddEdge(FVector(100, 0, 100), FVector(100, 100, 100));
 
-	AddEdge(FVector(0, 0, 0), FVector(0, 0, 100));
-	AddEdge(FVector(0, 100, 0), FVector(0, 100, 100));
-	AddEdge(FVector(100, 100, 0), FVector(100, 100, 100));
-	AddEdge(FVector(100, 0, 0), FVector(100, 0, 100));
+	//AddEdge(FVector(0, 0, 0), FVector(0, 0, 100));
+	//AddEdge(FVector(0, 100, 0), FVector(0, 100, 100));
+	//AddEdge(FVector(100, 100, 0), FVector(100, 100, 100));
+	//AddEdge(FVector(100, 0, 0), FVector(100, 0, 100));
 }
 
 void ABoxActor::BeginPlay() {
@@ -92,10 +88,10 @@ void ABoxActor::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
 
 	// Update the beam to match the spline. TODO: rotation
-	for (int i = 0; i < beams.size(); i++) {
-		beams[i]->SetBeamSourcePoint(0, splines[i]->GetStartPosition()* GetActorScale() + GetActorLocation(), 0);
-		beams[i]->SetBeamEndPoint(0, splines[i]->GetEndPosition()* GetActorScale() + GetActorLocation());
-	}
+	//for (int i = 0; i < beams.size(); i++) {
+	//	beams[i]->SetBeamSourcePoint(0, splines[i]->GetStartPosition()* GetActorScale() + GetActorLocation(), 0);
+	//	beams[i]->SetBeamEndPoint(0, splines[i]->GetEndPosition()* GetActorScale() + GetActorLocation());
+	//}
 
 	// Animate the box for testing purposes
 	//FVector NewLocation = GetActorLocation();
@@ -107,58 +103,57 @@ void ABoxActor::Tick(float DeltaTime) {
 
 // Draw a line (which must have already been instantiated in the constructor) at the given positions
 // All the commented out areas here are to allow adding lines at runtime. Currently disabled
-void ABoxActor::AddEdge(FVector start, FVector end) {
-	// Make a unique name for this beam and spline
-	char buffer[10];
-	sprintf(buffer, "Spline%d\0", (int)beams.size());
-	FString name = FString(ANSI_TO_TCHAR(buffer));
-
-	// Create the spline
-	USplineMeshComponent* spline = CreateDefaultSubobject<USplineMeshComponent>(FName(*(name)));
-	spline->SetMobility(EComponentMobility::Movable);
-	spline->SetupAttachment(RootComponent);
-
-	spline->ForwardAxis = ESplineMeshAxis::Z;
-	spline->SetMobility(EComponentMobility::Movable);
-	spline->SetStartAndEnd(start, FVector(0, 0, 0), end, FVector(0, 0, 0));
-	spline->SetStartScale(FVector2D(0.1, 0.1));
-	spline->SetEndScale(FVector2D(0.1, 0.1));
-
-	// Comment this on to set a mesh instead of a beam 
-	//spline->SetStaticMesh(splineStaticMesh);
-
-	// Create and initialize the beam
-	sprintf(buffer, "Beam%d\0", (int)beams.size());
-	name = FString(ANSI_TO_TCHAR(buffer));
-
-	//UParticleSystemComponent *beam = NewObject<UParticleSystemComponent>(this, FName(*(name)));
-	UParticleSystemComponent* beam = CreateDefaultSubobject<UParticleSystemComponent>(FName(*(name)));
-	beam->SetTemplate(particleBeamComponent);
-	beam->RegisterComponent();
-
-	// Store the beam and the spline
-	splines.push_back(spline);
-	beams.push_back(beam);
-}
+//void ABoxActor::AddEdge(FVector start, FVector end) {
+//	// Make a unique name for this beam and spline
+//	char buffer[10];
+//	sprintf(buffer, "Spline%d\0", (int)beams.size());
+//	FString name = FString(ANSI_TO_TCHAR(buffer));
+//
+//	// Create the spline
+//	USplineMeshComponent* spline = CreateDefaultSubobject<USplineMeshComponent>(FName(*(name)));
+//	spline->SetMobility(EComponentMobility::Movable);
+//	spline->SetupAttachment(RootComponent);
+//
+//	spline->ForwardAxis = ESplineMeshAxis::Z;
+//	spline->SetMobility(EComponentMobility::Movable);
+//	spline->SetStartAndEnd(start, FVector(0, 0, 0), end, FVector(0, 0, 0));
+//	spline->SetStartScale(FVector2D(0.1, 0.1));
+//	spline->SetEndScale(FVector2D(0.1, 0.1));
+//
+//	// Comment this on to set a mesh instead of a beam 
+//	//spline->SetStaticMesh(splineStaticMesh);
+//
+//	// Create and initialize the beam
+//	sprintf(buffer, "Beam%d\0", (int)beams.size());
+//	name = FString(ANSI_TO_TCHAR(buffer));
+//
+//	//UParticleSystemComponent *beam = NewObject<UParticleSystemComponent>(this, FName(*(name)));
+//	UParticleSystemComponent* beam = CreateDefaultSubobject<UParticleSystemComponent>(FName(*(name)));
+//	beam->SetTemplate(particleBeamComponent);
+//	beam->RegisterComponent();
+//
+//	// Store the beam and the spline
+//	splines.push_back(spline);
+//	beams.push_back(beam);
+//}
 
 // Create a beam attached to each actor 
 void ABoxActor::ConnectToBox(ABoxActor* other) {
-	char buffer[10];
-	sprintf(buffer, "Connection%d\0", (int)connections.size());
-	FString name = FString(ANSI_TO_TCHAR(buffer));
+	//char buffer[10];
+	//sprintf(buffer, "Connection%d\0", (int)connections.size());
+	//FString name = FString(ANSI_TO_TCHAR(buffer));
 
-	UParticleSystemComponent *beam = NewObject<UParticleSystemComponent>(this, (FName(*(name))));
-	beam->RegisterComponent();
-	beam->SetTemplate(particleBeamActorComponent);
-	beam->SetActorParameter(TEXT("BeamSource"), this);
-	beam->SetActorParameter(TEXT("BeamTarget"), other);
+	//UParticleSystemComponent *beam = NewObject<UParticleSystemComponent>(this, (FName(*(name))));
+	//beam->RegisterComponent();
+	//beam->SetTemplate(particleBeamActorComponent);
+	//beam->SetActorParameter(TEXT("BeamSource"), this);
+	//beam->SetActorParameter(TEXT("BeamTarget"), other);
 
-	connections.push_back(beam);
+	//connections.push_back(beam);
 }
 
 void ABoxActor::SetText(char *text) {
 	mainLabel->SetText(FString(ANSI_TO_TCHAR(text)));
 	FVector size = mainLabel->GetTextLocalSize();
-
 	UE_LOG(LogProck, Log, TEXT("Size: %s"), *size.ToString());
 }
