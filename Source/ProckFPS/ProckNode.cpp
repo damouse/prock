@@ -29,6 +29,7 @@ ProckNode *ProckNode::NewNode(PyObject *native) {
 void ProckNode::Spawn(UWorld *world, FVector pos) {
 	box = world->SpawnActor<ABoxActor>(ABoxActor::StaticClass(), pos, FRotator::ZeroRotator);
 	box->SetText(Name());
+	box->SizeFitContents();
 }
 
 char *ProckNode::GetAsString(char *name) {

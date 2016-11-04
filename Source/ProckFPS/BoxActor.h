@@ -7,6 +7,8 @@
 #include <vector>
 #include "BoxActor.generated.h"
 
+// Padding between the label and the edge of the box
+const int LABEL_MARGIN = 10;
 
 UCLASS()
 class PROCKFPS_API ABoxActor : public AActor
@@ -23,19 +25,27 @@ public:
 	void ConnectToBox(ABoxActor* other);
 
 	// Add a new line to this box
-	//void AddEdge(FVector start, FVector end);
+	void AddEdge(FVector start, FVector end);
 
 	// Change the text displayed in this box. TODO: 
 	void SetText(char *text);
+
+	// Resize this box to fit its contents by calling SizeToContents on all children, or 
+	// caluculating the dimensions of internal text. Returns the resized bounds
+	FVector SizeFitContents();
 	
 	// The lines of this box
-	//std::vector<UParticleSystemComponent *> beams;
-	//std::vector<USplineMeshComponent *> splines;
+	std::vector<UParticleSystemComponent *> beams;
+	std::vector<USplineMeshComponent *> splines;
 	std::vector<UParticleSystemComponent *> connections;
 
 	// Stored in the constructor. Not needed if not building lines at runtime
-	//UParticleSystem *particleBeamComponent;
-	//UParticleSystem *particleBeamActorComponent; // Same beam with connection settings set to actors instead of points
-	//UStaticMesh *splineStaticMesh;
+	UParticleSystem *particleBeamComponent;
+	UParticleSystem *particleBeamActorComponent; // Same beam with connection settings set to actors instead of points
+	UStaticMesh *splineStaticMesh;
 	UTextRenderComponent* mainLabel;
+
+	// Used to animate the box up and down for testing
+	float RunningTime;
+
 };
