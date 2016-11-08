@@ -14,7 +14,8 @@ from redbaron.nodes import *
 from redbaron import nodes, RedBaron
 
 CLASS_FILE = '../ProckFPS/ProckNode.h'
-ENUM_FILE = '../ProckFPS/ProckNode.cpp'
+HEADER_FILE = '../ProckFPS/BaseNode.h'
+ENUM_FILE = '../ProckFPS/BaseNode.cpp'
 
 # type enum
 enum_template = '''
@@ -189,10 +190,11 @@ def write_classes():
     unknowns = read_node_declarations(defs)
     body += '\n\n//\n// Generalized, "primitive" nodes'
     body += template_unknowns(unknowns)
+    foldAndWrite(CLASS_FILE, body)
 
     # Build the enum list from all node types and write the whole body out
     enums = template_enums(defs, unknowns)
-    foldAndWrite(CLASS_FILE, enums + body)
+    foldAndWrite(HEADER_FILE, enums)
 
     # Create and write string to class conversions
     enum = ["\t} else if (strcmp(t, \"" + n + "\") == 0) {\n\t\treturn new PN" + n.replace('Node', '') + "();\n" for n in unknowns]

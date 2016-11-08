@@ -27,24 +27,11 @@ ProckNode *ProckNode::NewNode(PyObject *native) {
 	return nullptr;
 }
 
-//// Spawn the box for this node. The real implementation for this method is held as the function pointer spawnerCurryFunction
-//void ProckNode::Spawn(UWorld *world, FVector pos) {
-//	return defaultSpawn(world, pos);
-//}
-
-// This is the real base implementation of ProckNode::Spawn
-void ProckNode::defaultSpawn(UWorld *world, FVector pos) {
-	box = world->SpawnActor<ABoxActor>(ABoxActor::StaticClass(), pos, FRotator::ZeroRotator);
-	box->SetText(Name());
-	box->SizeFitContents();
-}
-
 char *ProckNode::GetAsString(char *name) {
 	PyObject *r = PyObject_GetAttrString(astNode, name);
 	return (r == nullptr) ? nullptr : PyString_AsString(PyObject_Str(r));
 }
 
-// Getting this back is most likely an error
 char *ProckNode::Name() {
 	return "Base\0";
 }

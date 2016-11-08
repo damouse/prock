@@ -21,16 +21,10 @@ public:
 	// Don't use the default constructor to create new ProckNodes!
 	static ProckNode* NewNode(PyObject* astNode);
 
-	// Spawn box for this node at the given position and spawn children recursively
-	// The base implementation of this method simply spawns the box with labels for maxiumum information
-	virtual void Spawn(UWorld *world, FVector pos);
-
-	void defaultSpawn(UWorld *world, FVector pos);
-
 	// Dump the underlying python object. Equivalent to python: str(obj)
 	void PrintRaw();
 
-	// Return this class name without the leading 'PN'
+	// Return this class name without the leading 'PN'. The class PNCallArgument returns CallArgument, for example
 	virtual char *Name();
 
 	// Return the enumerated type for this node. Use this to check type instead of c++ casts

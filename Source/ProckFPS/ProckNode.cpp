@@ -3,25 +3,19 @@
 #include "ProckFPS.h"
 #include "ProckNode.h"
 
-//void PNList::Spawn(UWorld *world, FVector pos) {
-//	UE_LOG(LogProck, Log, TEXT("Subclass method called"));
-//	Super::Spawn(world, pos);
-//}
+// This is the real base implementation of ProckNode::Spawn
+void Base_Spawn(UWorld *world, ProckNode *node, FVector pos) {
+	node->box = world->SpawnActor<ABoxActor>(ABoxActor::StaticClass(), pos, FRotator::ZeroRotator);
+	node->box->SetText(node->Name());
+	node->box->SizeFitContents();
+}
+
 
 // Spawn the box for this node. The real implementation for this method is held as the function pointer spawnerCurryFunction
-void ProckNode::Spawn(UWorld *world, FVector pos) {
-	return defaultSpawn(world, pos);
+void Spawn(UWorld *world, ProckNode *node, FVector pos) {
+	return Base_Spawn(world, node, pos);
 }
 
 void PNList_Spawn(PNList *node, UWorld *world, FVector pos) {
 
-}
-
-void InitializeOverrides() {
-	//SPAWN_OVERRIDES[PNT_List] = &PNList_Spawn;
-
-	//SPAWN_OVERRIDES = {
-	//	std::pair<ProckNodeType, std::function<void(ProckNode *, UWorld *, FVector)>>(PNT_Base, &ProckNode::defaultSpawn),
-	//	std::pair<ProckNodeType, std::function<void(ProckNode *, UWorld *, FVector)>>(PNT_List, &PNList_Spawn),
-	//};
 }
