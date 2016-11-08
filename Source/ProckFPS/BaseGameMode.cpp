@@ -16,21 +16,8 @@ ABaseGameMode::ABaseGameMode() {
 void ABaseGameMode::InitGameState() {
 	// Load the bindings and import the code
 	peter = new Peter();
-	PNList *root = (PNList *) peter->LoadPython();
-
-	// Naive tick spacing
-	float offset = 600.f;
-	float currOffset = 0.f;
-
-	for (ProckNode *child : *root->NodeList()) {
-		// Skip comments and endlines for now. Comments could be useful in the future
-		if (child->Type() == PNT_Comment || child->Type() == PNT_Endl) {
-			continue;
-		}
-
-		Spawn(GetWorld(), child, FVector(currOffset, 0, 150));
-		currOffset = currOffset + offset;
-	}
+	ProckNode *root = peter->LoadPython();
+	Spawn(GetWorld(), root, FVector(0, 0, 150));
 }
 
 //// Spawn a nested box in the coordinate space of its parent (for nesting boxes)
