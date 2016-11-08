@@ -22,8 +22,6 @@ enum_template = '''
 enum ProckNodeType {
     PNT_Base,
 $body};
-
-// Begin Node Definition
 '''
 
 # single class 

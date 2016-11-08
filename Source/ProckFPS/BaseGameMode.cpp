@@ -30,7 +30,7 @@ void ABaseGameMode::InitGameState() {
 		}
 
 		//child->PrintRaw();
-		child->Spawn(GetWorld(), FVector(currOffset, 0, 100));
+		Spawn(GetWorld(), child, FVector(currOffset, 0, 100));
 		currOffset = currOffset + offset;
 
 		//if (PNAssignment *assign = static_cast<PNAssignment*>(child)) {

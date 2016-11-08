@@ -103,7 +103,7 @@ ProckNode *nodeSubclassFromString(char *t) {
 	} else if (strcmp(t, "str") == 0) {
 		return new PNName();
 
-		// Start Generated Code
+// Start Generated Code
 	} else if (strcmp(t, "BinaryRawStringNode") == 0) {
 		return new PNBinaryRawString();
 	} else if (strcmp(t, "BinaryStringNode") == 0) {
@@ -294,7 +294,7 @@ ProckNode *nodeSubclassFromString(char *t) {
 		return new PNWithContextItem();
 	} else if (strcmp(t, "WithNode") == 0) {
 		return new PNWith();
-		// End Generated Code
+// End Generated Code
 
 	} else {
 		UE_LOG(LogProck, Error, TEXT("Unknown node type: %s"), ANSI_TO_TCHAR(t));

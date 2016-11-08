@@ -30,7 +30,7 @@ public:
 	// Return the enumerated type for this node. Use this to check type instead of c++ casts
 	virtual ProckNodeType Type();
 
-protected:
+//protected:
 	// Generalized getters
 	char *GetAsString(char *name);
 
@@ -43,14 +43,14 @@ protected:
 	PyObject *astNode;
 };
 
-// Returns a constructed subclass of ProckNode that matches the given name
+// Returns a constructed subclass of ProckNode that matches the given name. Caller owns the reference to the object
 ProckNode *nodeSubclassFromString(char *t);
 
 // TODO: update the metaprogrammer!
 // Start Generated Code
 
 enum ProckNodeType {
-	PNT_Base,
+    PNT_Base,
 	PNT_ArgumentGeneratorComprehension,
 	PNT_Assert,
 	PNT_Assignment,
@@ -147,5 +147,4 @@ enum ProckNodeType {
 	PNT_UnicodeRawString,
 	PNT_UnicodeString,
 };
-
 // End Generated Code
