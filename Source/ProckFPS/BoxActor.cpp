@@ -34,11 +34,6 @@ ABoxActor::ABoxActor() {
 	// Visible translucent body
 	cube = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualRepresentation"));
 	cube->SetupAttachment(RootComponent);
-	//cube->SetMobility(EComponentMobility::Movable);
-	//cube->SetSimulatePhysics(true);
-	//cube->SetEnableGravity(false);
-	//cube->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	//cube->SetRelativeScale3D(FVector(.5, .5, .5));
 
 	// Centered label
 	mainLabel = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Label"));
@@ -100,35 +95,27 @@ the translucent portion of the box to match them.
 It should be looking at nested nodes to do this resolution. Right now its just checking the size of its text
 */
 FVector ABoxActor::SizeFitContents() {
-	// Get the root dimensions. Note: extents are always half values
-	UBoxComponent *root = (UBoxComponent *)RootComponent;
-	FVector extent = root->GetUnscaledBoxExtent();
-
 	// Get the target size of the label and calculate a new size 
 	FVector labelSize = mainLabel->GetTextLocalSize();
 	FVector newSize;
 
-	newSize.Y = 40;
+	newSize.Y = BOX_DEPTH;
 	newSize.Z = labelSize.Z + LABEL_MARGIN * 2;
 	newSize.X = labelSize.Y + LABEL_MARGIN * 2;
-	
-	// Set the new extent. Throws an error, which makes me think there are some rules here about extents I dontknow about 
-	//FVector fin(ceil(newSize.X / 2), ceil(newSize.Y / 2), ceil(newSize.Z / 2));
-	//UE_LOG(LogProck, Log, TEXT("Setting box extent to: %s"), *fin.ToString());
-	//root->SetBoxExtent(fin, false);
-	
+
 	// Update the volume. The div(100) is for the base size of the box mesh
 	FVector scale(newSize.X / 100, newSize.Y / 100, newSize.Z / 100);
 	cube->SetRelativeScale3D(scale);
 
 	// Center the label by halving its dimensions
-	mainLabel->SetRelativeLocation(FVector(-labelSize.X / 2, 0, -labelSize.Z / 2));
+	mainLabel->SetRelativeLocation(FVector(-newSize.X / 2 + LABEL_MARGIN, 0, -newSize.Z / 2 + LABEL_MARGIN));
 
 	return newSize;
 }
 
 void ABoxActor::SetText(char *text) {
-	mainLabel->SetText(FString(ANSI_TO_TCHAR(text)));
+	//UE_LOG(LogProck, Log, TEXT("Setting label to: %s"), UTF8_TO_TCHAR(text));
+	mainLabel->SetText(FString(UTF8_TO_TCHAR(text)));
 }
 
 void ABoxActor::Tick(float DeltaTime) {

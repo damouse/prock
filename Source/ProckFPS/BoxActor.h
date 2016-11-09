@@ -7,8 +7,8 @@
 #include <vector>
 #include "BoxActor.generated.h"
 
-// Padding between the label and the edge of the box
 const int LABEL_MARGIN = 5;
+const int BOX_DEPTH = 40;		// Depth when looking straight-on. Corresponds to y coordinate
 
 UCLASS()
 class PROCKFPS_API ABoxActor : public AActor
