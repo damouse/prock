@@ -8,7 +8,7 @@
 #include "BoxActor.generated.h"
 
 // Padding between the label and the edge of the box
-const int LABEL_MARGIN = 10;
+const int LABEL_MARGIN = 5;
 
 UCLASS()
 class PROCKFPS_API ABoxActor : public AActor
@@ -44,6 +44,8 @@ public:
 	UParticleSystem *particleBeamActorComponent; // Same beam with connection settings set to actors instead of points
 	UStaticMesh *splineStaticMesh;
 	UTextRenderComponent* mainLabel;
+
+	UStaticMeshComponent *cube;
 
 	// Used to animate the box up and down for testing
 	float RunningTime;

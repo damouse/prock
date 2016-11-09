@@ -3,6 +3,7 @@
 #include "ProckFPS.h"
 #include "BoxActor.h"
 #include <stdio.h>
+#include <math.h>  
 
 /*
 // See this for adding connections between actors:
@@ -21,23 +22,25 @@ ABoxActor::ABoxActor() {
 	static ConstructorHelpers::FObjectFinder<UMaterial> fontMaterialFinder(TEXT("Material'/Game/M_Label.M_Label'"));
 
 	PrimaryActorTick.bCanEverTick = true;
-	//UBoxComponent* root = CreateDefaultSubobject<UBoxComponent>(TEXT("RootComponent"));
-	//root->SetMobility(EComponentMobility::Movable);
-	//root->SetSimulatePhysics(false);
-	//root->SetEnableGravity(false);
-	//root->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	//RootComponent = root;
 
-	UStaticMeshComponent* cube = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualRepresentation"));
-	cube->SetMobility(EComponentMobility::Movable);
-	cube->SetSimulatePhysics(true);
-	cube->SetEnableGravity(false);
-	cube->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	RootComponent = cube;
-	//cube->SetupAttachment(RootComponent);
+	// The invisible root component
+	UBoxComponent* root = CreateDefaultSubobject<UBoxComponent>(TEXT("RootComponent"));
+	root->SetMobility(EComponentMobility::Movable);
+	root->SetSimulatePhysics(true);
+	root->SetEnableGravity(false);
+	root->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	RootComponent = root;
+
+	// Visible translucent body
+	cube = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualRepresentation"));
+	cube->SetupAttachment(RootComponent);
 	//cube->SetMobility(EComponentMobility::Movable);
+	//cube->SetSimulatePhysics(true);
+	//cube->SetEnableGravity(false);
+	//cube->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	//cube->SetRelativeScale3D(FVector(.5, .5, .5));
 
-	// Main central label
+	// Centered label
 	mainLabel = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Label"));
 	mainLabel->SetTextRenderColor(FColor::White);
 	mainLabel->SetText(FText::FromString(TEXT("MainLabel")));
@@ -90,31 +93,38 @@ void ABoxActor::BeginPlay() {
 	Super::BeginPlay();
 }
 
+/*
+This method resolves the size of its internal contents (somewhat) and resizes
+the translucent portion of the box to match them. 
+
+It should be looking at nested nodes to do this resolution. Right now its just checking the size of its text
+*/
 FVector ABoxActor::SizeFitContents() {
-	// Get the root dimensions
-	FVector max, min;
-	UStaticMeshComponent *r = (UStaticMeshComponent *)RootComponent;
-	r->GetLocalBounds(min, max);
+	// Get the root dimensions. Note: extents are always half values
+	UBoxComponent *root = (UBoxComponent *)RootComponent;
+	FVector extent = root->GetUnscaledBoxExtent();
 
+	// Get the target size of the label and calculate a new size 
 	FVector labelSize = mainLabel->GetTextLocalSize();
+	FVector newSize;
 
-	// Calculate the target size before doing anything else since we have to apply a scale
-	FVector current = max - min;
-	FVector target = max - min;
-	target.X = labelSize.Y + LABEL_MARGIN * 2;
+	newSize.Y = 40;
+	newSize.Z = labelSize.Z + LABEL_MARGIN * 2;
+	newSize.X = labelSize.Y + LABEL_MARGIN * 2;
+	
+	// Set the new extent. Throws an error, which makes me think there are some rules here about extents I dontknow about 
+	//FVector fin(ceil(newSize.X / 2), ceil(newSize.Y / 2), ceil(newSize.Z / 2));
+	//UE_LOG(LogProck, Log, TEXT("Setting box extent to: %s"), *fin.ToString());
+	//root->SetBoxExtent(fin, false);
+	
+	// Update the volume. The div(100) is for the base size of the box mesh
+	FVector scale(newSize.X / 100, newSize.Y / 100, newSize.Z / 100);
+	cube->SetRelativeScale3D(scale);
 
-	// Rescale the root to fit the new bounds
-	FVector scale(target.X / current.X, target.Y / current.Y, target.Z / current.Z);
-	r->SetRelativeScale3D(scale);
-	r->GetLocalBounds(min, max);
+	// Center the label by halving its dimensions
+	mainLabel->SetRelativeLocation(FVector(-labelSize.X / 2, 0, -labelSize.Z / 2));
 
-	// Move the label to its new location
-	FVector labelPosition(min.X + LABEL_MARGIN, 0, -(labelSize.Z / 2));
-	mainLabel->SetRelativeLocation(labelPosition);
-
-	// Return our new dimensions
-	//UE_LOG(LogProck, Log, TEXT("Label Size: %s, Current: %s, Target: %s, Scale: %s"), *labelSize.ToString(), *current.ToString(), *target.ToString(), *scale.ToString());
-	return max - min;
+	return newSize;
 }
 
 void ABoxActor::SetText(char *text) {
@@ -189,3 +199,8 @@ void ABoxActor::ConnectToBox(ABoxActor* other) {
 
 	connections.push_back(beam);
 }
+
+//// Spawn a nested box in the coordinate space of its parent (for nesting boxes)
+//ABoxTest *child = (ABoxTest *)GetWorld()->SpawnActor<AActor>(boxBPClass);
+//child->AttachToComponent(box->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
+//child->SetActorScale3D(FVector(0.5f, 0.5f, 0.5f));
