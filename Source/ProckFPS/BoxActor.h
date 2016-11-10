@@ -43,11 +43,25 @@ public:
 	UParticleSystem *particleBeamComponent;
 	UParticleSystem *particleBeamActorComponent; // Same beam with connection settings set to actors instead of points
 	UStaticMesh *splineStaticMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cuber")
 	UTextRenderComponent* mainLabel;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cuber")
 	UStaticMeshComponent *cube;
 
 	// Used to animate the box up and down for testing
 	float RunningTime;
 
+
+	// Calls from the blueprint to cpp
+	//UFUNCTION(BlueprintCallable, Category = "Callbacks")
+	//	void CursorOver();
+
+	// Calls from cpp to the blueprint
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Happened"))
+		void SomethingHappened();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Control")
+		bool SpawnOnce;
 };

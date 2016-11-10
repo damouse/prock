@@ -191,3 +191,7 @@ void ABoxActor::ConnectToBox(ABoxActor* other) {
 //ABoxTest *child = (ABoxTest *)GetWorld()->SpawnActor<AActor>(boxBPClass);
 //child->AttachToComponent(box->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
 //child->SetActorScale3D(FVector(0.5f, 0.5f, 0.5f));
+
+//void ABoxActor::CursorOver() {
+//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Overlap started"));
+//}
