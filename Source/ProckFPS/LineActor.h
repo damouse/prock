@@ -14,8 +14,8 @@ class PROCKFPS_API ALineActor : public AActor
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	ALineActor();
 
-	void Connect();
+	// Connect these guys with a line
+	void Connect(ABoxActor *from, ABoxActor *to);
 };
