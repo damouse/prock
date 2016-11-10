@@ -82,6 +82,11 @@ ABoxActor::ABoxActor() {
 	//AddEdge(FVector(0, 100, 0), FVector(0, 100, 100));
 	//AddEdge(FVector(100, 100, 0), FVector(100, 100, 100));
 	//AddEdge(FVector(100, 0, 0), FVector(100, 0, 100));
+
+	static ConstructorHelpers::FClassFinder<ABoxActor> boxBPFinder(TEXT("Blueprint'/Game/BoxActorBP'"));
+	if (boxBPFinder.Class != NULL) {
+		boxBPClass = boxBPFinder.Class;
+	}
 }
 
 void ABoxActor::BeginPlay() {

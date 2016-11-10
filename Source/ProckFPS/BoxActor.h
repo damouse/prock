@@ -28,7 +28,8 @@ public:
 	void AddEdge(FVector start, FVector end);
 
 	// Change the text displayed in this box. TODO: 
-	void SetText(char *text);
+	// UFUNCTION(BlueprintCallable, Category = "SetText")
+	 void SetText(char *text);
 
 	// Resize this box to fit its contents by calling SizeToContents on all children, or 
 	// caluculating the dimensions of internal text. Returns the resized bounds
@@ -44,7 +45,7 @@ public:
 	UParticleSystem *particleBeamActorComponent; // Same beam with connection settings set to actors instead of points
 	UStaticMesh *splineStaticMesh;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cuber")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Label")
 	UTextRenderComponent* mainLabel;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cuber")
@@ -65,3 +66,5 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Control")
 		bool SpawnOnce;
 };
+
+static TSubclassOf<ABoxActor> boxBPClass;
