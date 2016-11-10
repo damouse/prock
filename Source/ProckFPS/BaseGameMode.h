@@ -20,6 +20,8 @@ public:
 
 	virtual void InitGameState();
 
+	TSubclassOf<ABoxActor> boxBPClass;
+
 private:
 	Peter *peter;
 };

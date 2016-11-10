@@ -17,10 +17,6 @@ class PROCKFPS_API ABoxActor : public AActor
 public:
 	ABoxActor();
 
-	// Base overrides
-	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaSeconds) override;
-
 	// Connect another box using 0,0 as both source and target
 	void ConnectToBox(ABoxActor* other);
 
@@ -51,6 +47,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cuber")
 	UStaticMeshComponent *cube;
 
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "SetMainLabelText"))
+	void SetMainLabelText(const FText& text);
+
 	// Used to animate the box up and down for testing
 	float RunningTime;
 
@@ -60,11 +59,10 @@ public:
 	//	void CursorOver();
 
 	// Calls from cpp to the blueprint
-	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Happened"))
-		void SomethingHappened();
+	//UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Happened"))
+	//	void SomethingHappened();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Control")
-		bool SpawnOnce;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Control")
+	//	bool SpawnOnce;
 };
 
-static TSubclassOf<ABoxActor> boxBPClass;

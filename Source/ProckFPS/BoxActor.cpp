@@ -14,58 +14,58 @@ https://answers.unrealengine.com/questions/140298/attaching-particle-to-socket-o
 */
 
 ABoxActor::ABoxActor() {
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> SplinePipeAsset(TEXT("StaticMesh'/Game/Geometry/Meshes/S_Pipe_Spline.S_Pipe_Spline'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> cubeStaticMesh(TEXT("StaticMesh'/Game/Geometry/Meshes/Cube.Cube'"));
-	static ConstructorHelpers::FObjectFinder<UParticleSystem> beamClassFinder(TEXT("ParticleSystem'/Game/Particles/P_Beam.P_Beam'"));
-	static ConstructorHelpers::FObjectFinder<UParticleSystem> beamActorClassFinder(TEXT("ParticleSystem'/Game/Particles/P_Beam_Actor.P_Beam_Actor'"));
-	static ConstructorHelpers::FObjectFinder<UFont> fontAssetFinder(TEXT("Font'/Game/Inconsolata.Inconsolata'"));
-	static ConstructorHelpers::FObjectFinder<UMaterial> fontMaterialFinder(TEXT("Material'/Game/M_Label.M_Label'"));
+	//static ConstructorHelpers::FObjectFinder<UStaticMesh> SplinePipeAsset(TEXT("StaticMesh'/Game/Geometry/Meshes/S_Pipe_Spline.S_Pipe_Spline'"));
+	//static ConstructorHelpers::FObjectFinder<UStaticMesh> cubeStaticMesh(TEXT("StaticMesh'/Game/Geometry/Meshes/Cube.Cube'"));
+	//static ConstructorHelpers::FObjectFinder<UParticleSystem> beamClassFinder(TEXT("ParticleSystem'/Game/Particles/P_Beam.P_Beam'"));
+	//static ConstructorHelpers::FObjectFinder<UParticleSystem> beamActorClassFinder(TEXT("ParticleSystem'/Game/Particles/P_Beam_Actor.P_Beam_Actor'"));
+	//static ConstructorHelpers::FObjectFinder<UFont> fontAssetFinder(TEXT("Font'/Game/Inconsolata.Inconsolata'"));
+	//static ConstructorHelpers::FObjectFinder<UMaterial> fontMaterialFinder(TEXT("Material'/Game/M_Label.M_Label'"));
 
-	PrimaryActorTick.bCanEverTick = true;
+	//PrimaryActorTick.bCanEverTick = true;
 
 	// The invisible root component
-	UBoxComponent* root = CreateDefaultSubobject<UBoxComponent>(TEXT("RootComponent"));
-	root->SetMobility(EComponentMobility::Movable);
-	root->SetSimulatePhysics(true);
-	root->SetEnableGravity(false);
-	root->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
-	RootComponent = root;
+	//UBoxComponent* root = CreateDefaultSubobject<UBoxComponent>(TEXT("RootComponent"));
+	//root->SetMobility(EComponentMobility::Movable);
+	//root->SetSimulatePhysics(true);
+	//root->SetEnableGravity(false);
+	//root->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	//RootComponent = root;
 
-	// Visible translucent body
-	cube = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualRepresentation"));
-	cube->SetupAttachment(RootComponent);
+	//// Visible translucent body
+	//cube = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualRepresentation"));
+	//cube->SetupAttachment(RootComponent);
 
-	// Centered label
-	mainLabel = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Label"));
-	mainLabel->SetTextRenderColor(FColor::White);
-	mainLabel->SetText(FText::FromString(TEXT("MainLabel")));
-	mainLabel->SetupAttachment(RootComponent);
-	mainLabel->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f)); // Rotate so text faces the positive y direction
+	//// Centered label
+	//mainLabel = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Label"));
+	//mainLabel->SetTextRenderColor(FColor::White);
+	//mainLabel->SetText(FText::FromString(TEXT("MainLabel")));
+	//mainLabel->SetupAttachment(RootComponent);
+	//mainLabel->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f)); // Rotate so text faces the positive y direction
 
-	// Set the preloaded assets
-	if (cubeStaticMesh.Succeeded()) {
-		cube->SetStaticMesh(cubeStaticMesh.Object);
-	}
+	//// Set the preloaded assets
+	//if (cubeStaticMesh.Succeeded()) {
+	//	cube->SetStaticMesh(cubeStaticMesh.Object);
+	//}
 
-	if (beamClassFinder.Succeeded()) {
-		particleBeamComponent = beamClassFinder.Object;
-	}
+	//if (beamClassFinder.Succeeded()) {
+	//	particleBeamComponent = beamClassFinder.Object;
+	//}
 
-	if (beamActorClassFinder.Succeeded()) {
-		particleBeamActorComponent = beamActorClassFinder.Object;
-	}
+	//if (beamActorClassFinder.Succeeded()) {
+	//	particleBeamActorComponent = beamActorClassFinder.Object;
+	//}
 
-	if (SplinePipeAsset.Succeeded()) {
-		splineStaticMesh = SplinePipeAsset.Object;
-	}
+	//if (SplinePipeAsset.Succeeded()) {
+	//	splineStaticMesh = SplinePipeAsset.Object;
+	//}
 
-	if (fontAssetFinder.Succeeded()) {
-		mainLabel->SetFont(fontAssetFinder.Object);
-	}
+	//if (fontAssetFinder.Succeeded()) {
+	//	mainLabel->SetFont(fontAssetFinder.Object);
+	//}
 
-	if (fontMaterialFinder.Succeeded()) {
-		mainLabel->SetTextMaterial(fontMaterialFinder.Object);
-	}
+	//if (fontMaterialFinder.Succeeded()) {
+	//	mainLabel->SetTextMaterial(fontMaterialFinder.Object);
+	//}
 
 	// Create the lines
 	//AddEdge(FVector(0, 0, 0), FVector(100, 0, 0));
@@ -82,15 +82,6 @@ ABoxActor::ABoxActor() {
 	//AddEdge(FVector(0, 100, 0), FVector(0, 100, 100));
 	//AddEdge(FVector(100, 100, 0), FVector(100, 100, 100));
 	//AddEdge(FVector(100, 0, 0), FVector(100, 0, 100));
-
-	static ConstructorHelpers::FClassFinder<ABoxActor> boxBPFinder(TEXT("Blueprint'/Game/BoxActorBP'"));
-	if (boxBPFinder.Class != NULL) {
-		boxBPClass = boxBPFinder.Class;
-	}
-}
-
-void ABoxActor::BeginPlay() {
-	Super::BeginPlay();
 }
 
 /*
@@ -100,6 +91,8 @@ the translucent portion of the box to match them.
 It should be looking at nested nodes to do this resolution. Right now its just checking the size of its text
 */
 FVector ABoxActor::SizeFitContents() {
+	return FVector();
+
 	// Get the target size of the label and calculate a new size 
 	FVector labelSize = mainLabel->GetTextLocalSize();
 	FVector newSize;
@@ -120,24 +113,8 @@ FVector ABoxActor::SizeFitContents() {
 
 void ABoxActor::SetText(char *text) {
 	//UE_LOG(LogProck, Log, TEXT("Setting label to: %s"), UTF8_TO_TCHAR(text));
-	mainLabel->SetText(FString(UTF8_TO_TCHAR(text)));
-}
-
-void ABoxActor::Tick(float DeltaTime) {
-	Super::Tick(DeltaTime);
-
-	// Update the beam to match the spline. TODO: rotation
-	//for (int i = 0; i < beams.size(); i++) {
-	//  beams[i]->SetBeamSourcePoint(0, splines[i]->GetStartPosition()* GetActorScale() + GetActorLocation(), 0);
-	//  beams[i]->SetBeamEndPoint(0, splines[i]->GetEndPosition()* GetActorScale() + GetActorLocation());
-	//}
-
-	// Animate the box for testing purposes
-	//FVector NewLocation = GetActorLocation();
-	//float DeltaHeight = (FMath::Sin(RunningTime + DeltaTime) - FMath::Sin(RunningTime));
-	//NewLocation.Z += DeltaHeight * 20.0f;       //Scale our height by a factor of 20
-	//RunningTime += DeltaTime;
-	//SetActorLocation(NewLocation);
+	SetMainLabelText(FText::FromString(FString(UTF8_TO_TCHAR(text))));
+	
 }
 
 // DEPRECATED
@@ -179,6 +156,8 @@ void ABoxActor::AddEdge(FVector start, FVector end) {
 
 // Create a beam attached to each actor 
 void ABoxActor::ConnectToBox(ABoxActor* other) {
+	return;
+
 	char buffer[10];
 	sprintf(buffer, "Connection%d\0", (int)connections.size());
 	FString name = FString(ANSI_TO_TCHAR(buffer));
