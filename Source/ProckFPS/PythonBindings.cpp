@@ -27,18 +27,16 @@ PythonBindings::PythonBindings() {
 	PyObject *py_scripts_path = PyUnicode_FromString(scripts_path);
 	PyList_Insert(py_path, 0, py_scripts_path);
 
-	UE_LOG(LogProck, Log, TEXT("Python VM initialized: %s"), UTF8_TO_TCHAR(Py_GetVersion()));
-	UE_LOG(LogProck, Log, TEXT("Python Scripts search path: %s"), UTF8_TO_TCHAR(scripts_path));
+	UE_LOG(LogProck, Log, TEXT("Python VM initialized: %s. Search path: %s"), UTF8_TO_TCHAR(Py_GetVersion(), UTF8_TO_TCHAR(scripts_path)));
 
-	// You know, I'm not entirely sure we need to have native extensions at all. Why not just do 
-	// the processing here? Just import redbaron and do the work in c++
-	// import python native peter module
+	// We don't meed native python handlers. Importing like this is temporary
 	this->pypeter = PyImport_ImportModule("pypeter.main");
 	if (!this->pypeter) {
 		log_py_error();
 		return;
 	}
-
+	
+	// Smoke test call
 	PyObject *hello = PyObject_CallMethod(this->pypeter, (char *)"handshake", nullptr);
 	if (!hello) {
 		log_py_error();
@@ -56,17 +54,13 @@ PythonBindings::~PythonBindings() {
 
 // Kick off the source code processing job
 PyObject* PythonBindings::ImportCode() {
-	PyObject *ast = PyObject_CallMethod(this->pypeter, (char *)"load_source", nullptr);
+	// Note the hardcoded load path to samplecode.py
+	char *sample_path = TCHAR_TO_ANSI(*FPaths::Combine(*FPaths::GameDir(), UTF8_TO_TCHAR("samplecode.py")));
+	PyObject *py_native_path = PyUnicode_FromString(sample_path);
+
+	PyObject *ast = PyObject_CallMethod(this->pypeter, (char *)"load_source", (char *)"O", py_native_path);
 	if (!ast) {
 		log_py_error();
-		return nullptr;
-	}
-
-	return ast;
-
-	// Make sure we recieved a list
-	if (!PyList_Check(ast)) {
-		UE_LOG(LogProck, Error, TEXT("Did not recieve list as ast: %s"), UTF8_TO_TCHAR(PyString_AsString(PyObject_Str(ast))));
 		return nullptr;
 	}
 

@@ -51,11 +51,9 @@ def to_json(ast):
 def load_source(path="../../../../../../Code/unreal/Prock/samplecode.py"):
     '''
     Load the source code. Note that we should be taking arguments here eventually. 
-    Hardcoded for now.
     '''
     ast = load_file(path)
     return ast
-    return [x for x in ast]
 
 
 def test_source(path):
