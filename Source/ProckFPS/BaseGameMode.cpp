@@ -23,7 +23,7 @@ void ABaseGameMode::InitGameState() {
 	ProckNode *root = peter->LoadPython();
 
 	if (root) {
-		Spawn(GetWorld(), boxBPClass, root, FVector(0, 0, 150));
+		Spawn(GetWorld(), boxBPClass, root, FVector(0, 0, 50));
 	}
 
 	//ABoxActor* box = GetWorld()->SpawnActor<ABoxActor>(boxBPClass, FVector(100, 100, 100), FRotator::ZeroRotator);

@@ -43,8 +43,8 @@ void BinaryOperator_Spawn(UWorld *world, TSubclassOf<ABoxActor> klass, PNBinaryO
 	ProckNode *first = node->First();
 	ProckNode *second = node->Second();
 
-	Spawn(world, klass, first, pos + FVector(0, 0, 150));
-	Spawn(world, klass, second, pos + FVector(0, 0, -50));
+	Spawn(world, klass, first, pos + FVector(0, 0, 75));
+	Spawn(world, klass, second, pos + FVector(0, 0, -25));
 
 	node->box->ConnectToBox(first->box);
 	node->box->ConnectToBox(second->box);
@@ -64,7 +64,7 @@ void List_Spawn(UWorld *world, TSubclassOf<ABoxActor> klass, PNList *node, FVect
 			continue;
 		}
 
-		Spawn(world, klass, child, FVector(currOffset, 0, 150));
+		Spawn(world, klass, child, FVector(currOffset, 0, 50));
 		currOffset = currOffset + offset;
 	};
 }

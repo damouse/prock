@@ -27,7 +27,7 @@ PythonBindings::PythonBindings() {
 	PyObject *py_scripts_path = PyUnicode_FromString(scripts_path);
 	PyList_Insert(py_path, 0, py_scripts_path);
 
-	UE_LOG(LogProck, Log, TEXT("Python VM initialized: %s. Search path: %s"), UTF8_TO_TCHAR(Py_GetVersion(), UTF8_TO_TCHAR(scripts_path)));
+	//UE_LOG(LogProck, Log, TEXT("Python VM initialized: %s. Search path: %s"), UTF8_TO_TCHAR(Py_GetVersion()), UTF8_TO_TCHAR(scripts_path));
 
 	// We don't meed native python handlers. Importing like this is temporary
 	this->pypeter = PyImport_ImportModule("pypeter.main");

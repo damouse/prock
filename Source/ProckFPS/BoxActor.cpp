@@ -20,36 +20,10 @@ ABoxActor::ABoxActor() {
 	}
 }
 
-/*
-This method resolves the size of its internal contents (somewhat) and resizes
-the translucent portion of the box to match them. 
-
-It should be looking at nested nodes to do this resolution. Right now its just checking the size of its text
-*/
-FVector ABoxActor::SizeFitContents() {
-	//return FVector();
-
-	// Get the target size of the label and calculate a new size 
-	FVector labelSize = mainLabel->GetTextLocalSize();
-	FVector newSize;
-
-	newSize.Y = BOX_DEPTH;
-	newSize.Z = labelSize.Z + LABEL_MARGIN * 2;
-	newSize.X = labelSize.Y + LABEL_MARGIN * 2;
-
-	// Update the volume. The div(100) is for the base size of the box mesh
-	FVector scale(newSize.X / 100, newSize.Y / 100, newSize.Z / 100);
-	cube->SetRelativeScale3D(scale);
-
-	// Center the label by halving its dimensions
-	mainLabel->SetRelativeLocation(FVector(-newSize.X / 2 + LABEL_MARGIN, 0, -newSize.Z / 2 + LABEL_MARGIN));
-
-	return newSize;
-}
-
 void ABoxActor::SetText(char *text) {
 	if (mainLabel) {
-		mainLabel->SetText(FString(UTF8_TO_TCHAR(text)));
+		//UE_LOG(LogProck, Log, TEXT("Setting label to: '%s'"), ANSI_TO_TCHAR(text));
+		mainLabel->SetText(FString(ANSI_TO_TCHAR(text)));
 	}
 }
 

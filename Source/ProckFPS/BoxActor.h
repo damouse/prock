@@ -7,7 +7,7 @@
 #include <vector>
 #include "BoxActor.generated.h"
 
-const int LABEL_MARGIN = 5;
+const int LABEL_MARGIN = 2;
 const int BOX_DEPTH = 40;		// Depth when looking straight-on. Corresponds to y coordinate
 
 UCLASS()
@@ -23,17 +23,10 @@ public:
 	// Change the text displayed in this box
 	void SetText(char *text);
 
-	// Resize this box to fit its contents by calling SizeToContents on all children, or 
-	// caluculating the dimensions of internal text
-	FVector SizeFitContents();
-	
 	// The lines of this box
 	std::vector<UParticleSystemComponent *> connections;
 
-	// Stored in the constructor. Not needed if not building lines at runtime
-	UParticleSystem *particleBeamActorComponent;
 
-	//
 	// References to components in the blueprint
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Label")
 	UTextRenderComponent* mainLabel;
@@ -41,9 +34,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cuber")
 	UStaticMeshComponent *cube;
 
-	//
-	// Functions that call into blueprints
-	// UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "SetMainLabelText"))
-	// void SetMainLabelText(const FText& text);
+
+	// Resize the box to fit its current text
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "ResizeToFitText"))
+	void SizeFitContents();
+
+private:
+	// Stored in the constructor. Not needed if not building lines at runtime
+	UParticleSystem *particleBeamActorComponent;
 };
 
