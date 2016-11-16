@@ -7,12 +7,12 @@
 
 ABaseGameMode::ABaseGameMode() {
 	// I'm not entirely sure this is needed, but the blueprint this was taken from had physical manipulation already set up and running
-	static ConstructorHelpers::FClassFinder<APlayerController> playerBPFinder(TEXT("Blueprint'/Game/BasePlayerController'"));
+	static ConstructorHelpers::FClassFinder<APlayerController> playerBPFinder(TEXT("Blueprint'/Game/Blueprints/BasePlayerController'"));
 	if (playerBPFinder.Class != NULL) {
 		PlayerControllerClass = playerBPFinder.Class;
 	}
 
-	static ConstructorHelpers::FClassFinder<ABoxActor> boxBPFinder(TEXT("Blueprint'/Game/BoxActorBP'"));
+	static ConstructorHelpers::FClassFinder<ABoxActor> boxBPFinder(TEXT("Blueprint'/Game/Blueprints/BoxActorBP'"));
 	if (boxBPFinder.Class != NULL) {
 		boxBPClass = boxBPFinder.Class;
 	}
