@@ -6,6 +6,8 @@
 #include "BoxActor.h"
 
 ABaseGameMode::ABaseGameMode() {
+	UE_LOG(LogProck, Error, TEXT("Fuck you UE4"));
+
 	// I'm not entirely sure this is needed, but the blueprint this was taken from had physical manipulation already set up and running
 	static ConstructorHelpers::FClassFinder<APlayerController> playerBPFinder(TEXT("Blueprint'/Game/Blueprints/BasePlayerController'"));
 	if (playerBPFinder.Class != NULL) {
