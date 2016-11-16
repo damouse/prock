@@ -9,6 +9,7 @@
 void Base_Spawn(UWorld *world, TSubclassOf<ABoxActor> klass, ProckNode *node, FVector pos) {
 	node->box = world->SpawnActor<ABoxActor>(klass, pos, FRotator::ZeroRotator);
 	node->box->SetText(node->Name());
+	
 	node->box->SizeFitContents();
 }
 
@@ -30,21 +31,21 @@ void Assignment_Spawn(UWorld *world, TSubclassOf<ABoxActor> klass, PNAssignment 
 	ProckNode *value = node->Value();
 
 	Spawn(world, klass, value, pos);
-	Spawn(world, klass, target, pos + FVector(300, 0, 0));
+	Spawn(world, klass, target, pos + FVector(30, 0, 0));
 
 	value->box->ConnectToBox(target->box);
 }
 
 void BinaryOperator_Spawn(UWorld *world, TSubclassOf<ABoxActor> klass, PNBinaryOperator *node, FVector pos) {
-	node->box = world->SpawnActor<ABoxActor>(klass, pos + FVector(200, 0, 0), FRotator::ZeroRotator);
+	node->box = world->SpawnActor<ABoxActor>(klass, pos + FVector(20, 0, 0), FRotator::ZeroRotator);
 	node->box->SetText(node->Value());
 	node->box->SizeFitContents();
 
 	ProckNode *first = node->First();
 	ProckNode *second = node->Second();
 
-	Spawn(world, klass, first, pos + FVector(0, 0, 75));
-	Spawn(world, klass, second, pos + FVector(0, 0, -25));
+	Spawn(world, klass, first, pos + FVector(0, 0, 5));
+	Spawn(world, klass, second, pos + FVector(0, 0, -5));
 
 	node->box->ConnectToBox(first->box);
 	node->box->ConnectToBox(second->box);
@@ -55,7 +56,7 @@ void BinaryOperator_Spawn(UWorld *world, TSubclassOf<ABoxActor> klass, PNBinaryO
 //
 void List_Spawn(UWorld *world, TSubclassOf<ABoxActor> klass, PNList *node, FVector pos) {
 	// Very naive spacing implementation
-	float offset = 600.f;
+	float offset = 60.f;
 	float currOffset = 0.f;
 
 	for (ProckNode *child : *node->NodeList()) {
@@ -64,7 +65,7 @@ void List_Spawn(UWorld *world, TSubclassOf<ABoxActor> klass, PNList *node, FVect
 			continue;
 		}
 
-		Spawn(world, klass, child, FVector(currOffset, 0, 50));
+		Spawn(world, klass, child, pos + FVector(currOffset, 0, 5));
 		currOffset = currOffset + offset;
 	};
 }
