@@ -14,21 +14,38 @@ ABaseGameMode::ABaseGameMode() {
 
 void ABaseGameMode::BeginPlay() {
 	// Load the room instance which was statically placed in the world
-	for (TActorIterator<ARoom> ActorItr(GetWorld()); ActorItr; ++ActorItr) {
+	for (TActorIterator<ABoxActor> ActorItr(GetWorld()); ActorItr; ++ActorItr) {
 		UE_LOG(LogProck, Log, TEXT("Loaded room"));
-		room = *ActorItr;
+		ABoxActor *room = *ActorItr;
 	}
 
 	peter = new Peter();
 	ProckNode *root = peter->LoadPython();
 
-	if (root) {
-		Spawn(GetWorld(), boxBPClass, root, FVector(-120, -60, 45));
-	}
+	root->box = GetWorld()->SpawnActor<ABoxActor>(boxBPClass, FVector(), FRotator::ZeroRotator);
+	root->box->SetText("A");
+	root->box->SizeFitContents();
 
-	//ABoxActor* box = GetWorld()->SpawnActor<ABoxActor>(boxBPClass, FVector(100, 100, 100), FRotator::ZeroRotator);
-	//ABoxActor* boo = GetWorld()->SpawnActor<ABoxActor>(boxBPClass, FVector(300, 100, 100), FRotator::ZeroRotator);
+	root->box->AttachToActor(room, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	root->box->SetActorRelativeTransform(FTransform());
 
-	//box->SetText("Hello\0");
-	//boo->SetText("Goodbye\0");
+	//if (root) {
+	//	Spawn(GetWorld(), boxBPClass, root, FVector(-120, -60, 45));
+	//}
+
+	// Here we can spawn the box, remove its coloring, and resize it to fit the room
+
+	/*
+	Spawn the box, remove its coloring, resize it to a "Room"
+
+	Then in c++ trigger the draw for all children.
+		ProckNode->SpawnInternal()
+
+	This: 
+		- Triggers a scope collection
+		- Draws a box for each PNode with relative positioning, collecting offset data
+		- Connects the lines
+
+	Note that the drawing and the scaling 
+	*/
 }

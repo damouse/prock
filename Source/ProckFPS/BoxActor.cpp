@@ -28,16 +28,16 @@ void ABoxActor::SetText(char *text) {
 }
 
 // Create a beam attached to each actor 
-void ABoxActor::ConnectToBox(ABoxActor* other) {
-	char buffer[10];
-	sprintf(buffer, "Connection%d\0", (int)connections.size());
-	FString name = FString(ANSI_TO_TCHAR(buffer));
-
-	UParticleSystemComponent *beam = NewObject<UParticleSystemComponent>(this, (FName(*(name))));
-	beam->RegisterComponent();
-	beam->SetTemplate(particleBeamActorComponent);
-	beam->SetActorParameter(TEXT("BeamSource"), this);
-	beam->SetActorParameter(TEXT("BeamTarget"), other);
-
-	connections.push_back(beam);
-}
+//void ABoxActor::ConnectToBox(ABoxActor* other) {
+//	char buffer[10];
+//	sprintf(buffer, "Connection%d\0", (int)connections.size());
+//	FString name = FString(ANSI_TO_TCHAR(buffer));
+//
+//	UParticleSystemComponent *beam = NewObject<UParticleSystemComponent>(this, (FName(*(name))));
+//	beam->RegisterComponent();
+//	beam->SetTemplate(particleBeamActorComponent);
+//	beam->SetActorParameter(TEXT("BeamSource"), this);
+//	beam->SetActorParameter(TEXT("BeamTarget"), other);
+//
+//	connections.push_back(beam);
+//}

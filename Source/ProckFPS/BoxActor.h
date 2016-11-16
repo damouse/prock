@@ -18,7 +18,7 @@ public:
 	ABoxActor();
 
 	// Connect another box using 0,0 as both source and target
-	void ConnectToBox(ABoxActor* other);
+	//void ConnectToBox(ABoxActor* other);
 
 	// Change the text displayed in this box
 	void SetText(char *text);
@@ -26,7 +26,7 @@ public:
 	// The lines of this box
 	std::vector<UParticleSystemComponent *> connections;
 
-
+	
 	// References to components in the blueprint
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Label")
 	UTextRenderComponent* mainLabel;

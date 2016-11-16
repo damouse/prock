@@ -33,7 +33,7 @@ void Assignment_Spawn(UWorld *world, TSubclassOf<ABoxActor> klass, PNAssignment 
 	Spawn(world, klass, value, pos);
 	Spawn(world, klass, target, pos + FVector(30, 0, 0));
 
-	value->box->ConnectToBox(target->box);
+	//value->box->ConnectToBox(target->box);
 }
 
 void BinaryOperator_Spawn(UWorld *world, TSubclassOf<ABoxActor> klass, PNBinaryOperator *node, FVector pos) {
@@ -47,8 +47,8 @@ void BinaryOperator_Spawn(UWorld *world, TSubclassOf<ABoxActor> klass, PNBinaryO
 	Spawn(world, klass, first, pos + FVector(0, 0, 5));
 	Spawn(world, klass, second, pos + FVector(0, 0, -5));
 
-	node->box->ConnectToBox(first->box);
-	node->box->ConnectToBox(second->box);
+	//node->box->ConnectToBox(first->box);
+	//node->box->ConnectToBox(second->box);
 }
 
 //
@@ -67,6 +67,8 @@ void List_Spawn(UWorld *world, TSubclassOf<ABoxActor> klass, PNList *node, FVect
 
 		Spawn(world, klass, child, pos + FVector(currOffset, 0, 5));
 		currOffset = currOffset + offset;
+
+		// Spawn relative to this box? node->box?
 	};
 }
 
