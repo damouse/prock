@@ -24,7 +24,7 @@ public:
 	// Likely temporary, but this is the RoomBP that draws all the stuffs. The reference to it
 	// is picked up in BeginPlay
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Room")
-	AActor *room;
+	ABoxActor *room;
 private:
 	Peter *peter;
 };
