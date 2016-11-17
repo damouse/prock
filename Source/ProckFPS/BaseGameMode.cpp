@@ -16,18 +16,27 @@ void ABaseGameMode::BeginPlay() {
 	// Load the room instance which was statically placed in the world
 	for (TActorIterator<ABoxActor> ActorItr(GetWorld()); ActorItr; ++ActorItr) {
 		UE_LOG(LogProck, Log, TEXT("Loaded room"));
-		ABoxActor *room = *ActorItr;
+		room = *ActorItr;
 	}
 
 	peter = new Peter();
 	ProckNode *root = peter->LoadPython();
 
-	root->box = GetWorld()->SpawnActor<ABoxActor>(boxBPClass, FVector(), FRotator::ZeroRotator);
+	root->box = GetWorld()->SpawnActor<ABoxActor>(boxBPClass);
 	root->box->SetText("A");
 	root->box->SizeFitContents();
 
-	root->box->AttachToActor(room, FAttachmentTransformRules::SnapToTargetIncludingScale);
-	root->box->SetActorRelativeTransform(FTransform());
+	root->box->AttachToComponent(room->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
+	root->box->SetActorScale3D(FVector(0.2f, 0.2f, 0.2f));
+
+	//root->box->AttachToActor(room, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	//root->box->SetActorRelativeTransform(FTransform());
+	//root->box->SetActorRelativeLocation(FVector());
+
+	//// Spawn a nested box in the coordinate space of its parent (for nesting boxes)
+	//ABoxTest *child = (ABoxTest *)GetWorld()->SpawnActor<AActor>(boxBPClass);
+	//child->AttachToComponent(box->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
+	//child->SetActorScale3D(FVector(0.5f, 0.5f, 0.5f));
 
 	//if (root) {
 	//	Spawn(GetWorld(), boxBPClass, root, FVector(-120, -60, 45));
