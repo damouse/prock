@@ -23,6 +23,7 @@ ABoxActor::ABoxActor() {
 void ABoxActor::SetText(char *text) {
 	if (mainLabel) {
 		//UE_LOG(LogProck, Log, TEXT("Setting label to: '%s'"), ANSI_TO_TCHAR(text));
+		// Unicode vs ansi? Unlikely if repr reports the same thing
 		mainLabel->SetText(FString(ANSI_TO_TCHAR(text)));
 	}
 }
