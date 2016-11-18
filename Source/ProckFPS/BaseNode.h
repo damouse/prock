@@ -18,10 +18,14 @@ enum ProckNodeType : int;
 */
 class PROCKFPS_API ProckNode {
 public:
-	//static void InitializeSpawn
+	//ProckNode();
+
 	// Factory Method: creates the appropriate ProckNode subclass based on the given PyObject. 
 	// Don't use the default constructor to create new ProckNodes!
 	static ProckNode* NewNode(PyObject* astNode);
+
+	// Yet another spawn method
+	void Spawn();
 
 	// Dump the underlying python object. Equivalent to python: str(obj)
 	void PrintRaw();
@@ -43,12 +47,16 @@ public:
 
 	ABoxActor *box;
 	PyObject *astNode;
+
+	// Passed in from BaseGameMode within its constructor. This might be incorrect, 
+	// but I'm scared to make ProckNode a UClass-- totally hypothetical concerns about performance
+	static TSubclassOf<ABoxActor> boxBPClass;
+	static UWorld *world;
 };
 
 // Returns a constructed subclass of ProckNode that matches the given name. Caller owns the reference to the object
 ProckNode *nodeSubclassFromString(char *t);
 
-// TODO: update the metaprogrammer!
 // Start Generated Code
 
 enum ProckNodeType {

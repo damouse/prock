@@ -4,6 +4,16 @@
 #include "BaseNode.h" 
 #include "ProckNode.h"
 
+TSubclassOf<ABoxActor> ProckNode::boxBPClass = nullptr;
+UWorld *world = nullptr;
+
+//ProckNode::ProckNode() {
+//	static ConstructorHelpers::FClassFinder<ABoxActor> boxBPFinder(TEXT("Blueprint'/Game/Blueprints/BoxActorBP'"));
+//	if (boxBPFinder.Class != NULL) {
+//		boxBPClass = boxBPFinder.Class;
+//	}
+//}
+
 ProckNode *ProckNode::NewNode(PyObject *native) {
 	PyObject *klass = PyObject_GetAttrString(native, "__class__");
 	if (!klass) {

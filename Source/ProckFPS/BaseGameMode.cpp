@@ -8,7 +8,7 @@
 ABaseGameMode::ABaseGameMode() {
 	static ConstructorHelpers::FClassFinder<ABoxActor> boxBPFinder(TEXT("Blueprint'/Game/Blueprints/BoxActorBP'"));
 	if (boxBPFinder.Class != NULL) {
-		boxBPClass = boxBPFinder.Class;
+		ProckNode::boxBPClass = boxBPFinder.Class;
 	}
 }
 
@@ -31,6 +31,6 @@ void ABaseGameMode::BeginPlay() {
 	//root->box->SetActorScale3D(FVector(0.2f, 0.2f, 0.2f));
 
 	if (root) {
-		Spawn(GetWorld(), boxBPClass, root, room, FVector(0, 0, 0));
+		Spawn(GetWorld(), ProckNode::boxBPClass, root, room, FVector(0, 0, 0));
 	}
 }

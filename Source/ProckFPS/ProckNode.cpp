@@ -1,11 +1,14 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "ProckFPS.h"
 #include "ProckNode.h"
 
-//
+// - Move the spawn method back to nodes
+// - Load BoxActor in ProckNode. Try to consolidate spawning crap
+// - Attach "children" in a list node to the root node in the position, not the parent box
+// - Return x, z offsets after spawn. At child (in the list) translate after all spawns
+
+// 
 // Leaf Nodes
-//
+// 
 void Base_Spawn(UWorld *world, TSubclassOf<ABoxActor> klass, ProckNode *node, ABoxActor *parent, FVector pos) {
 	node->box = world->SpawnActor<ABoxActor>(klass);
 	node->box->SetText(node->Name());
@@ -56,9 +59,9 @@ void BinaryOperator_Spawn(UWorld *world, TSubclassOf<ABoxActor> klass, PNBinaryO
 	//node->box->ConnectToBox(second->box);
 }
 
-//
+// 
 // Collections of Nodes
-//
+// 
 void List_Spawn(UWorld *world, TSubclassOf<ABoxActor> klass, PNList *node, ABoxActor *parent, FVector pos) {
 	float offset = 20.f;
 	float currOffset = 0.f;
@@ -94,6 +97,25 @@ void Spawn(UWorld *world, TSubclassOf<ABoxActor> klass, ProckNode *node, ABoxAct
 	case PNT_List:				return List_Spawn(world, klass, (PNList *)node, parent, pos);
 
 	// Fallback to just drawing the box
+	default:					return Base_Spawn(world, klass, node, parent, pos);
+	}
+}
+
+void ProckNode::Spawn() {
+	switch (nodeType()) {
+
+		// Leaf Nodes
+	case PNT_Name:				return Name_Spawn(world, klass, (PNName *)node, parent, pos);
+	case PNT_Int:				return Int_Spawn(world, klass, (PNInt *)node, parent, pos);
+
+		// Basic Operators
+	case PNT_Assignment:		return Assignment_Spawn(world, klass, (PNAssignment *)node, parent, pos);
+	case PNT_BinaryOperator:	return BinaryOperator_Spawn(world, klass, (PNBinaryOperator *)node, parent, pos);
+
+		// Collections
+	case PNT_List:				return List_Spawn(world, klass, (PNList *)node, parent, pos);
+
+		// Fallback to just drawing the box
 	default:					return Base_Spawn(world, klass, node, parent, pos);
 	}
 }
