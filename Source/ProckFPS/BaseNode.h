@@ -18,20 +18,18 @@ enum ProckNodeType : int;
 */
 class PROCKFPS_API ProckNode {
 public:
-	//ProckNode();
-
 	// Factory Method: creates the appropriate ProckNode subclass based on the given PyObject. 
-	// Don't use the default constructor to create new ProckNodes!
+	// Avoid constructing your own
 	static ProckNode* NewNode(PyObject* astNode);
 
 	// Spawn this node in the game world.
-	// NOTE: this method is the ProckNode.cpp. Its basically a glorified switch statement for the anonymous functions there
+	// NOTE: this method is the ProckNode.cpp since its a simple switch statement for the functions there
 	void Spawn(ProckNode *node, FVector pos);
 
 	// Dump the underlying python object. Equivalent to python: str(obj)
 	void PrintRaw();
 
-	// Return this class name without the leading 'PN'. The class PNCallArgument returns CallArgument, for example
+	// Return this class name without the leading 'PN'. Example: class PNCallArgument returns CallArgument
 	virtual char *Name();
 
 	// Return the enumerated type for this node. Use this to check type instead of c++ casts
@@ -41,8 +39,7 @@ public:
 	// Generalized getters
 	char *GetAsString(char *name);
 
-	// Note: this allocates a new list! Every time its called it will leak memory-- have to 
-	// cache the results on this node! 
+	// Note: this allocates a new list! Every time its called it will leak memory-- cache results
 	std::vector<ProckNode *> *GetAsList(char *name);
 	ProckNode *GetAsNode(char *name);
 
@@ -54,9 +51,6 @@ public:
 	static TSubclassOf<ABoxActor> boxBPClass;
 	static UWorld *world;
 };
-
-// Returns a constructed subclass of ProckNode that matches the given name. Caller owns the reference to the object
-ProckNode *nodeSubclassFromString(char *t);
 
 // Start Generated Code
 

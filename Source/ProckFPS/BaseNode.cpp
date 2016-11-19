@@ -7,6 +7,9 @@
 TSubclassOf<ABoxActor> ProckNode::boxBPClass = nullptr;
 UWorld *ProckNode::world = nullptr;
 
+// Returns a constructed subclass of ProckNode that matches the given name. Caller owns the reference to the object
+ProckNode *nodeSubclassFromString(char *t);
+
 ProckNode *ProckNode::NewNode(PyObject *native) {
 	PyObject *klass = PyObject_GetAttrString(native, "__class__");
 	if (!klass) {

@@ -1,6 +1,12 @@
 #include "ProckFPS.h"
 #include "ProckNode.h"
 
+/*
+	Pass in ScopeNode into each spawn call
+	Name Nodes trigger pathing: call a method on ScopeNode::PathIvar(). Create the path if it does not exist, else attach it to the current path 
+	Also: spawn lines as actors
+*/
+
 // Leaf Nodes
 void Base_Spawn(ProckNode *n) {
 	n->box = ProckNode::world->SpawnActor<ABoxActor>(ProckNode::boxBPClass);
@@ -23,7 +29,7 @@ void Int_Spawn(PNInt *n) {
 void Assignment_Spawn(PNAssignment *n) {
 	Base_Spawn(n);
 
-	// Assignmnent doesnt have its own box
+	// Assignmnent doesnt have its own box; hide it
 	n->box->GetRootComponent()->SetVisibility(false, true);
 
 	ProckNode *target = n->Target();
@@ -55,13 +61,6 @@ void List_Spawn(PNList *n) {
 	float offset = 20.f;
 	float currOffset = 0.f;
 
-	std::vector<ProckNode *> *kids = n->NodeList();
-
-	if (!kids) {
-		UE_LOG(LogProck, Error, TEXT("PNList did not get a list back"));
-		return;
-	}
-
 	for (ProckNode *child : *n->NodeList()) {
 		// Skip comments and endlines for now. Comments could be useful in the future
 		if (child->Type() == PNT_Comment || child->Type() == PNT_Endl) {
@@ -78,6 +77,8 @@ void List_Spawn(PNList *n) {
 // When creating new _Spawn methods, please give them the same name as the node being targeted
 //
 // Note that this design intentionally allows for a single _Spawn method to handle multiple node types.
+//
+// Attaches to the passed node at the relative position. Root nodes are passed null and 0 as params. 
 void ProckNode::Spawn(ProckNode *node, FVector pos) {
 	switch (Type()) {
 
