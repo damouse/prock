@@ -6,6 +6,9 @@
 #include "BoxActor.h"
 
 ABaseGameMode::ABaseGameMode() {
+	// Do we need this twice? No, likely not.
+	ProckNode::world = GetWorld();
+
 	static ConstructorHelpers::FClassFinder<ABoxActor> boxBPFinder(TEXT("Blueprint'/Game/Blueprints/BoxActorBP'"));
 	if (boxBPFinder.Class != NULL) {
 		ProckNode::boxBPClass = boxBPFinder.Class;
@@ -13,7 +16,7 @@ ABaseGameMode::ABaseGameMode() {
 }
 
 void ABaseGameMode::BeginPlay() {
-	// Load the room instance which was statically placed in the world
+	// Load the room instance which starts the game in the map
 	for (TActorIterator<ABoxActor> ActorItr(GetWorld()); ActorItr; ++ActorItr) {
 		UE_LOG(LogProck, Log, TEXT("Loaded room"));
 		room = *ActorItr;
@@ -22,15 +25,14 @@ void ABaseGameMode::BeginPlay() {
 	peter = new Peter();
 	ProckNode *root = peter->LoadPython();
 
-	// Note that the root prock node should handle this directly, these two sections are just for demonstration
-	//root->box = GetWorld()->SpawnActor<ABoxActor>(boxBPClass, FVector(600, 100, 100), FRotator::ZeroRotator);
-	//root->box->SetText("A");
-	//root->box->SizeFitContents();
-
-	//root->box->AttachToComponent(room->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
-	//root->box->SetActorScale3D(FVector(0.2f, 0.2f, 0.2f));
+	if (!room) {
+		UE_LOG(LogProck, Log, TEXT("Room doesnt exist, can't load"));
+		return;
+	}
 
 	if (root) {
-		Spawn(GetWorld(), ProckNode::boxBPClass, root, room, FVector(0, 0, 0));
+		// The first box is already placed, assign it as the root's box
+		root->box = room;
+		root->Spawn(nullptr, FVector());
 	}
 }

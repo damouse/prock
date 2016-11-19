@@ -5,14 +5,7 @@
 #include "ProckNode.h"
 
 TSubclassOf<ABoxActor> ProckNode::boxBPClass = nullptr;
-UWorld *world = nullptr;
-
-//ProckNode::ProckNode() {
-//	static ConstructorHelpers::FClassFinder<ABoxActor> boxBPFinder(TEXT("Blueprint'/Game/Blueprints/BoxActorBP'"));
-//	if (boxBPFinder.Class != NULL) {
-//		boxBPClass = boxBPFinder.Class;
-//	}
-//}
+UWorld *ProckNode::world = nullptr;
 
 ProckNode *ProckNode::NewNode(PyObject *native) {
 	PyObject *klass = PyObject_GetAttrString(native, "__class__");
@@ -37,6 +30,20 @@ ProckNode *ProckNode::NewNode(PyObject *native) {
 	return nullptr;
 }
 
+void ProckNode::Attach(ProckNode *node, FVector pos) {
+	if (!node) {
+		UE_LOG(LogProck, Error, TEXT("Given node is null"));
+	} else if (!node->box) {
+		UE_LOG(LogProck, Error, TEXT("Given node has no box: %s"), UTF8_TO_TCHAR(node->Name()));
+	} else if (!box) {
+		UE_LOG(LogProck, Error, TEXT("This node has no box: %s"), UTF8_TO_TCHAR(Name()));
+	} else {
+		node->box->AttachToComponent(box->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
+		node->box->SetActorScale3D(FVector(.2, .2, .2));
+		node->box->SetActorRelativeLocation(pos);
+	}
+}
+
 char *ProckNode::GetAsString(char *name) {
 	PyObject *r = PyObject_GetAttrString(astNode, name);
 	return (r == nullptr) ? nullptr : PyString_AsString(PyObject_Str(r));
@@ -52,7 +59,8 @@ ProckNodeType ProckNode::Type() {
 
 std::vector<ProckNode *> *ProckNode::GetAsList(char *name) {
 	PyObject *r = PyObject_GetAttrString(astNode, name);
-	if (!PyIter_Check(r)) {
+
+	if (!r || !PyIter_Check(r)) {
 		UE_LOG(LogProck, Error, TEXT("Did not recieve list in node request"));
 		return nullptr;
 	}

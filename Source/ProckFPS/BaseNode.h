@@ -24,8 +24,9 @@ public:
 	// Don't use the default constructor to create new ProckNodes!
 	static ProckNode* NewNode(PyObject* astNode);
 
-	// Yet another spawn method
-	void Spawn();
+	// Spawn this node in the game world.
+	// NOTE: this method is the ProckNode.cpp. Its basically a glorified switch statement for the anonymous functions there
+	void Spawn(ProckNode *node, FVector pos);
 
 	// Dump the underlying python object. Equivalent to python: str(obj)
 	void PrintRaw();
@@ -35,6 +36,9 @@ public:
 
 	// Return the enumerated type for this node. Use this to check type instead of c++ casts
 	virtual ProckNodeType Type();
+
+	// Attach the root component of the given node to our root component and set its relative positioning
+	void Attach(ProckNode *node, FVector pos);
 
 //protected:
 	// Generalized getters

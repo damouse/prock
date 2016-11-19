@@ -1,78 +1,80 @@
 #include "ProckFPS.h"
 #include "ProckNode.h"
 
-// - Move the spawn method back to nodes
-// - Load BoxActor in ProckNode. Try to consolidate spawning crap
-// - Attach "children" in a list node to the root node in the position, not the parent box
-// - Return x, z offsets after spawn. At child (in the list) translate after all spawns
-
-// 
 // Leaf Nodes
-// 
-void Base_Spawn(UWorld *world, TSubclassOf<ABoxActor> klass, ProckNode *node, ABoxActor *parent, FVector pos) {
-	node->box = world->SpawnActor<ABoxActor>(klass);
-	node->box->SetText(node->Name());
-	node->box->AttachToComponent(parent->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
-	node->box->SetActorScale3D(FVector(.2, .2, .2));
-	node->box->SetActorRelativeLocation(pos);
-	node->box->SizeFitContents();
+void Base_Spawn(ProckNode *n) {
+	n->box = ProckNode::world->SpawnActor<ABoxActor>(ProckNode::boxBPClass);
+	n->box->SetText(n->Name());
+	//n->box->SetActorScale3D(FVector(.2, .2, .2));
+	n->box->SizeFitContents();
 }
 
-void Name_Spawn(UWorld *world, TSubclassOf<ABoxActor> klass, PNName *node, ABoxActor *parent, FVector pos) {
-	Base_Spawn(world, klass, node, parent, pos);
-	node->box->SetText(node->Value());
+void Name_Spawn(PNName *n) {
+	Base_Spawn(n);
+	n->box->SetText(n->Value());
 }
 
-void Int_Spawn(UWorld *world, TSubclassOf<ABoxActor> klass, PNInt *node, ABoxActor *parent, FVector pos) {
-	Base_Spawn(world, klass, node, parent, pos);
-	node->box->SetText(node->Value());
+void Int_Spawn(PNInt *n) {
+	Base_Spawn(n);
+	n->box->SetText(n->Value());
 }
 
-// 
 // "Basic" Operators
-// 
-void Assignment_Spawn(UWorld *world, TSubclassOf<ABoxActor> klass, PNAssignment *node, ABoxActor *parent, FVector pos) {
-	ProckNode *target = node->Target();
-	ProckNode *value = node->Value();
+void Assignment_Spawn(PNAssignment *n) {
+	Base_Spawn(n);
 
-	Spawn(world, klass, value, parent, pos);
-	Spawn(world, klass, target, parent, pos + FVector(5, 0, 0));
+	// Assignmnent doesnt have its own box
+	n->box->GetRootComponent()->SetVisibility(false, true);
+
+	ProckNode *target = n->Target();
+	ProckNode *value = n->Value();
+
+	target->Spawn(n, FVector(30, 0, 0));
+	value->Spawn(n, FVector(-30, 0, 0));
+
+	//n->Attach(target, FVector(30, 0, 0));
+	//n->Attach(value, FVector(-30, 0, 0));
 
 	//value->box->ConnectToBox(target->box);
 }
 
-void BinaryOperator_Spawn(UWorld *world, TSubclassOf<ABoxActor> klass, PNBinaryOperator *node, ABoxActor *parent, FVector pos) {
-	node->box = world->SpawnActor<ABoxActor>(klass);
-	node->box->SetText(node->Value());
-	node->box->AttachToComponent(parent->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
-	node->box->SetActorScale3D(FVector(.2, .2, .2));
-	node->box->SetActorRelativeLocation(pos);
-	node->box->SizeFitContents();
+void BinaryOperator_Spawn(PNBinaryOperator *n) {
+	Base_Spawn(n);
+	n->box->SetText(n->Value());
 
-	ProckNode *first = node->First();
-	ProckNode *second = node->Second();
+	ProckNode *first = n->First();
+	ProckNode *second = n->Second();
 
-	Spawn(world, klass, first, parent, pos + FVector(-2, 0, 5));
-	Spawn(world, klass, second, parent, pos + FVector(-2, 0, -5));
+	first->Spawn(n, FVector(30, 0, 0));
+	second->Spawn(n, FVector(30, 0, 0));
+
+	//n->Attach(first, FVector(-5, 0, 3));
+	//n->Attach(first, FVector(-5, 0, -3));
 
 	//node->box->ConnectToBox(first->box);
 	//node->box->ConnectToBox(second->box);
 }
 
-// 
 // Collections of Nodes
-// 
-void List_Spawn(UWorld *world, TSubclassOf<ABoxActor> klass, PNList *node, ABoxActor *parent, FVector pos) {
+void List_Spawn(PNList *n) {
 	float offset = 20.f;
 	float currOffset = 0.f;
 
-	for (ProckNode *child : *node->NodeList()) {
+	std::vector<ProckNode *> *kids = n->NodeList();
+
+	if (!kids) {
+		UE_LOG(LogProck, Error, TEXT("PNList did not get a list back"));
+		return;
+	}
+
+	for (ProckNode *child : *n->NodeList()) {
 		// Skip comments and endlines for now. Comments could be useful in the future
 		if (child->Type() == PNT_Comment || child->Type() == PNT_Endl) {
 			continue;
 		}
 
-		Spawn(world, klass, child, parent, pos + FVector(currOffset, 0, 0));
+		child->Spawn(n, FVector(currOffset, 0, 0));
+		//n->Attach(child, FVector(currOffset, 0, 0));
 		currOffset = currOffset + offset;
 	};
 }
@@ -82,40 +84,28 @@ void List_Spawn(UWorld *world, TSubclassOf<ABoxActor> klass, PNList *node, ABoxA
 // When creating new _Spawn methods, please give them the same name as the node being targeted
 //
 // Note that this design intentionally allows for a single _Spawn method to handle multiple node types.
-void Spawn(UWorld *world, TSubclassOf<ABoxActor> klass, ProckNode *node, ABoxActor *parent, FVector pos) {
-	switch (node->Type()) {
+void ProckNode::Spawn(ProckNode *node, FVector pos) {
+	switch (Type()) {
 
 	// Leaf Nodes
-	case PNT_Name:				return Name_Spawn(world, klass, (PNName *)node, parent, pos);
-	case PNT_Int:				return Int_Spawn(world, klass, (PNInt *)node, parent, pos);
+	case PNT_Name:				Name_Spawn((PNName *) this); break;
+	case PNT_Int:				Int_Spawn((PNInt *) this); break;
 
 	// Basic Operators
-	case PNT_Assignment:		return Assignment_Spawn(world, klass, (PNAssignment *)node, parent, pos);
-	case PNT_BinaryOperator:	return BinaryOperator_Spawn(world, klass, (PNBinaryOperator *)node, parent, pos);
+	case PNT_Assignment:		Assignment_Spawn((PNAssignment *) this); break;
+	case PNT_BinaryOperator:	BinaryOperator_Spawn((PNBinaryOperator *) this); break;
 
 	// Collections
-	case PNT_List:				return List_Spawn(world, klass, (PNList *)node, parent, pos);
+	case PNT_List:				List_Spawn((PNList *) this); break;
 
-	// Fallback to just drawing the box
-	default:					return Base_Spawn(world, klass, node, parent, pos);
+	// Basic box
+	default:					Base_Spawn(this); break;
+	}
+
+	if (node) {
+		box->AttachToComponent(node->box->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
+		box->SetActorScale3D(FVector(.2, .2, .2));
+		box->SetActorRelativeLocation(pos);
 	}
 }
 
-void ProckNode::Spawn() {
-	switch (nodeType()) {
-
-		// Leaf Nodes
-	case PNT_Name:				return Name_Spawn(world, klass, (PNName *)node, parent, pos);
-	case PNT_Int:				return Int_Spawn(world, klass, (PNInt *)node, parent, pos);
-
-		// Basic Operators
-	case PNT_Assignment:		return Assignment_Spawn(world, klass, (PNAssignment *)node, parent, pos);
-	case PNT_BinaryOperator:	return BinaryOperator_Spawn(world, klass, (PNBinaryOperator *)node, parent, pos);
-
-		// Collections
-	case PNT_List:				return List_Spawn(world, klass, (PNList *)node, parent, pos);
-
-		// Fallback to just drawing the box
-	default:					return Base_Spawn(world, klass, node, parent, pos);
-	}
-}
