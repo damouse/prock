@@ -5,7 +5,7 @@
 void Base_Spawn(ProckNode *n) {
 	n->box = ProckNode::world->SpawnActor<ABoxActor>(ProckNode::boxBPClass);
 	n->box->SetText(n->Name());
-	//n->box->SetActorScale3D(FVector(.2, .2, .2));
+	n->box->SetActorScale3D(FVector(.2, .2, .2));
 	n->box->SizeFitContents();
 }
 
@@ -32,24 +32,19 @@ void Assignment_Spawn(PNAssignment *n) {
 	target->Spawn(n, FVector(30, 0, 0));
 	value->Spawn(n, FVector(-30, 0, 0));
 
-	//n->Attach(target, FVector(30, 0, 0));
-	//n->Attach(value, FVector(-30, 0, 0));
-
 	//value->box->ConnectToBox(target->box);
 }
 
 void BinaryOperator_Spawn(PNBinaryOperator *n) {
 	Base_Spawn(n);
 	n->box->SetText(n->Value());
+	n->box->SizeFitContents();
 
 	ProckNode *first = n->First();
 	ProckNode *second = n->Second();
 
-	first->Spawn(n, FVector(30, 0, 0));
-	second->Spawn(n, FVector(30, 0, 0));
-
-	//n->Attach(first, FVector(-5, 0, 3));
-	//n->Attach(first, FVector(-5, 0, -3));
+	first->Spawn(n, FVector(-30, 0, 20));
+	second->Spawn(n, FVector(-30, 0, -20));
 
 	//node->box->ConnectToBox(first->box);
 	//node->box->ConnectToBox(second->box);
@@ -74,7 +69,6 @@ void List_Spawn(PNList *n) {
 		}
 
 		child->Spawn(n, FVector(currOffset, 0, 0));
-		//n->Attach(child, FVector(currOffset, 0, 0));
 		currOffset = currOffset + offset;
 	};
 }

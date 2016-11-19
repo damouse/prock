@@ -37,9 +37,6 @@ public:
 	// Return the enumerated type for this node. Use this to check type instead of c++ casts
 	virtual ProckNodeType Type();
 
-	// Attach the root component of the given node to our root component and set its relative positioning
-	void Attach(ProckNode *node, FVector pos);
-
 //protected:
 	// Generalized getters
 	char *GetAsString(char *name);

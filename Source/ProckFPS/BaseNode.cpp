@@ -30,20 +30,6 @@ ProckNode *ProckNode::NewNode(PyObject *native) {
 	return nullptr;
 }
 
-void ProckNode::Attach(ProckNode *node, FVector pos) {
-	if (!node) {
-		UE_LOG(LogProck, Error, TEXT("Given node is null"));
-	} else if (!node->box) {
-		UE_LOG(LogProck, Error, TEXT("Given node has no box: %s"), UTF8_TO_TCHAR(node->Name()));
-	} else if (!box) {
-		UE_LOG(LogProck, Error, TEXT("This node has no box: %s"), UTF8_TO_TCHAR(Name()));
-	} else {
-		node->box->AttachToComponent(box->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
-		node->box->SetActorScale3D(FVector(.2, .2, .2));
-		node->box->SetActorRelativeLocation(pos);
-	}
-}
-
 char *ProckNode::GetAsString(char *name) {
 	PyObject *r = PyObject_GetAttrString(astNode, name);
 	return (r == nullptr) ? nullptr : PyString_AsString(PyObject_Str(r));
