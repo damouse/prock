@@ -1,10 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "ProckFPS.h"
-#include "Room.h"
+#include "Actors/LineActor.h"
 
-
-ARoom::ARoom() {
+ALineActor::ALineActor() {
 
 }
-

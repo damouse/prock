@@ -1,17 +1,14 @@
 #include "ProckFPS.h"
-#include "ProckNode.h"
+#include "Nodes/ProckNodeSubclasses.h"
+#include "Glue/Scope.h"
+#include <queue>
 
-/*
-	Pass in ScopeNode into each spawn call
-	Name Nodes trigger pathing: call a method on ScopeNode::PathIvar(). Create the path if it does not exist, else attach it to the current path 
-	Also: spawn lines as actors
-*/
 
 // Leaf Nodes
 void Base_Spawn(ProckNode *n) {
 	n->box = ProckNode::world->SpawnActor<ABoxActor>(ProckNode::boxBPClass);
 	n->box->SetText(n->Name());
-	n->box->SetActorScale3D(FVector(.2, .2, .2));
+	n->box->SetActorScale3D(FVector(BOX_RESCALE));
 	n->box->SizeFitContents();
 }
 
@@ -32,13 +29,11 @@ void Assignment_Spawn(PNAssignment *n) {
 	// Assignmnent doesnt have its own box; hide it
 	n->box->GetRootComponent()->SetVisibility(false, true);
 
-	ProckNode *target = n->Target();
-	ProckNode *value = n->Value();
+	// Add this variable to the scope
+	n->Scope->NewVariable(n->Target());
 
-	target->Spawn(n, FVector(30, 0, 0));
-	value->Spawn(n, FVector(-30, 0, 0));
-
-	//value->box->ConnectToBox(target->box);
+	n->Target()->Spawn(n, FVector(30, 0, 0));
+	n->Value()->Spawn(n, FVector(-30, 0, 0));
 }
 
 void BinaryOperator_Spawn(PNBinaryOperator *n) {
@@ -46,20 +41,16 @@ void BinaryOperator_Spawn(PNBinaryOperator *n) {
 	n->box->SetText(n->Value());
 	n->box->SizeFitContents();
 
-	ProckNode *first = n->First();
-	ProckNode *second = n->Second();
-
-	first->Spawn(n, FVector(-30, 0, 20));
-	second->Spawn(n, FVector(-30, 0, -20));
-
-	//node->box->ConnectToBox(first->box);
-	//node->box->ConnectToBox(second->box);
+	n->First()->Spawn(n, FVector(-30, 0, 20));
+	n->Second()->Spawn(n, FVector(-30, 0, -20));
 }
 
 // Collections of Nodes
 void List_Spawn(PNList *n) {
 	float offset = 20.f;
 	float currOffset = 0.f;
+
+	n->Scope = new Scope();
 
 	for (ProckNode *child : *n->NodeList()) {
 		// Skip comments and endlines for now. Comments could be useful in the future
@@ -80,6 +71,11 @@ void List_Spawn(PNList *n) {
 //
 // Attaches to the passed node at the relative position. Root nodes are passed null and 0 as params. 
 void ProckNode::Spawn(ProckNode *node, FVector pos) {
+	// Always pass our scope down to the next node. Construction happens in appropriate Spawn function
+	if (node) {
+		Scope = node->Scope;
+	}
+
 	switch (Type()) {
 
 	// Leaf Nodes
@@ -99,8 +95,7 @@ void ProckNode::Spawn(ProckNode *node, FVector pos) {
 
 	if (node) {
 		box->AttachToComponent(node->box->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
-		box->SetActorScale3D(FVector(.2, .2, .2));
+		box->SetActorScale3D(FVector(BOX_RESCALE));
 		box->SetActorRelativeLocation(pos);
 	}
 }
-

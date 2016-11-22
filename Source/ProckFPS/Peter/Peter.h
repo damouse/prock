@@ -2,7 +2,7 @@
 
 #pragma once
 #include "PythonBindings.h"
-#include "ProckNode.h"
+#include "Nodes/ProckNodeSubclasses.h"
 
 /**
  * Peter manages editting code: loading and reading, transforming the AST, 

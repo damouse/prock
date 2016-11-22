@@ -5,7 +5,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include "BoxActor.h"
+#include "Actors/BoxActor.h"
 #include "LineActor.generated.h"
 
 UCLASS()

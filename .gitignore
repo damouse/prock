@@ -3,6 +3,7 @@ DerivedDataCache
 Intermediate
 !Intermediate/ProjectFiles/*
 Saved
+Build
 *.VC.db
 *.opensdf
 *.opendb

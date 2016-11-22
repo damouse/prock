@@ -4,7 +4,7 @@ The one and only game mode. Does most of the heavy lifting on organization and s
 #pragma once
 
 #include "GameFramework/GameMode.h"
-#include "Peter.h"
+#include "Peter/Peter.h"
 #include "ParticleDefinitions.h"
 #include "BaseGameMode.generated.h"
 
@@ -20,10 +20,10 @@ public:
 
 	TSubclassOf<ABoxActor> boxBPClass;
 
-	// Likely temporary, but this is the RoomBP that draws all the stuffs. The reference to it
-	// is picked up in BeginPlay
+	// Likely temporary, but this is the RoomBP placed in the map before the procedural rendering starts
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Room")
 	ABoxActor *room;
+
 private:
 	Peter *peter;
 };

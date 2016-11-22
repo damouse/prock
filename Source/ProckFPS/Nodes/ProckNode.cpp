@@ -1,10 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "ProckFPS.h"
-#include "BaseNode.h" 
-#include "ProckNode.h"
+#include "Nodes/ProckNode.h" 
+#include "Nodes/ProckNodeSubclasses.h"
 
 TSubclassOf<ABoxActor> ProckNode::boxBPClass = nullptr;
+TSubclassOf<AGhostActor> ProckNode::ghostBPClass = nullptr;
+TSubclassOf<ALineActor> ProckNode::lineBPClass = nullptr;
+
 UWorld *ProckNode::world = nullptr;
 
 // Returns a constructed subclass of ProckNode that matches the given name. Caller owns the reference to the object

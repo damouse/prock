@@ -1,13 +1,18 @@
 #pragma once
 
-#include "BoxActor.h"
-#include "PythonBindings.h"
+#include "Actors/BoxActor.h"
+#include "Actors/GhostActor.h"
+#include "Actors/LineActor.h"
+
+#include "Peter/PythonBindings.h"
 #include <map>
 #include <functional>
 
 // The type of each node, used to test for type before casts. This is instead of using dynaic_cast, 
 // which requires RTTI and incurs a performance overhead
 enum ProckNodeType : int;
+
+class Scope;
 
 /**
 * Abstract base class for all ProckNodes. A ProckNode "glues" a BoxActor to a native
@@ -31,24 +36,24 @@ public:
 
 	// Return this class name without the leading 'PN'. Example: class PNCallArgument returns CallArgument
 	virtual char *Name();
-
-	// Return the enumerated type for this node. Use this to check type instead of c++ casts
 	virtual ProckNodeType Type();
 
-//protected:
 	// Generalized getters
 	char *GetAsString(char *name);
-
-	// Note: this allocates a new list! Every time its called it will leak memory-- cache results
 	std::vector<ProckNode *> *GetAsList(char *name);
 	ProckNode *GetAsNode(char *name);
+		
+	Scope *Scope;
 
+// protected:
 	ABoxActor *box;
 	PyObject *astNode;
 
-	// Passed in from BaseGameMode within its constructor. This might be incorrect, 
-	// but I'm scared to make ProckNode a UClass-- totally hypothetical concerns about performance
+	// Refs to blueprints and the world. Temporary location
 	static TSubclassOf<ABoxActor> boxBPClass;
+	static TSubclassOf<AGhostActor> ghostBPClass;
+	static TSubclassOf<ALineActor> lineBPClass;
+
 	static UWorld *world;
 };
 
