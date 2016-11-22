@@ -22,5 +22,13 @@ void Scope::NewVariable(ProckNode *node) {
 }
 
 void Scope::Spawn(ProckNode *n) {
+	float offset = -2.f;
+	float currOffset = 2.f;
 
+	for (Ghost * g : ghosts) {
+		g->ghostActor = ProckNode::world->SpawnActor<AGhostActor>(ProckNode::ghostBPClass);
+		g->ghostActor->AttachToComponent(n->box->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
+		g->ghostActor->SetActorRelativeLocation(FVector(0, currOffset, -6));
+		currOffset = currOffset + offset;
+	}
 }
