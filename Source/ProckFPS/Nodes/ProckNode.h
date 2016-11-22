@@ -55,6 +55,11 @@ public:
 	static TSubclassOf<ALineActor> lineBPClass;
 
 	static UWorld *world;
+
+private:
+	// Remembers previous results to GetAsNode and GetAsList results and stores them for future calls 
+	// Required so that we get the same ProckNode on subsequent accesses
+	std::map<std::string, void*> nodeCache;
 };
 
 // Start Generated Code

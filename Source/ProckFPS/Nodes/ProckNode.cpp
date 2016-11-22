@@ -4,11 +4,15 @@
 #include "Nodes/ProckNode.h" 
 #include "Nodes/ProckNodeSubclasses.h"
 
+using namespace std;
+
+// Static references to blueprint and the world
 TSubclassOf<ABoxActor> ProckNode::boxBPClass = nullptr;
 TSubclassOf<AGhostActor> ProckNode::ghostBPClass = nullptr;
 TSubclassOf<ALineActor> ProckNode::lineBPClass = nullptr;
 
 UWorld *ProckNode::world = nullptr;
+
 
 // Returns a constructed subclass of ProckNode that matches the given name. Caller owns the reference to the object
 ProckNode *nodeSubclassFromString(char *t);
@@ -50,6 +54,12 @@ ProckNodeType ProckNode::Type() {
 }
 
 std::vector<ProckNode *> *ProckNode::GetAsList(char *name) {
+	// Check if we have a cached response for this access
+	string s(name);
+	if (nodeCache.count(s)) {
+		return (vector<ProckNode *> *) nodeCache[s];
+	}
+
 	PyObject *r = PyObject_GetAttrString(astNode, name);
 
 	if (!r || !PyIter_Check(r)) {
@@ -81,12 +91,26 @@ std::vector<ProckNode *> *ProckNode::GetAsList(char *name) {
 	}
 
 	Py_DECREF(iterator);
+	nodeCache[s] = result;
 	return result;
 }
 
 ProckNode *ProckNode::GetAsNode(char *name) {
+	// Check if we have a cached response for this access
+	string s(name);
+	if (nodeCache.count(s)) {
+		return (ProckNode *) nodeCache[s];
+	}
+
 	PyObject *r = PyObject_GetAttrString(astNode, name);
-	return (r == nullptr) ? nullptr : ProckNode::NewNode(r);
+
+	if (r) {
+		ProckNode *ret = ProckNode::NewNode(r);
+		nodeCache[s] = ret;
+		return ret;
+	}
+
+	return nullptr;
 }
 
 void ProckNode::PrintRaw() {
