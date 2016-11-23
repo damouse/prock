@@ -7,6 +7,7 @@
 #include "LinkableInterface.h"
 #include "BoxActor.generated.h"
 
+// TODO: move to config.h
 const int LABEL_MARGIN = 2;
 const int BOX_DEPTH = 40;		// Depth when looking straight-on. Corresponds to y coordinate
 

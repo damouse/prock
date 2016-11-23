@@ -15,5 +15,6 @@ bool Ghost::AddReference(PNName *n) {
 	}
 	
 	nodes.insert(n);
+	n->ghost = this;
 	return true;
 }

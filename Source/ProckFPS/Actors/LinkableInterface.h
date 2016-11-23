@@ -15,6 +15,4 @@ UCLASS()
 class PROCKFPS_API ALinkable : public AActor {
 	GENERATED_BODY()
 public:
-	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Connect"))
-	void Connect(AActor *from, AActor *to);
 };

@@ -3,9 +3,11 @@
 #include "ProckFPS.h"
 #include "Scope.h"
 #include "Utils/Config.h"
-
+#include "Actors/LinkableInterface.h"
 
 using namespace std;
+
+Scope::Scope(ProckNode *r) : Root(r), spawnOffset(0) {}
 
 bool Scope::NewVariable(ProckNode *node) {
 	if (node->Type() != PNT_Name) {
@@ -20,19 +22,57 @@ bool Scope::NewVariable(ProckNode *node) {
 		}
 	}
 
-	ghosts.push_back(new Ghost(n));
+	Ghost *g = new Ghost(n);
+	g->ghostActor = UConfig::world->SpawnActor<AGhostActor>(UConfig::ghostBPClass);
+	g->ghostActor->AttachToComponent(Root->box->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
+	g->ghostActor->SetActorRelativeLocation(FVector(0, spawnOffset, -6));
+	g->ghostActor->SetText(g->name);
+
+	spawnOffset += GHOST_OFFSET;
+	node->ghost = g;
+	ghosts.push_back(g);
+	
 	return true;
 }
 
-void Scope::Spawn(ProckNode *n) {
-	float offset = -3.f;
-	float currOffset = 2.f;
-
-	for (Ghost * g : ghosts) {
-		g->ghostActor = UConfig::world->SpawnActor<AGhostActor>(UConfig::ghostBPClass);
-		g->ghostActor->AttachToComponent(n->box->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
-		g->ghostActor->SetActorRelativeLocation(FVector(0, currOffset, -6));
-		g->ghostActor->SetText(g->name);
-		currOffset = currOffset + offset;
+void Scope::Connect(ProckNode *from, ProckNode *to) {
+	ALinkable *fromLink, *toLink;
+	
+	// Fetch the appropriate actor to link to: ghost or box
+	if (from->box) {
+		fromLink = from->box;
+	} else if (from->ghost) {
+		fromLink = from->ghost->ghostActor;
+	} else {
+		UE_LOG(LogProck, Error, TEXT("Scope asked to connect FROM a node that doesn't have a box or ghost"));
+		return;
 	}
+	
+	if (to->box) {
+		toLink = to->box;
+	} else if (to->ghost) {
+		toLink = to->ghost->ghostActor;
+	} else {
+		UE_LOG(LogProck, Error, TEXT("Scope asked to connect TO a node that doesn't have a box or ghost"));
+		to->PrintRaw();
+		return;
+	}
+
+	ALineActor *line = UConfig::world->SpawnActor<ALineActor>(UConfig::lineBPClass);
+	line->From = fromLink;
+	line->To = toLink;
+	line->Connect(fromLink, toLink);
 }
+
+/*
+
+Spawn::ConnectBox()
+	Spawn a new line
+	line::Connect(box, box)
+	scope.lines.insert(line)
+
+Spawn::ConnectGhost()
+	Spawn line
+	line::Connect(box, line)
+
+*/

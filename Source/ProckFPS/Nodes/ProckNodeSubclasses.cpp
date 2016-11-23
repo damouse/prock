@@ -23,6 +23,7 @@ void Int_Spawn(PNInt *n) {
 	n->box->SetText(n->Value());
 }
 
+
 // "Basic" Operators
 void Assignment_Spawn(PNAssignment *n) {
 	Base_Spawn(n);
@@ -37,6 +38,7 @@ void Assignment_Spawn(PNAssignment *n) {
 	}
 
 	n->Value()->Spawn(n, FVector(-30, 0, 0));
+	n->Scope->Connect(n->Value(), n->Target());
 }
 
 void BinaryOperator_Spawn(PNBinaryOperator *n) {
@@ -46,14 +48,18 @@ void BinaryOperator_Spawn(PNBinaryOperator *n) {
 
 	n->First()->Spawn(n, FVector(-30, 0, 20));
 	n->Second()->Spawn(n, FVector(-30, 0, -20));
+
+	n->Scope->Connect(n->First(), n);
+	n->Scope->Connect(n->Second(), n);
 }
+
 
 // Collections of Nodes
 void List_Spawn(PNList *n) {
 	float offset = 20.f;
 	float currOffset = 0.f;
 
-	n->Scope = new Scope();
+	n->Scope = new Scope(n);
 
 	for (ProckNode *child : *n->NodeList()) {
 		// Skip comments and endlines for now. Comments could be useful in the future
@@ -96,6 +102,8 @@ void ProckNode::Spawn(ProckNode *node, FVector pos) {
 	default:					Base_Spawn(this); break;
 	}
 
+	// NOTE: Because this happens after each box calls "spawn" the position of the box changes after the method is updated
+	// Need to do another pass or find a better way of attaching the spline
 	if (node) {
 		box->AttachToComponent(node->box->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
 		box->SetActorScale3D(FVector(BOX_RESCALE));

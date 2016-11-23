@@ -16,26 +16,20 @@ ABaseGameMode::ABaseGameMode() {
 void ABaseGameMode::BeginPlay() {
 	// Load the room instance which starts the game in the map
 	for (TActorIterator<ABoxActor> ActorItr(GetWorld()); ActorItr; ++ActorItr) {
-		UE_LOG(LogProck, Log, TEXT("Loaded room"));
 		room = *ActorItr;
+	}
+
+	if (!room) {
+		UE_LOG(LogProck, Error, TEXT("Room doesnt exist, can't load"));
+		return;
 	}
 
 	peter = new Peter();
 	ProckNode *root = peter->LoadPython();
 
-	if (!room) {
-		UE_LOG(LogProck, Log, TEXT("Room doesnt exist, can't load"));
-		return;
-	}
-
 	if (root) {
 		// The first box is already placed, assign it as the root's box
 		root->box = room;
 		root->Spawn(nullptr, FVector());
-
-		// Spawn ghosts
-		root->Scope->Spawn(root);
-
-		// Make connections
 	}
 }

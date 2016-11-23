@@ -13,6 +13,7 @@
 enum ProckNodeType : int;
 
 class Scope;
+class Ghost;
 
 /**
 * Abstract base class for all ProckNodes. A ProckNode "glues" a BoxActor to a native
@@ -48,6 +49,7 @@ public:
 // protected:
 	ABoxActor *box;
 	PyObject *astNode;
+	Ghost *ghost;
 
 private:
 	// Remembers previous results to GetAsNode and GetAsList results and stores them for future calls 

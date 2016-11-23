@@ -1,5 +1,5 @@
 /*
- Holds global static configuration and asset references. Specifically, this class stores:
+ Holds global static configuration and asset references. Specifically, this file stores:
 	- Static Refs to blueprints, the world
 	- Coordinate/Spawning offsets
 	- Project-wide settings
@@ -12,6 +12,10 @@
 class ABoxActor;
 class AGhostActor;
 class ALineActor;
+
+
+// Spawning Ofsets
+const float GHOST_OFFSET = -3.f;
 
 UCLASS()
 class PROCKFPS_API UConfig : public UObject

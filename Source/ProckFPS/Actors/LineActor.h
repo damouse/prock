@@ -8,6 +8,7 @@
 
 #include "GameFramework/Actor.h"
 #include "Actors/BoxActor.h"
+#include "Actors/LinkableInterface.h"
 #include "LineActor.generated.h"
 
 // Line actor
@@ -17,12 +18,15 @@ class PROCKFPS_API ALineActor : public AActor
 	GENERATED_BODY()
 public:	
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Connect"))
-	void Connect(AActor *from, AActor *to);
+	void Connect(ALinkable *from, ALinkable *to);
 
+	//// If connect has already been called (From and To are not nil) then this updates the line based on current positioning
+	//UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Reconnect"))
+	//void Reconnect(ALinkable *from, ALinkable *to);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "From")
-	AActor *From;
+	ALinkable *From;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "To")
-	AActor *To;
+	ALinkable *To;
 };
