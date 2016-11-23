@@ -23,13 +23,10 @@ public:
 	// was added successfully then a new GhostActor is spawned and attached to the Root
     bool NewVariable(ProckNode *n);
 
-	// Spawn AGhostActors into the game world as a child of the passed node's box
-	void Spawn(ProckNode *root);
-
 	// Connect the two logical nodes with a line with ALineActor
 	// The real connection (ALineActor) could either be between two boxes or a box and a ghost
+	// This isn't part of the programming scope, its part of the scope of things drawn within a box
 	void Connect(ProckNode *from, ProckNode *to);
-
 
 	// The root prock node this scope is bound to
 	ProckNode *Root;
