@@ -3,16 +3,9 @@
 #include "ProckFPS.h"
 #include "Nodes/ProckNode.h" 
 #include "Nodes/ProckNodeSubclasses.h"
+#include "Utils/Config.h"
 
 using namespace std;
-
-// Static references to blueprint and the world
-TSubclassOf<ABoxActor> ProckNode::boxBPClass = nullptr;
-TSubclassOf<AGhostActor> ProckNode::ghostBPClass = nullptr;
-TSubclassOf<ALineActor> ProckNode::lineBPClass = nullptr;
-
-UWorld *ProckNode::world = nullptr;
-
 
 // Returns a constructed subclass of ProckNode that matches the given name. Caller owns the reference to the object
 ProckNode *nodeSubclassFromString(char *t);

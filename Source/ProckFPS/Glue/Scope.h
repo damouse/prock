@@ -2,9 +2,10 @@
 
 #pragma once
 
-#include <set>
 #include "Glue/Ghost.h"
 #include "Nodes/ProckNode.h"
+
+#include <vector>
 
 /**
  * Collection of references visible within a certain scope, usually attached to a Node.
@@ -13,11 +14,12 @@
 class PROCKFPS_API Scope {
 public:
     // Try to register a new variable with the scope. Does nothing if the node is not type PNT_Name
-    void NewVariable(ProckNode *n);
+	// Returns true if the variable was added or exists
+    bool NewVariable(ProckNode *n);
 
 	// Spawn AGhostActors into the game world as a child of the passed node's box
 	void Spawn(ProckNode *root);
 
 //private: 
-    std::set<Ghost *> ghosts;
+    std::vector<Ghost *> ghosts;
 };

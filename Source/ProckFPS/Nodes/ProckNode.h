@@ -49,13 +49,6 @@ public:
 	ABoxActor *box;
 	PyObject *astNode;
 
-	// Refs to blueprints and the world. Temporary location
-	static TSubclassOf<ABoxActor> boxBPClass;
-	static TSubclassOf<AGhostActor> ghostBPClass;
-	static TSubclassOf<ALineActor> lineBPClass;
-
-	static UWorld *world;
-
 private:
 	// Remembers previous results to GetAsNode and GetAsList results and stores them for future calls 
 	// Required so that we get the same ProckNode on subsequent accesses

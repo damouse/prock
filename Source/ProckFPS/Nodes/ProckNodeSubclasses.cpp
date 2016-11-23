@@ -1,12 +1,13 @@
 #include "ProckFPS.h"
 #include "Nodes/ProckNodeSubclasses.h"
 #include "Glue/Scope.h"
+#include "Utils/Config.h"
 #include <queue>
 
 
 // Leaf Nodes
 void Base_Spawn(ProckNode *n) {
-	n->box = ProckNode::world->SpawnActor<ABoxActor>(ProckNode::boxBPClass);
+	n->box = UConfig::world->SpawnActor<ABoxActor>(UConfig::boxBPClass);
 	n->box->SetText(n->Name());
 	n->box->SetActorScale3D(FVector(BOX_RESCALE));
 	n->box->SizeFitContents();
@@ -29,10 +30,12 @@ void Assignment_Spawn(PNAssignment *n) {
 	// Assignmnent doesnt have its own box; hide it
 	n->box->GetRootComponent()->SetVisibility(false, true);
 
-	// Add this variable to the scope
-	n->Scope->NewVariable(n->Target());
+	// Add this variable to the scope. If scope rejects the new variable that means n->Target is not a Name node, its 
+	// an expression: don't spawn it
+	if (!n->Scope->NewVariable(n->Target())) {
+		n->Target()->Spawn(n, FVector(30, 0, 0));
+	}
 
-	n->Target()->Spawn(n, FVector(30, 0, 0));
 	n->Value()->Spawn(n, FVector(-30, 0, 0));
 }
 

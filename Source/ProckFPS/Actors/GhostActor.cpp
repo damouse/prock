@@ -3,6 +3,8 @@
 #include "ProckFPS.h"
 #include "Actors/GhostActor.h"
 
-AGhostActor::AGhostActor() {
-
+void AGhostActor::SetText(char *text) {
+	if (boxInstance) {
+		boxInstance->SetText(text);
+	}
 }

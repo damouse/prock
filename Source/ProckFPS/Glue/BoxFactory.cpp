@@ -87,7 +87,7 @@ void BoxFactory::Collect(PNList *n) {
 
 // Leaf Nodes
 void BoxFactory::Base_Build(ProckNode *n) {
-    n->box = ProckNode::world->SpawnActor<ABoxActor>(ProckNode::boxBPClass);
+    n->box = UConfig::world->SpawnActor<ABoxActor>(UConfig::boxBPClass);
     n->box->SetText(n->Name());
     n->box->SetActorScale3D(FVector(BOX_RESCALE));
     n->box->SizeFitContents();
