@@ -27,5 +27,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cuber")
 	UStaticMeshComponent *cube;
+
+	//UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Attachment")
+	//void NestBox(ALinkable *to, FVector &pos, FVector &tan);
 };
 

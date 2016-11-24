@@ -4,6 +4,8 @@
 #include "Utils/Config.h"
 #include <queue>
 
+// Parallel splines
+//https://answers.unrealengine.com/questions/319813/parallel-splines.html
 
 // Leaf Nodes
 void Base_Spawn(ProckNode *n) {
@@ -31,13 +33,13 @@ void Assignment_Spawn(PNAssignment *n) {
 	// Assignmnent doesnt have its own box; hide it
 	n->box->GetRootComponent()->SetVisibility(false, true);
 
-	// Add this variable to the scope. If scope rejects the new variable that means n->Target is not a Name node, its 
-	// an expression: don't spawn it
+	// Add this variable to the scope if it is a variable. NewVariable returns false if it isnt
 	if (!n->Scope->NewVariable(n->Target())) {
-		n->Target()->Spawn(n, FVector(30, 0, 0));
+		n->Target()->Spawn(n, FVector(BOX_X_OFFSET, 0, 0));
 	}
 
-	n->Value()->Spawn(n, FVector(-30, 0, 0));
+	n->Value()->Spawn(n, FVector(-BOX_X_OFFSET, 0, 0));
+
 	n->Scope->Connect(n->Value(), n->Target());
 }
 
@@ -46,8 +48,8 @@ void BinaryOperator_Spawn(PNBinaryOperator *n) {
 	n->box->SetText(n->Value());
 	n->box->SizeFitContents();
 
-	n->First()->Spawn(n, FVector(-30, 0, 20));
-	n->Second()->Spawn(n, FVector(-30, 0, -20));
+	n->First()->Spawn(n, FVector(-BOX_X_OFFSET, 0, BOX_Z_OFFSET));
+	n->Second()->Spawn(n, FVector(-BOX_X_OFFSET, 0, -BOX_Z_OFFSET));
 
 	n->Scope->Connect(n->First(), n);
 	n->Scope->Connect(n->Second(), n);
@@ -62,7 +64,6 @@ void List_Spawn(PNList *n) {
 	n->Scope = new Scope(n);
 
 	for (ProckNode *child : *n->NodeList()) {
-		// Skip comments and endlines for now. Comments could be useful in the future
 		if (child->Type() == PNT_Comment || child->Type() == PNT_Endl) {
 			continue;
 		}
@@ -80,7 +81,7 @@ void List_Spawn(PNList *n) {
 //
 // Attaches to the passed node at the relative position. Root nodes are passed null and 0 as params. 
 void ProckNode::Spawn(ProckNode *node, FVector pos) {
-	// Always pass our scope down to the next node. Construction happens in appropriate Spawn function
+	// Assign this node's scope as the scope as the passed scope. Scope construction happens in appropriate Spawn function
 	if (node) {
 		Scope = node->Scope;
 	}
@@ -102,7 +103,7 @@ void ProckNode::Spawn(ProckNode *node, FVector pos) {
 	default:					Base_Spawn(this); break;
 	}
 
-	// NOTE: Because this happens after each box calls "spawn" the position of the box changes after the method is updated
+	// NOTE: Because this happens after each box calls "spawn" the position of the box changes after the method is updated the original "SetLine" doesn't work well
 	// Need to do another pass or find a better way of attaching the spline
 	if (node) {
 		box->AttachToComponent(node->box->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);

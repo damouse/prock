@@ -15,11 +15,11 @@ UCLASS()
 class PROCKFPS_API ALinkable : public AActor {
 	GENERATED_BODY()
 public:
-	// Get attach positions in worldspace given the object in the other position
+	// Get attachment position and tangent for a line connecting To and From this actor
 	// These functions are implemented in the Blueprint subclasses for Box and Ghost
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Attachment")
-	FVector GetToPos(ALinkable *from);
+	void GetLineToAttachment(ALinkable *from, FVector &pos, FVector &tan);
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Attachment")
-	FVector GetFromPos(ALinkable *to);
+	void GetLineFromAttachment(ALinkable *to, FVector &pos, FVector &tan);
 };

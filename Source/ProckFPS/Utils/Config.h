@@ -17,6 +17,9 @@ class ALineActor;
 // Spawning Ofsets
 const float GHOST_OFFSET = -3.f;
 
+const float BOX_X_OFFSET = 40;
+const float BOX_Z_OFFSET = 20;
+
 UCLASS()
 class PROCKFPS_API UConfig : public UObject
 {
@@ -31,5 +34,4 @@ public:
 	static TSubclassOf<ABoxActor> boxBPClass;
 	static TSubclassOf<AGhostActor> ghostBPClass;
 	static TSubclassOf<ALineActor> lineBPClass;
-
 };
