@@ -58,7 +58,7 @@ void BinaryOperator_Spawn(PNBinaryOperator *n) {
 
 // Collections of Nodes
 void List_Spawn(PNList *n) {
-	float offset = 20.f;
+	FVector curr, origin, extent;
 	float currOffset = 0.f;
 
 	n->Scope = new Scope(n);
@@ -68,8 +68,11 @@ void List_Spawn(PNList *n) {
 			continue;
 		}
 
-		child->Spawn(n, FVector(currOffset, 0, 0));
-		currOffset = currOffset + offset;
+		child->Spawn(n, FVector(0, 0, 0));
+		child->box->GetActorBounds(false, origin, extent);
+
+		currOffset += extent.X;
+		child->box->SetActorRelativeLocation(FVector(currOffset, extent.Y, extent.Z + FRAME_Z_OFFSET));
 	};
 }
 

@@ -25,7 +25,7 @@ bool Scope::NewVariable(ProckNode *node) {
 	Ghost *g = new Ghost(n);
 	g->ghostActor = UConfig::world->SpawnActor<AGhostActor>(UConfig::ghostBPClass);
 	g->ghostActor->AttachToComponent(Root->box->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
-	g->ghostActor->SetActorRelativeLocation(FVector(0, spawnOffset, -6));
+	g->ghostActor->SetActorRelativeLocation(FVector(0, spawnOffset, 0));
 	g->ghostActor->SetText(g->name);
 
 	spawnOffset += GHOST_OFFSET;
@@ -63,16 +63,3 @@ void Scope::Connect(ProckNode *from, ProckNode *to) {
 	line->To = toLink;
 	line->Connect(fromLink, toLink);
 }
-
-/*
-
-Spawn::ConnectBox()
-	Spawn a new line
-	line::Connect(box, box)
-	scope.lines.insert(line)
-
-Spawn::ConnectGhost()
-	Spawn line
-	line::Connect(box, line)
-
-*/
