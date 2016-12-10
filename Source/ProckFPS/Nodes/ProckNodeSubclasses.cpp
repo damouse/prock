@@ -117,8 +117,7 @@ void ProckNode::Spawn(ProckNode *node, FVector pos) {
 	// NOTE: Because this happens after each box calls "spawn" the position of the box changes after the method is updated the original "SetLine" doesn't work well
 	// Need to do another pass or find a better way of attaching the spline
 	if (node) {
-		box->AttachToComponent(node->box->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
-		box->SetActorScale3D(FVector(BOX_RESCALE));
+		box->AttachToActor(node->box, FAttachmentTransformRules::SnapToTargetIncludingScale);
 		box->SetActorRelativeLocation(pos);
 	}
 }
