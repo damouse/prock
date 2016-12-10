@@ -8,7 +8,7 @@
 using namespace std;
 
 // If the scope contains a ghost that matches this name return it
-AGhostActor *AScopeActor::RefVar(PNName *name) {
+AGhostActor *AScopeActor::ReferenceVariable(PNName *name, ProckNode *parent, FVector pos) {
 	FString newName(name->Value());
 
 	for (AGhostActor *g : Ghosts) {
@@ -21,13 +21,15 @@ AGhostActor *AScopeActor::RefVar(PNName *name) {
 
 	AGhostActor *g = UConfig::world->SpawnActor<AGhostActor>(UConfig::ghostBPClass);
 	g->AttachToActor(this, FAttachmentTransformRules::SnapToTargetIncludingScale);
-	//g->SetActorRelativeLocation(FVector(0, spawnOffset, 0));
 	g->SetText(name->Value());
 	g->RefName = newName;
+
+	name->ghost = g;
 	g->nodes.insert(name);
 
-	Ghosts.Add(g);
-	//RedrawGhosts();
+	// Kick off the rest of the processing in blueprint, where the spline information is 
+	AddNewGhost(g, pos);
+
 	return g;
 }
 

@@ -11,12 +11,7 @@
 void Base_Spawn(ProckNode *n) {
 	n->box = UConfig::world->SpawnActor<ABoxActor>(UConfig::boxBPClass);
 	n->box->SetText(n->Name());
-	//n->box->SetActorScale3D(FVector(BOX_RESCALE));
 	n->box->SizeFitContents();
-}
-
-void Name_Spawn(PNName *n) {
-	n->ghost = n->Scope->RefVar(n);
 }
 
 void Int_Spawn(PNInt *n) {
@@ -99,7 +94,7 @@ void ProckNode::Spawn(ProckNode *node, FVector pos) {
 	switch (Type()) {
 
 	// Leaf Nodes
-	case PNT_Name:				Name_Spawn((PNName *) this); break;
+	case PNT_Name:				Scope->ReferenceVariable((PNName *) this, node, pos); break;
 	case PNT_Int:				Int_Spawn((PNInt *) this); break;
 
 	// Basic Operators

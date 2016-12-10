@@ -26,7 +26,12 @@ public:
 	// This isn't part of the programming scope, its part of the scope of things drawn within a box
 	void Connect(ProckNode *from, ProckNode *to);
 
-	AGhostActor *RefVar(PNName *name);
+	// Name a new variable with the given node
+	AGhostActor *ReferenceVariable(PNName *name, ProckNode *parent, FVector pos);
+
+	// Create a new ghost "near" this position, whatever that means
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "AddNewGhost")
+	void AddNewGhost(AGhostActor *ghost, FVector pos);
 
 	// Name a variable in scope. This function returns a contact point for that 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "GetGhostConnectionPoint")
