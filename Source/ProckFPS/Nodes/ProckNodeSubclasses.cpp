@@ -72,10 +72,9 @@ void List_Spawn(PNList *n) {
 		child->box->SetActorRelativeLocation(FVector(currOffset, extent.Y, extent.Z + FRAME_Z_OFFSET));
 
 		// Set the new box as the next line of code, which connects it to the scope
+		n->Scope->DrawScopeInBox();
 		n->Scope->SetNextLine(child->box);
 	};
-
-	n->Scope->RedrawGhosts();
 }
 
 // This function switches on the type of the passed node and invokes a respective _Spawn function if one exists, 

@@ -42,17 +42,17 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "SetNextLine"))
 	void SetNextLine(ABoxActor *next);
 
-	// Add the next box in the line, if this node represents a list
-	// This room should append the box to an array and draw scope between the two 
-	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "RedrawGhosts"))
-	void RedrawGhosts();
+	// Scope will always draw bewteen boxes. This draws the scope inside the scope of a box 
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "DrawScopeInBox"))
+	void DrawScopeInBox();
 
-	// The name of this ghost
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ghosts")
 	TArray<AGhostActor *> Ghosts;
 
 //private: 
 	std::set<ALineActor *> lines;
+
+	float currOffset;
 
 	// The root prock node this scope is bound to
 	ProckNode *Root;

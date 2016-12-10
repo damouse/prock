@@ -15,12 +15,18 @@ AGhostActor *AScopeActor::ReferenceVariable(PNName *name, ProckNode *parent, FVe
 		if (g->RefName.Equals(newName)) {
 			// Make the ghost aware of which name nodes reference it 
 			g->nodes.insert(name);
+			name->ghost = g;
 			return g;
 		}
 	}
 
 	AGhostActor *g = UConfig::world->SpawnActor<AGhostActor>(UConfig::ghostBPClass);
 	g->AttachToActor(this, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	g->GetRootComponent()->AttachToComponent(parent->box->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
+
+	g->AddActorLocalOffset(FVector(0, currOffset, -15));
+	currOffset += GHOST_OFFSET;
+
 	g->SetText(name->Value());
 	g->RefName = newName;
 
@@ -28,8 +34,7 @@ AGhostActor *AScopeActor::ReferenceVariable(PNName *name, ProckNode *parent, FVe
 	g->nodes.insert(name);
 
 	// Kick off the rest of the processing in blueprint, where the spline information is 
-	AddNewGhost(g, pos);
-
+	AddNewGhost(g, parent->box->GetActorLocation() + pos);
 	return g;
 }
 

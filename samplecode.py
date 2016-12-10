@@ -4,8 +4,8 @@ a = 1
 # 2: addition
 b = 1 + a
 
-# 3: subtraction
-c = 1 - b
+# # 3: subtraction
+# c = 1 - b
 
 # #4: multiplication
 # d = c * 2
