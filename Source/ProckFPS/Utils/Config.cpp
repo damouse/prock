@@ -6,7 +6,7 @@
 #include "Actors/BoxActor.h"
 #include "Actors/GhostActor.h"
 #include "Actors/LineActor.h"
-#include "Glue/Scope.h"
+#include "Actors/ScopeActor.h"
 
 TSubclassOf<ABoxActor> UConfig::boxBPClass = nullptr;
 TSubclassOf<AGhostActor> UConfig::ghostBPClass = nullptr;

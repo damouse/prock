@@ -3,14 +3,13 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include "Glue/Ghost.h"
 #include "Actors/LineActor.h"
 #include "Actors/GhostActor.h"
-#include "Nodes/ProckNode.h"
+#include "Nodes/ProckNodeSubclasses.h"
 
 #include <vector>
 #include <set>
-#include "Scope.generated.h"
+#include "ScopeActor.generated.h"
 
 /**
  * Collection of references visible within a certain scope, usually attached to a Node.
@@ -22,20 +21,10 @@ UCLASS()
 class PROCKFPS_API AScopeActor : public AActor {
 	GENERATED_BODY()
 public:
-	//Scope(ProckNode *root);
-
-    // Try to register a new variable with the scope. Does nothing if the node is not type PNT_Name
-	// Returns true if the variable was added as a new ghost or to an existing one. If the variable
-	// was added successfully then a new GhostActor is spawned and attached to the Root
-    //bool NewVariable(ProckNode *n);
-
 	// Connect the two logical nodes with a line with ALineActor
 	// The real connection (ALineActor) could either be between two boxes or a box and a ghost
 	// This isn't part of the programming scope, its part of the scope of things drawn within a box
 	void Connect(ProckNode *from, ProckNode *to);
-
-	// The root prock node this scope is bound to
-	ProckNode *Root;
 
 	AGhostActor *RefVar(PNName *name);
 
@@ -53,8 +42,10 @@ public:
 	TArray<AGhostActor *> Ghosts;
 
 //private: 
-    std::vector<Ghost *> ghosts;
 	std::set<ALineActor *> lines;
+
+	// The root prock node this scope is bound to
+	ProckNode *Root;
 
 	// Very sloppy way of tracking where to spawn new Ghosts on the root
 	float spawnOffset;

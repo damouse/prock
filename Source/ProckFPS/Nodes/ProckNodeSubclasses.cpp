@@ -1,6 +1,6 @@
 #include "ProckFPS.h"
 #include "Nodes/ProckNodeSubclasses.h"
-#include "Glue/Scope.h"
+#include "Actors/ScopeActor.h"
 #include "Utils/Config.h"
 #include <queue>
 

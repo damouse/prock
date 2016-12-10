@@ -4,8 +4,7 @@
 #include "BaseGameMode.h"
 
 #include "Nodes/ProckNodeSubclasses.h"
-#include "Glue/Ghost.h"
-#include "Glue/Scope.h"
+#include "Actors/ScopeActor.h"
 #include "Utils/Config.h"
 
 

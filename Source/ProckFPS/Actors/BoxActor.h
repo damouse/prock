@@ -5,7 +5,7 @@
 #include "GameFramework/Actor.h"
 #include <vector>
 #include "LinkableInterface.h"
-//#include "Glue/Scope.h"
+//#include "Actors/ScopeActor.h"
 
 #include "BoxActor.generated.h"
 

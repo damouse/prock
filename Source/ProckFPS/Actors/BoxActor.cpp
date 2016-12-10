@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <math.h> 
 
-#include "Glue/Scope.h"
+#include "Actors/ScopeActor.h"
 
 
 void ABoxActor::SetText(char *text) {
