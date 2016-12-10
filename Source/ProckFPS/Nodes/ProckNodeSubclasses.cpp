@@ -38,6 +38,7 @@ void Assignment_Spawn(PNAssignment *n) {
 	//	n->Target()->Spawn(n, FVector(BOX_X_OFFSET, 0, 0));
 	//}
 
+	n->Target()->Spawn(n, FVector(BOX_X_OFFSET, 0, 0));
 	n->Value()->Spawn(n, FVector(-BOX_X_OFFSET, 0, 0));
 
 	n->Scope->Connect(n->Value(), n->Target());
@@ -60,7 +61,12 @@ void BinaryOperator_Spawn(PNBinaryOperator *n) {
 void List_Spawn(PNList *n) {
 	FVector curr, origin, extent;
 	float currOffset = 0.f;
-	n->Scope = new Scope(n);
+	
+	// Create a new scope blueprint actor and assign it both to this node and this box.
+	// TODO: may not need both references
+	n->Scope = UConfig::world->SpawnActor<AScopeActor>(UConfig::scopeBPClass);
+	//n->Scope->SetActorRelativeLocation(FVector(0, 0, 0));
+	n->box->scope = n->Scope;
 
 	for (ProckNode *child : *n->NodeList()) {
 		if (child->Type() == PNT_Comment || child->Type() == PNT_Endl) {
@@ -70,8 +76,11 @@ void List_Spawn(PNList *n) {
 		child->Spawn(n, FVector(0, 0, 0));
 		child->box->GetActorBounds(false, origin, extent);
 
-		currOffset += extent.X;
+		currOffset += extent.X + FRAME_X_OFFSET;
 		child->box->SetActorRelativeLocation(FVector(currOffset, extent.Y, extent.Z + FRAME_Z_OFFSET));
+
+		// Set the new box as the next line of code, which connects it to the scope
+		n->Scope->SetNextLine(child->box);
 	};
 }
 

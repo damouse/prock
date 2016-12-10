@@ -5,11 +5,15 @@
 #include "GameFramework/Actor.h"
 #include <vector>
 #include "LinkableInterface.h"
+//#include "Glue/Scope.h"
+
 #include "BoxActor.generated.h"
 
 // TODO: move to config.h
 const int LABEL_MARGIN = 2;
 const int BOX_DEPTH = 40;		// Depth when looking straight-on. Corresponds to y coordinate
+
+class AScopeActor;
 
 UCLASS()
 class PROCKFPS_API ABoxActor : public ALinkable
@@ -21,14 +25,13 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "ResizeToFitText"))
 	void SizeFitContents();
 	
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Label")
 	UTextRenderComponent* mainLabel;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cuber")
 	UStaticMeshComponent *cube;
 
-	//UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Attachment")
-	//void NestBox(ALinkable *to, FVector &pos, FVector &tan);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cuber")
+	AScopeActor *scope;
 };
 

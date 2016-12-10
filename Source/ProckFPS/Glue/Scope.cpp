@@ -7,9 +7,9 @@
 
 using namespace std;
 
-Scope::Scope(ProckNode *r) : Root(r), spawnOffset(0) {}
+//AScopeActor::AScopeActor(ProckNode *r) : Root(r), spawnOffset(0) {}
 
-bool Scope::NewVariable(ProckNode *node) {
+bool AScopeActor::NewVariable(ProckNode *node) {
 	if (node->Type() != PNT_Name) {
 		return false;
 	}
@@ -35,7 +35,7 @@ bool Scope::NewVariable(ProckNode *node) {
 	return true;
 }
 
-void Scope::Connect(ProckNode *from, ProckNode *to) {
+void AScopeActor::Connect(ProckNode *from, ProckNode *to) {
 	ALinkable *fromLink, *toLink;
 	
 	// Fetch the appropriate actor to link to: ghost or box

@@ -3,7 +3,9 @@
 #include "ProckFPS.h"
 #include "Actors/BoxActor.h"
 #include <stdio.h>
-#include <math.h>  
+#include <math.h> 
+
+#include "Glue/Scope.h"
 
 
 void ABoxActor::SetText(char *text) {

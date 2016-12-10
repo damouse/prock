@@ -2,11 +2,14 @@
 
 #pragma once
 
+#include "GameFramework/Actor.h"
 #include "Glue/Ghost.h"
 #include "Actors/LineActor.h"
 #include "Nodes/ProckNode.h"
 
 #include <vector>
+#include <set>
+#include "Scope.generated.h"
 
 /**
  * Collection of references visible within a certain scope, usually attached to a Node.
@@ -14,9 +17,11 @@
  *
  * Think of this class as a representation of the nested content within a node and not the node itself.
  */
-class PROCKFPS_API Scope {
+UCLASS()
+class PROCKFPS_API AScopeActor : public AActor {
+	GENERATED_BODY()
 public:
-	Scope(ProckNode *root);
+	//Scope(ProckNode *root);
 
     // Try to register a new variable with the scope. Does nothing if the node is not type PNT_Name
 	// Returns true if the variable was added as a new ghost or to an existing one. If the variable
@@ -28,8 +33,16 @@ public:
 	// This isn't part of the programming scope, its part of the scope of things drawn within a box
 	void Connect(ProckNode *from, ProckNode *to);
 
+	//UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Connection Point")
+	//void ReferenceVar(FVector requestorLocation, bool isAssignment, FVector &pos);
+
 	// The root prock node this scope is bound to
 	ProckNode *Root;
+
+	// Add the next box in the line, if this node represents a list
+	// This room should append the box to an array and draw scope between the two 
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "SetNextLine"))
+	void SetNextLine(ABoxActor *next);
 
 //private: 
     std::vector<Ghost *> ghosts;

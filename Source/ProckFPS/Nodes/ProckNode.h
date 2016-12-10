@@ -12,7 +12,7 @@
 // which requires RTTI and incurs a performance overhead
 enum ProckNodeType : int;
 
-class Scope;
+class AScopeActor;
 class Ghost;
 
 /**
@@ -44,7 +44,7 @@ public:
 	std::vector<ProckNode *> *GetAsList(char *name);
 	ProckNode *GetAsNode(char *name);
 		
-	Scope *Scope;
+	AScopeActor *Scope;
 
 // protected:
 	ABoxActor *box;
