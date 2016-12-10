@@ -21,12 +21,13 @@ AGhostActor *AScopeActor::RefVar(PNName *name) {
 
 	AGhostActor *g = UConfig::world->SpawnActor<AGhostActor>(UConfig::ghostBPClass);
 	g->AttachToActor(this, FAttachmentTransformRules::SnapToTargetIncludingScale);
-	g->SetActorRelativeLocation(FVector(0, spawnOffset, 0));
+	//g->SetActorRelativeLocation(FVector(0, spawnOffset, 0));
 	g->SetText(name->Value());
 	g->RefName = newName;
 	g->nodes.insert(name);
 
 	Ghosts.Add(g);
+	RedrawGhosts();
 	return g;
 }
 

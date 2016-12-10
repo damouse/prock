@@ -37,6 +37,11 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "SetNextLine"))
 	void SetNextLine(ABoxActor *next);
 
+	// Add the next box in the line, if this node represents a list
+	// This room should append the box to an array and draw scope between the two 
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "RedrawGhosts"))
+	void RedrawGhosts();
+
 	// The name of this ghost
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ghosts")
 	TArray<AGhostActor *> Ghosts;
@@ -46,7 +51,4 @@ public:
 
 	// The root prock node this scope is bound to
 	ProckNode *Root;
-
-	// Very sloppy way of tracking where to spawn new Ghosts on the root
-	float spawnOffset;
 };

@@ -11,7 +11,7 @@
 void Base_Spawn(ProckNode *n) {
 	n->box = UConfig::world->SpawnActor<ABoxActor>(UConfig::boxBPClass);
 	n->box->SetText(n->Name());
-	n->box->SetActorScale3D(FVector(BOX_RESCALE));
+	//n->box->SetActorScale3D(FVector(BOX_RESCALE));
 	n->box->SizeFitContents();
 }
 
@@ -61,6 +61,7 @@ void List_Spawn(PNList *n) {
 	n->Scope = UConfig::world->SpawnActor<AScopeActor>(UConfig::scopeBPClass);
 	n->Scope->Root = n;
 	n->Scope->AttachToActor(n->box, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	n->Scope->SetActorRelativeLocation(FVector(0, 0, 0));
 
 	n->box->scope = n->Scope;
 
