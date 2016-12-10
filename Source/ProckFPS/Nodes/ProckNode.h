@@ -48,8 +48,8 @@ public:
 
 // protected:
 	ABoxActor *box;
+	AGhostActor *ghost;
 	PyObject *astNode;
-	Ghost *ghost;
 
 private:
 	// Remembers previous results to GetAsNode and GetAsList results and stores them for future calls 

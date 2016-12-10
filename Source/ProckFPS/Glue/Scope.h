@@ -5,6 +5,7 @@
 #include "GameFramework/Actor.h"
 #include "Glue/Ghost.h"
 #include "Actors/LineActor.h"
+#include "Actors/GhostActor.h"
 #include "Nodes/ProckNode.h"
 
 #include <vector>
@@ -26,23 +27,30 @@ public:
     // Try to register a new variable with the scope. Does nothing if the node is not type PNT_Name
 	// Returns true if the variable was added as a new ghost or to an existing one. If the variable
 	// was added successfully then a new GhostActor is spawned and attached to the Root
-    bool NewVariable(ProckNode *n);
+    //bool NewVariable(ProckNode *n);
 
 	// Connect the two logical nodes with a line with ALineActor
 	// The real connection (ALineActor) could either be between two boxes or a box and a ghost
 	// This isn't part of the programming scope, its part of the scope of things drawn within a box
 	void Connect(ProckNode *from, ProckNode *to);
 
-	//UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Connection Point")
-	//void ReferenceVar(FVector requestorLocation, bool isAssignment, FVector &pos);
-
 	// The root prock node this scope is bound to
 	ProckNode *Root;
+
+	AGhostActor *RefVar(PNName *name);
+
+	// Name a variable in scope. This function returns a contact point for that 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "GetGhostConnectionPoint")
+	void ReferenceVar(FVector requestorLocation, bool isAssignment, FVector &pos);
 
 	// Add the next box in the line, if this node represents a list
 	// This room should append the box to an array and draw scope between the two 
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "SetNextLine"))
 	void SetNextLine(ABoxActor *next);
+
+	// The name of this ghost
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ghosts")
+	TArray<AGhostActor *> Ghosts;
 
 //private: 
     std::vector<Ghost *> ghosts;

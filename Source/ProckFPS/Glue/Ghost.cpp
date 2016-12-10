@@ -9,12 +9,12 @@ Ghost::Ghost(PNName *n) {
 }
 
 bool Ghost::AddReference(PNName *n) {
-	// Check to make sure the names match
-	if (strcmp(name, n->Value()) != 0) {
-		return false;
-	}
-	
-	nodes.insert(n);
-	n->ghost = this;
+	//// Check to make sure the names match
+	//if (strcmp(name, n->Value()) != 0) {
+	//	return false;
+	//}
+	//
+	//nodes.insert(n);
+	//n->ghost = this;
 	return true;
 }

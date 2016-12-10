@@ -7,32 +7,54 @@
 
 using namespace std;
 
-//AScopeActor::AScopeActor(ProckNode *r) : Root(r), spawnOffset(0) {}
+//// Check the blueprin
+//bool AScopeActor::NewVariable(ProckNode *node) {
+//	if (node->Type() != PNT_Name) {
+//		return false;
+//	}
+//
+//	PNName *n = (PNName *) node;
+//
+//	for (Ghost *g : ghosts) {
+//		if (g->AddReference(n)) {
+//			return true;
+//		}
+//	}
+//
+//	Ghost *g = new Ghost(n);
+//	g->ghostActor = UConfig::world->SpawnActor<AGhostActor>(UConfig::ghostBPClass);
+//	g->ghostActor->AttachToComponent(Root->box->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
+//	g->ghostActor->SetActorRelativeLocation(FVector(0, spawnOffset, 0));
+//	g->ghostActor->SetText(g->name);
+//
+//	spawnOffset += GHOST_OFFSET;
+//	node->ghost = g;
+//	ghosts.push_back(g);
+//	
+//	return true;
+//}
 
-bool AScopeActor::NewVariable(ProckNode *node) {
-	if (node->Type() != PNT_Name) {
-		return false;
-	}
+// If the scope contains a ghost that matches this name return it
+AGhostActor *AScopeActor::RefVar(PNName *name) {
+	FString newName(name->Value());
 
-	PNName *n = (PNName *) node;
-
-	for (Ghost *g : ghosts) {
-		if (g->AddReference(n)) {
-			return true;
+	for (AGhostActor *g : Ghosts) {
+		if (g->RefName.Equals(newName)) {
+			// Make the ghost aware of which name nodes reference it 
+			g->nodes.insert(name);
+			return g;
 		}
 	}
 
-	Ghost *g = new Ghost(n);
-	g->ghostActor = UConfig::world->SpawnActor<AGhostActor>(UConfig::ghostBPClass);
-	g->ghostActor->AttachToComponent(Root->box->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
-	g->ghostActor->SetActorRelativeLocation(FVector(0, spawnOffset, 0));
-	g->ghostActor->SetText(g->name);
+	AGhostActor *g = UConfig::world->SpawnActor<AGhostActor>(UConfig::ghostBPClass);
+	g->AttachToActor(this, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	g->SetActorRelativeLocation(FVector(0, spawnOffset, 0));
+	g->SetText(name->Value());
+	g->RefName = newName;
+	g->nodes.insert(name);
 
-	spawnOffset += GHOST_OFFSET;
-	node->ghost = g;
-	ghosts.push_back(g);
-	
-	return true;
+	Ghosts.Add(g);
+	return g;
 }
 
 void AScopeActor::Connect(ProckNode *from, ProckNode *to) {
@@ -42,7 +64,7 @@ void AScopeActor::Connect(ProckNode *from, ProckNode *to) {
 	if (from->box) {
 		fromLink = from->box;
 	} else if (from->ghost) {
-		fromLink = from->ghost->ghostActor;
+		fromLink = from->ghost;
 	} else {
 		UE_LOG(LogProck, Error, TEXT("Scope asked to connect FROM a node that doesn't have a box or ghost"));
 		return;
@@ -51,7 +73,7 @@ void AScopeActor::Connect(ProckNode *from, ProckNode *to) {
 	if (to->box) {
 		toLink = to->box;
 	} else if (to->ghost) {
-		toLink = to->ghost->ghostActor;
+		toLink = to->ghost;
 	} else {
 		UE_LOG(LogProck, Error, TEXT("Scope asked to connect TO a node that doesn't have a box or ghost"));
 		to->PrintRaw();

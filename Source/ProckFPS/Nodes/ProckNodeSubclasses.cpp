@@ -16,8 +16,7 @@ void Base_Spawn(ProckNode *n) {
 }
 
 void Name_Spawn(PNName *n) {
-	Base_Spawn(n);
-	n->box->SetText(n->Value());
+	n->ghost = n->Scope->RefVar(n);
 }
 
 void Int_Spawn(PNInt *n) {
@@ -32,11 +31,6 @@ void Assignment_Spawn(PNAssignment *n) {
 
 	// Assignmnent doesnt have its own box; hide it
 	n->box->GetRootComponent()->SetVisibility(false, true);
-
-	//// Add this variable to the scope if it is a variable. NewVariable returns false if it isnt
-	//if (!n->Scope->NewVariable(n->Target())) {
-	//	n->Target()->Spawn(n, FVector(BOX_X_OFFSET, 0, 0));
-	//}
 
 	n->Target()->Spawn(n, FVector(BOX_X_OFFSET, 0, 0));
 	n->Value()->Spawn(n, FVector(-BOX_X_OFFSET, 0, 0));
@@ -63,9 +57,11 @@ void List_Spawn(PNList *n) {
 	float currOffset = 0.f;
 	
 	// Create a new scope blueprint actor and assign it both to this node and this box.
-	// TODO: may not need both references
+	// TODO: may not need both circular references
 	n->Scope = UConfig::world->SpawnActor<AScopeActor>(UConfig::scopeBPClass);
-	//n->Scope->SetActorRelativeLocation(FVector(0, 0, 0));
+	n->Scope->Root = n;
+	n->Scope->AttachToActor(n->box, FAttachmentTransformRules::SnapToTargetIncludingScale);
+
 	n->box->scope = n->Scope;
 
 	for (ProckNode *child : *n->NodeList()) {
@@ -116,7 +112,9 @@ void ProckNode::Spawn(ProckNode *node, FVector pos) {
 
 	// NOTE: Because this happens after each box calls "spawn" the position of the box changes after the method is updated the original "SetLine" doesn't work well
 	// Need to do another pass or find a better way of attaching the spline
-	if (node) {
+
+	// Check the box for existence since name nodes dont spawn anything
+	if (node && box) {
 		box->AttachToActor(node->box, FAttachmentTransformRules::SnapToTargetIncludingScale);
 		box->SetActorRelativeLocation(pos);
 	}
