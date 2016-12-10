@@ -27,7 +27,7 @@ AGhostActor *AScopeActor::RefVar(PNName *name) {
 	g->nodes.insert(name);
 
 	Ghosts.Add(g);
-	RedrawGhosts();
+	//RedrawGhosts();
 	return g;
 }
 

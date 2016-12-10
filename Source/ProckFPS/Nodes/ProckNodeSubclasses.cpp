@@ -79,6 +79,8 @@ void List_Spawn(PNList *n) {
 		// Set the new box as the next line of code, which connects it to the scope
 		n->Scope->SetNextLine(child->box);
 	};
+
+	n->Scope->RedrawGhosts();
 }
 
 // This function switches on the type of the passed node and invokes a respective _Spawn function if one exists, 
