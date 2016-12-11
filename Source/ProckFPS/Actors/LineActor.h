@@ -17,12 +17,8 @@ class PROCKFPS_API ALineActor : public AActor
 {
 	GENERATED_BODY()
 public:	
-	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Connect"))
-	void Connect(ALinkable *from, ALinkable *to);
-
-	//// If connect has already been called (From and To are not nil) then this updates the line based on current positioning
-	//UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Reconnect"))
-	//void Reconnect(ALinkable *from, ALinkable *to);
+	//UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Connect"))
+	//void Connect(ALinkable *from, ALinkable *to);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "From")
 	ALinkable *From;

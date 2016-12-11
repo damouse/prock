@@ -64,32 +64,5 @@ void AScopeActor::Connect(ProckNode *from, ProckNode *to) {
 	ALineActor *line = UConfig::world->SpawnActor<ALineActor>(UConfig::lineBPClass);
 	line->From = fromLink;
 	line->To = toLink;
-	line->Connect(fromLink, toLink);
+	//line->Connect(fromLink, toLink);
 }
-
-//// Check the blueprin
-//bool AScopeActor::NewVariable(ProckNode *node) {
-//	if (node->Type() != PNT_Name) {
-//		return false;
-//	}
-//
-//	PNName *n = (PNName *) node;
-//
-//	for (Ghost *g : ghosts) {
-//		if (g->AddReference(n)) {
-//			return true;
-//		}
-//	}
-//
-//	Ghost *g = new Ghost(n);
-//	g->ghostActor = UConfig::world->SpawnActor<AGhostActor>(UConfig::ghostBPClass);
-//	g->ghostActor->AttachToComponent(Root->box->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
-//	g->ghostActor->SetActorRelativeLocation(FVector(0, spawnOffset, 0));
-//	g->ghostActor->SetText(g->name);
-//
-//	spawnOffset += GHOST_OFFSET;
-//	node->ghost = g;
-//	ghosts.push_back(g);
-//	
-//	return true;
-//}
