@@ -33,10 +33,10 @@ void Assignment_Spawn(PNAssignment *n) {
 	// Assignmnent doesnt have its own box; hide it
 	n->box->GetRootComponent()->SetVisibility(false, true);
 
-	//// Add this variable to the scope if it is a variable. NewVariable returns false if it isnt
-	//if (!n->Scope->NewVariable(n->Target())) {
-	//	n->Target()->Spawn(n, FVector(BOX_X_OFFSET, 0, 0));
-	//}
+	// Add this variable to the scope if it is a variable. NewVariable returns false if it isnt
+	if (!n->Scope->NewVariable(n->Target())) {
+		n->Target()->Spawn(n, FVector(BOX_X_OFFSET, 0, 0));
+	}
 
 	n->Value()->Spawn(n, FVector(-BOX_X_OFFSET, 0, 0));
 
@@ -60,6 +60,7 @@ void BinaryOperator_Spawn(PNBinaryOperator *n) {
 void List_Spawn(PNList *n) {
 	FVector curr, origin, extent;
 	float currOffset = 0.f;
+
 	n->Scope = new Scope(n);
 
 	for (ProckNode *child : *n->NodeList()) {
