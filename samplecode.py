@@ -8,10 +8,10 @@ b = 1 + a
 c = 1 - b
 
 #4: multiplication
-d = c * 2
+d = 2 * c
 
 #5: division
-e = d / 2
+e = 2 / d
 
 #6: if
 if a is 1:
