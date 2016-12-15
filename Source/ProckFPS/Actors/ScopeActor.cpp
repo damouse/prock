@@ -27,7 +27,7 @@ AGhostActor *AScopeActor::ReferenceVariable(PNName *name, ProckNode *parent, FVe
 	g->AddActorLocalOffset(FVector(0, currOffset, -15));
 	currOffset += GHOST_OFFSET;
 
-	g->SetText(name->Value());
+	g->SetMainText(name->Value());
 	g->RefName = newName;
 
 	name->ghost = g;

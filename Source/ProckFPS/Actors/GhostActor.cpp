@@ -4,9 +4,3 @@
 #include "Actors/GhostActor.h"
 
 #include "Nodes/ProckNodeSubclasses.h"
-
-void AGhostActor::SetText(char *text) {
-	if (boxInstance) {
-		boxInstance->SetText(text);
-	}
-}

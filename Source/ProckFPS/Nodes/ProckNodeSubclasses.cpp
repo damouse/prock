@@ -73,6 +73,8 @@ void List_Spawn(PNList *n) {
 
 		// Set the new box as the next line of code, which connects it to the scope
 		n->Scope->DrawScopeInBox();
+
+		// Creates 
 		n->Scope->SetNextLine(child->box);
 	};
 }

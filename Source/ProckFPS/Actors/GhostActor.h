@@ -19,9 +19,6 @@ class PROCKFPS_API AGhostActor : public ALinkable
 {
 	GENERATED_BODY()
 public:	
-	// Sets the label for the floating instance of this ghost
-	void SetText(char *name);
-
 	// The sliding box that represents an instance of this ghost
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BoxInstance")
 	ABoxActor *boxInstance;
@@ -29,6 +26,9 @@ public:
 	// The name of this ghost
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RefName")
 	FString RefName;
+
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "SetMainLabel"))
+	void SetMainText(const FString& name);
 
 	// This is so the ghost knows which name nodes reference it. 
 	// The BP needs the boxes, too
