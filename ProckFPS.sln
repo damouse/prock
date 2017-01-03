@@ -7,9 +7,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{45CFB0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Games", "Games", "{EC800A69-9145-45C3-9A52-84B969C121BE}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UE4", "Intermediate\ProjectFiles\UE4.vcxproj", "{5C362CFA-8B3F-45C3-BB51-6D49E53CBF57}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UE4", "Intermediate\ProjectFiles\UE4.vcxproj", "{03B01C84-2CB4-499A-AB78-889C1A0191E8}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProckFPS", "Intermediate\ProjectFiles\ProckFPS.vcxproj", "{E0CA43EC-3DF2-4458-A2F6-CA8EC22FCAF7}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProckFPS", "Intermediate\ProjectFiles\ProckFPS.vcxproj", "{4B59A13C-00BA-4CB0-A7DF-8F3C93C02BFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
