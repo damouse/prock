@@ -5,7 +5,6 @@
 #include "GameFramework/Actor.h"
 #include <vector>
 #include "LinkableInterface.h"
-//#include "Actors/ScopeActor.h"
 
 #include "BoxActor.generated.h"
 
@@ -33,5 +32,16 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cuber")
 	AScopeActor *scope;
+	
+	//
+	// Experimental-- lets take a quick detour and see if cpp is any clearer than blueprints
+	// It maybe, but at this point it requires backtracking on a lot of existing work in blueprints
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Pathline", meta = (DisplayName = "GetPathInOut"))
+	void GetPathInOut(FVector &startPos, FVector &startTan, FVector &endPos, FVector &endTan);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Pathline", meta = (DisplayName = "CreateSplineMeshComponent"))
+	USplineMeshComponent* CreateSplineMeshComponent();
+
+	virtual void BeginPlay();
 };
 
