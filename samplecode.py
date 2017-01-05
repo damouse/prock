@@ -1,8 +1,8 @@
-# # #1: assignment
-# a = 1
+# #1: assignment
+a = 1
 
-# # 2: addition
-# b = 1 + a
+# 2: addition
+b = 1 + a
 
 # # 3: subtraction
 # c = 1 - b

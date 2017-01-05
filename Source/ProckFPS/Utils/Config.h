@@ -13,6 +13,7 @@ class ABoxActor;
 class AGhostActor;
 class ALineActor;
 class AScopeActor;
+class APathSegment;
 
 // Spawning Ofsets
 const float GHOST_OFFSET = -3.f;
@@ -38,4 +39,5 @@ public:
 	static TSubclassOf<AGhostActor> ghostBPClass;
 	static TSubclassOf<ALineActor> lineBPClass;
 	static TSubclassOf<AScopeActor> scopeBPClass;
+	static TSubclassOf<APathSegment> segmentBPClass;
 };

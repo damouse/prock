@@ -13,6 +13,8 @@ ABaseGameMode::ABaseGameMode() {
 }
 
 void ABaseGameMode::BeginPlay() {
+	return;
+
 	// Load the room instance which starts the game in the map
 	for (TActorIterator<ABoxActor> ActorItr(GetWorld()); ActorItr; ++ActorItr) {
 		room = *ActorItr;

@@ -7,13 +7,15 @@
 #include "Actors/GhostActor.h"
 #include "Actors/LineActor.h"
 #include "Actors/ScopeActor.h"
+#include "Actors/PathSegmentComponent.h"
 
 TSubclassOf<ABoxActor> UConfig::boxBPClass = nullptr;
 TSubclassOf<AGhostActor> UConfig::ghostBPClass = nullptr;
 TSubclassOf<ALineActor> UConfig::lineBPClass = nullptr;
 TSubclassOf<AScopeActor> UConfig::scopeBPClass = nullptr;
-UWorld *UConfig::world = nullptr;
+TSubclassOf<APathSegment> UConfig::segmentBPClass = nullptr;
 
+UWorld *UConfig::world = nullptr;
 
 UConfig::UConfig() {
 	static ConstructorHelpers::FClassFinder<ABoxActor> boxBPFinder(TEXT("Blueprint'/Game/Blueprints/BoxActorBP'"));
@@ -34,5 +36,10 @@ UConfig::UConfig() {
 	static ConstructorHelpers::FClassFinder<AScopeActor> scopeBPFinder(TEXT("Blueprint'/Game/Blueprints/ScopeActorBP'"));
 	if (scopeBPFinder.Class != NULL) {
 		UConfig::scopeBPClass = scopeBPFinder.Class;
+	}
+
+	static ConstructorHelpers::FClassFinder<APathSegment> segmentBPClassFinder(TEXT("Blueprint'/Game/Blueprints/PathSegmentBP'"));
+	if (segmentBPClassFinder.Class != NULL) {
+		UConfig::segmentBPClass = segmentBPClassFinder.Class;
 	}
 }

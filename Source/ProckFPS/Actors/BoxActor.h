@@ -11,6 +11,7 @@ const int LABEL_MARGIN = 2;
 const int BOX_DEPTH = 40;		// Depth when looking straight-on. Corresponds to y coordinate
 
 class AScopeActor;
+class APathSegment;
 
 UCLASS()
 class PROCKFPS_API ABoxActor : public ALinkable
@@ -21,7 +22,12 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "ResizeToFitText"))
 	void SizeFitContents();
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Path Segments")
+	TArray<APathSegment *> PathSegments;
+
+
+	// TODO: Remove all of these
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Label")
 	UTextRenderComponent* mainLabel;
 
@@ -30,6 +36,5 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cuber")
 	AScopeActor *scope;
-
 };
 
