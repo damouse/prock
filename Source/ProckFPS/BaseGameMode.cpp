@@ -5,6 +5,8 @@
 
 #include "Nodes/ProckNodeSubclasses.h"
 #include "Actors/ScopeActor.h"
+#include "Actors/GhostActor.h"
+
 #include "Utils/Config.h"
 
 
@@ -13,8 +15,6 @@ ABaseGameMode::ABaseGameMode() {
 }
 
 void ABaseGameMode::BeginPlay() {
-	return;
-
 	// Load the room instance which starts the game in the map
 	for (TActorIterator<ABoxActor> ActorItr(GetWorld()); ActorItr; ++ActorItr) {
 		room = *ActorItr;
@@ -27,10 +27,11 @@ void ABaseGameMode::BeginPlay() {
 
 	peter = new Peter();
 	ProckNode *root = peter->LoadPython();
+	TArray<AGhostActor *> ghosts;
 
 	if (root) {
 		// The first box is already placed, assign it as the root's box
 		root->box = room;
-		root->Spawn(nullptr, FVector());
+		root->Spawn(nullptr, FVector(), ghosts);
 	}
 }

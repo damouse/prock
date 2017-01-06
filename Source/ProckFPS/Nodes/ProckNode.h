@@ -30,7 +30,7 @@ public:
 
 	// Spawn this node in the game world.
 	// NOTE: this method is the ProckNode.cpp since its a simple switch statement for the functions there
-	void Spawn(ProckNode *node, FVector pos);
+	void Spawn(ProckNode *node, FVector pos, TArray<AGhostActor *> ghosts);
 
 	// Dump the underlying python object. Equivalent to python: str(obj)
 	void PrintRaw();

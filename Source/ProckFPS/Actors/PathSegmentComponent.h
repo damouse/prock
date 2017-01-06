@@ -19,12 +19,14 @@ class PROCKFPS_API APathSegment : public AActor
 	GENERATED_BODY()
 
 public:	
-	// Blueprint Fields
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ghosts")
-	TArray<AGhostActor *> Ghosts;
+	// Convenience initializer that sets the rest of the fields on this class
+	void InitializeSegment(ABoxActor *start, ABoxActor *end, bool connectToStartSource, bool connectToEndSource, TArray<AGhostActor*> ghosts);
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spline Segments")
-	TArray<USplineMeshComponent *> Splines;
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "NeedsRedraw"))
+	void NeedsRedraw();
+
+	//UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "AddGhosts"))
+	//void AddGhosts(TArray<AGhostActor *> ghost);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Connections")
 	ABoxActor *Start;
@@ -58,4 +60,11 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Positioning")
 	FVector EndRight;
+
+	// Private Blueprint Fields
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ghosts")
+	TArray<AGhostActor *> Ghosts;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spline Segments")
+	TArray<USplineMeshComponent *> Splines;
 };

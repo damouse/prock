@@ -23,6 +23,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "ResizeToFitText"))
 	void SizeFitContents();
 
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "NeedsRedraw"))
+	void NeedsRedraw();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Path Segments")
 	TArray<APathSegment *> PathSegments;
 
