@@ -44,3 +44,6 @@ The logical representation of a single variable between all references to that v
 
 Like programmatic scope, this component collects references to variables and replaces them with ghosts.
 
+### Miscellanious Resources
+
+[Parallel splines](https://answers.unrealengine.com/questions/319813/parallel-splines.html)

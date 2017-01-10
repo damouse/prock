@@ -5,8 +5,12 @@
 #include "Utils/Config.h"
 #include <queue>
 
-// Parallel splines
-//https://answers.unrealengine.com/questions/319813/parallel-splines.html
+// Line Utility Method
+void Connect(ProckNode *from, ProckNode *to) {
+	ALineActor* line = UConfig::world->SpawnActor<ALineActor>(UConfig::lineBPClass);
+	line->From = from->box;
+	line->To = to->box;
+}
 
 // Leaf Nodes
 void Base_Spawn(ProckNode *n) {
@@ -36,7 +40,7 @@ void Assignment_Spawn(PNAssignment *n) {
 	n->Target()->Spawn(n, FVector(BOX_X_OFFSET, 0, 0));
 	n->Value()->Spawn(n, FVector(-BOX_X_OFFSET, 0, 0));
 
-	//n->Scope->Connect(n->Value(), n->Target());
+	Connect(n->Value(), n->Target());
 }
 
 void BinaryOperator_Spawn(PNBinaryOperator *n) {
@@ -47,8 +51,8 @@ void BinaryOperator_Spawn(PNBinaryOperator *n) {
 	n->First()->Spawn(n, FVector(-BOX_X_OFFSET, 0, BOX_Z_OFFSET));
 	n->Second()->Spawn(n, FVector(-BOX_X_OFFSET, 0, -BOX_Z_OFFSET));
 
-	//n->Scope->Connect(n->First(), n);
-	//n->Scope->Connect(n->Second(), n);
+	Connect(n->First(), n);
+	Connect(n->Second(), n);
 }
 
 
