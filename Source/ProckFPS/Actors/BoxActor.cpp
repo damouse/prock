@@ -2,7 +2,6 @@
 
 #include "ProckFPS.h"
 
-#include "Actors/ScopeActor.h"
 #include "Actors/BoxActor.h"
 #include "Utils/Config.h"
 

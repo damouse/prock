@@ -1,4 +1,5 @@
 #pragma once
+
 #include "GameFramework/Actor.h"
 #include "LinkableInterface.h"
 
@@ -26,18 +27,8 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "NeedsRedraw"))
 	void NeedsRedraw();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Path Segments")
-	TArray<APathSegment *> PathSegments;
-
-
 	// TODO: Remove all of these
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Label")
 	UTextRenderComponent* mainLabel;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cuber")
-	UStaticMeshComponent *cube;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cuber")
-	AScopeActor *scope;
 };
 

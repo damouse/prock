@@ -1,9 +1,6 @@
 #include "ProckFPS.h"
 
 #include "Nodes/ProckNodeSubclasses.h"
-#include "Actors/ScopeActor.h"
-#include "Actors/GhostActor.h"
-#include "Actors/PathSegmentComponent.h"
 
 #include "Utils/Config.h"
 #include <queue>
@@ -18,52 +15,37 @@ void Base_Spawn(ProckNode *n) {
 	n->box->SizeFitContents();
 }
 
-void Int_Spawn(PNInt *n, TArray<AGhostActor*> ghosts) {
+void Int_Spawn(PNInt *n) {
 	Base_Spawn(n);
 	n->box->SetText(n->Value());
 }
 
-void Name_Spawn(PNName *n, TArray<AGhostActor*> ghosts) {
+void Name_Spawn(PNName *n) {
 	Base_Spawn(n);
 	n->box->SetText(n->Value());
 }
 
 
 // "Basic" Operators
-void Assignment_Spawn(PNAssignment *n, TArray<AGhostActor*> ghosts) {
+void Assignment_Spawn(PNAssignment *n) {
 	Base_Spawn(n);
 
 	// Assignmnent doesnt have its own box; hide it
 	n->box->GetRootComponent()->SetVisibility(false, true);
 
-	// Draw the pathline
-	APathSegment* segment = UConfig::world->SpawnActor<APathSegment>(UConfig::segmentBPClass);
-	segment->InitializeSegment(n->box, n->box, true, false, ghosts);
-	n->box->PathSegments.Add(segment);
-
-	n->Target()->Spawn(n, FVector(BOX_X_OFFSET, 0, -BOX_X_OFFSET), ghosts);
-	n->Value()->Spawn(n, FVector(-BOX_X_OFFSET, 0, 0), ghosts);
-
-	// onnect the Target box with its own pathline
-	APathSegment* outgoing = UConfig::world->SpawnActor<APathSegment>(UConfig::segmentBPClass);
-	outgoing->InitializeSegment(n->Target()->box, n->box, false, false, TArray<AGhostActor*>());
-	n->box->PathSegments.Add(outgoing);
-
-	// Merge the ghost into tthe array and return them all
+	n->Target()->Spawn(n, FVector(BOX_X_OFFSET, 0, 0));
+	n->Value()->Spawn(n, FVector(-BOX_X_OFFSET, 0, 0));
 
 	//n->Scope->Connect(n->Value(), n->Target());
-
-	// Resize this box to fit its nested nodes
-	n->box->NeedsRedraw();
 }
 
-void BinaryOperator_Spawn(PNBinaryOperator *n, TArray<AGhostActor*> ghosts) {
+void BinaryOperator_Spawn(PNBinaryOperator *n) {
 	Base_Spawn(n);
 	n->box->SetText(n->Value());
 	n->box->SizeFitContents();
 
-	n->First()->Spawn(n, FVector(-BOX_X_OFFSET, 0, BOX_Z_OFFSET), ghosts);
-	n->Second()->Spawn(n, FVector(-BOX_X_OFFSET, 0, -BOX_Z_OFFSET), ghosts);
+	n->First()->Spawn(n, FVector(-BOX_X_OFFSET, 0, BOX_Z_OFFSET));
+	n->Second()->Spawn(n, FVector(-BOX_X_OFFSET, 0, -BOX_Z_OFFSET));
 
 	//n->Scope->Connect(n->First(), n);
 	//n->Scope->Connect(n->Second(), n);
@@ -71,25 +53,16 @@ void BinaryOperator_Spawn(PNBinaryOperator *n, TArray<AGhostActor*> ghosts) {
 
 
 // Collections of Nodes
-void List_Spawn(PNList *n, TArray<AGhostActor*> ghosts) {
+void List_Spawn(PNList *n) {
 	FVector curr, origin, extent;
 	float currOffset = 0.f;
-	
-	// Create a new scope blueprint actor and assign it both to this node and this box.
-	// TODO: may not need both circular references
-	//n->Scope = UConfig::world->SpawnActor<AScopeActor>(UConfig::scopeBPClass);
-	//n->Scope->Root = n;
-	//n->Scope->AttachToActor(n->box, FAttachmentTransformRules::SnapToTargetIncludingScale);
-	//n->Scope->SetActorRelativeLocation(FVector(0, 0, 0));
-
-	//n->box->scope = n->Scope;
 
 	for (ProckNode *child : *n->NodeList()) {
 		if (child->Type() == PNT_Comment || child->Type() == PNT_Endl) {
 			continue;
 		}
 
-		child->Spawn(n, FVector(0, 0, 0), ghosts);
+		child->Spawn(n, FVector(0, 0, 0));
 		child->box->GetActorBounds(false, origin, extent);
 
 		currOffset += extent.X + FRAME_X_OFFSET;
@@ -108,19 +81,19 @@ void List_Spawn(PNList *n, TArray<AGhostActor*> ghosts) {
 // Note that this design intentionally allows for a single _Spawn method to handle multiple node types.
 //
 // Attaches to the passed node at the relative position. Root nodes are passed null and 0 as params. 
-void ProckNode::Spawn(ProckNode *node, FVector pos, TArray<AGhostActor*> ghosts) {
+void ProckNode::Spawn(ProckNode *node, FVector pos) {
 	switch (Type()) {
 
 	// Leaf Nodes
-	case PNT_Name:				Name_Spawn((PNName *) this, ghosts); break;  
-	case PNT_Int:				Int_Spawn((PNInt *) this, ghosts); break; 
+	case PNT_Name:				Name_Spawn((PNName *) this); break;  
+	case PNT_Int:				Int_Spawn((PNInt *) this); break; 
 
 	// Basic Operators
-	case PNT_Assignment:		Assignment_Spawn((PNAssignment *) this, ghosts); break; 
-	case PNT_BinaryOperator:	BinaryOperator_Spawn((PNBinaryOperator *) this, ghosts); break; 
+	case PNT_Assignment:		Assignment_Spawn((PNAssignment *) this); break; 
+	case PNT_BinaryOperator:	BinaryOperator_Spawn((PNBinaryOperator *) this); break; 
 
 	// Collections
-	case PNT_List:				List_Spawn((PNList *) this, ghosts); break; 
+	case PNT_List:				List_Spawn((PNList *) this); break; 
 
 	// Basic box
 	default:					Base_Spawn(this); break; 

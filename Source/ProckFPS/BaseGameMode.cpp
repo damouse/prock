@@ -4,8 +4,6 @@
 #include "BaseGameMode.h"
 
 #include "Nodes/ProckNodeSubclasses.h"
-#include "Actors/ScopeActor.h"
-#include "Actors/GhostActor.h"
 
 #include "Utils/Config.h"
 
@@ -27,11 +25,10 @@ void ABaseGameMode::BeginPlay() {
 
 	peter = new Peter();
 	ProckNode *root = peter->LoadPython();
-	TArray<AGhostActor *> ghosts;
 
 	if (root) {
 		// The first box is already placed, assign it as the root's box
 		root->box = room;
-		root->Spawn(nullptr, FVector(), ghosts);
+		root->Spawn(nullptr, FVector());
 	}
 }

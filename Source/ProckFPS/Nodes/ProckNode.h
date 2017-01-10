@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Actors/BoxActor.h"
-#include "Actors/GhostActor.h"
 #include "Actors/LineActor.h"
 
 #include "Peter/PythonBindings.h"
@@ -30,7 +29,7 @@ public:
 
 	// Spawn this node in the game world.
 	// NOTE: this method is the ProckNode.cpp since its a simple switch statement for the functions there
-	void Spawn(ProckNode *node, FVector pos, TArray<AGhostActor *> ghosts);
+	void Spawn(ProckNode *node, FVector pos);
 
 	// Dump the underlying python object. Equivalent to python: str(obj)
 	void PrintRaw();
@@ -48,7 +47,6 @@ public:
 
 // protected:
 	ABoxActor *box;
-	AGhostActor *ghost;
 	PyObject *astNode;
 
 private:
