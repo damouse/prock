@@ -4,16 +4,12 @@
 #include "Config.h"
 
 #include "Actors/BoxActor.h"
-#include "Actors/GhostActor.h"
 #include "Actors/LineActor.h"
-#include "Actors/ScopeActor.h"
 
 TSubclassOf<ABoxActor> UConfig::boxBPClass = nullptr;
-TSubclassOf<AGhostActor> UConfig::ghostBPClass = nullptr;
 TSubclassOf<ALineActor> UConfig::lineBPClass = nullptr;
-TSubclassOf<AScopeActor> UConfig::scopeBPClass = nullptr;
-UWorld *UConfig::world = nullptr;
 
+UWorld *UConfig::world = nullptr;
 
 UConfig::UConfig() {
 	static ConstructorHelpers::FClassFinder<ABoxActor> boxBPFinder(TEXT("Blueprint'/Game/Blueprints/BoxActorBP'"));
@@ -21,18 +17,8 @@ UConfig::UConfig() {
 		UConfig::boxBPClass = boxBPFinder.Class;
 	}
 
-	static ConstructorHelpers::FClassFinder<AGhostActor> ghostBPFinder(TEXT("Blueprint'/Game/Blueprints/GhostActorBP'"));
-	if (ghostBPFinder.Class != NULL) {
-		UConfig::ghostBPClass = ghostBPFinder.Class;
-	}
-
 	static ConstructorHelpers::FClassFinder<ALineActor> lineBPFinder(TEXT("Blueprint'/Game/Blueprints/LineActorBP'"));
 	if (lineBPFinder.Class != NULL) {
 		UConfig::lineBPClass = lineBPFinder.Class;
-	}
-
-	static ConstructorHelpers::FClassFinder<AScopeActor> scopeBPFinder(TEXT("Blueprint'/Game/Blueprints/ScopeActorBP'"));
-	if (scopeBPFinder.Class != NULL) {
-		UConfig::scopeBPClass = scopeBPFinder.Class;
 	}
 }

@@ -1,11 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include <vector>
 #include "LinkableInterface.h"
-//#include "Actors/ScopeActor.h"
+
+#include <vector>
 
 #include "BoxActor.generated.h"
 
@@ -14,6 +12,7 @@ const int LABEL_MARGIN = 2;
 const int BOX_DEPTH = 40;		// Depth when looking straight-on. Corresponds to y coordinate
 
 class AScopeActor;
+class APathSegment;
 
 UCLASS()
 class PROCKFPS_API ABoxActor : public ALinkable
@@ -24,14 +23,12 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "ResizeToFitText"))
 	void SizeFitContents();
-	
+
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "NeedsRedraw"))
+	void NeedsRedraw();
+
+	// TODO: Remove all of these
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Label")
 	UTextRenderComponent* mainLabel;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cuber")
-	UStaticMeshComponent *cube;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cuber")
-	AScopeActor *scope;
 };
 

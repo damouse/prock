@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Actors/BoxActor.h"
-#include "Actors/GhostActor.h"
 #include "Actors/LineActor.h"
 
 #include "Peter/PythonBindings.h"
@@ -48,7 +47,6 @@ public:
 
 // protected:
 	ABoxActor *box;
-	AGhostActor *ghost;
 	PyObject *astNode;
 
 private:
