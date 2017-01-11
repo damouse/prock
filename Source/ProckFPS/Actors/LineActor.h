@@ -25,8 +25,4 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "To")
 	ABoxActor *To;
-
-	double springconstant = 0.1;
-	double dampingconstant = 0.01;
-	double restlength = 40;
 };
