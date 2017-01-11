@@ -19,7 +19,7 @@ class PROCKFPS_API ABoxActor : public ALinkable
 	GENERATED_BODY()
 public:
 	virtual void BeginPlay();
-	virtual void Tick(float DeltaSeconds) override;
+	virtual void Tick(float DeltaSeconds);
 
 	void SetText(char *text);
 
@@ -38,10 +38,10 @@ public:
 	// http://paulbourke.net/miscellaneous/particle/
 
 	void UpdateForces(TArray<ABoxActor*> boxes, TArray<ALineActor*> lines);
-	void UpdatePositions(TArray<ABoxActor*> boxes, TArray<ALineActor*> lines);
+	void UpdatePositions(TArray<ABoxActor*> boxes, TArray<ALineActor*> lines, double dt);
 
 	bool fixed = false;
-	float dt;
+	float time;
 	float m; // Mass
 
 	FVector p; // Position, as recoreded and updated by our physics system
