@@ -41,9 +41,7 @@ public:
 	void UpdatePositions(TArray<ABoxActor*> boxes, TArray<ALineActor*> lines, double dt);
 
 	bool fixed = false;
-	float time;
 	float m; // Mass
-
 	FVector p; // Position, as recoreded and updated by our physics system
 	FVector v; // Velocity
 	FVector f; // Force

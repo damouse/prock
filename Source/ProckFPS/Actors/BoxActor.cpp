@@ -64,22 +64,11 @@ void ABoxActor::UpdateForces(TArray<ABoxActor*> boxes, TArray<ALineActor*> lines
 	}
 
 	for (ALineActor *s : lines) {
-		FVector d = s->From->p - s->To->p;
-		float len = d.Size();
-		FVector nf;
+		FVector dp = s->From->p - s->To->p;
+		FVector dv = s->From->v - s->To->v;
+		float len = dp.Size();
 
-		nf.X = s->springconstant  * (len - s->restlength);
-		nf.X += s->dampingconstant * (s->From->v.X - s->To->v.X) * d.X / len;
-		nf.X *= -d.X / len;
-
-		nf.Y = s->springconstant  * (len - s->restlength);
-		nf.Y += s->dampingconstant * (s->From->v.Y - s->To->v.Y) * d.Y / len;
-		nf.Y *= -d.Y / len;
-
-		nf.Z = s->springconstant  * (len - s->restlength);
-		nf.Z += s->dampingconstant * (s->From->v.Z - s->To->v.Z) * d.Z / len;
-		nf.Z *= -d.Z / len;
-
+		FVector nf = dv * (dp / len) * s->dampingconstant + (s->springconstant  * (len - s->restlength) * (-dp / len));
 
 		if (!s->From->fixed) {
 			s->From->f += nf;
