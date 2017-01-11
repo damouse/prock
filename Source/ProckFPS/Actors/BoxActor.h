@@ -11,14 +11,16 @@
 const int LABEL_MARGIN = 2;
 const int BOX_DEPTH = 40;		// Depth when looking straight-on. Corresponds to y coordinate
 
-class AScopeActor;
-class APathSegment;
+class ALineActor;
 
 UCLASS()
 class PROCKFPS_API ABoxActor : public ALinkable
 {
 	GENERATED_BODY()
 public:
+	virtual void BeginPlay();
+	virtual void Tick(float DeltaSeconds) override;
+
 	void SetText(char *text);
 
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "ResizeToFitText"))
@@ -27,8 +29,20 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "NeedsRedraw"))
 	void NeedsRedraw();
 
-	// TODO: Remove all of these
+	// TODO: remove and replace with direct BP method
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Label")
 	UTextRenderComponent* mainLabel;
+
+//protected:
+	void UpdateForces(TArray<ABoxActor*> boxes, TArray<ALineActor*> lines);
+	void UpdatePositions(TArray<ABoxActor*> boxes, TArray<ALineActor*> lines);
+
+	bool fixed = false;
+	float dt;
+	float m; // Mass
+
+	FVector p; // Position, as recoreded and updated by our physics system
+	FVector v; // Velocity
+	FVector f; // Force
 };
 

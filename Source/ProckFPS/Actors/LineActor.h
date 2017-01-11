@@ -21,8 +21,12 @@ public:
 	//void Connect(ALinkable *from, ALinkable *to);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "From")
-	ALinkable *From;
+	ABoxActor *From;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "To")
-	ALinkable *To;
+	ABoxActor *To;
+
+	double springconstant = 0.1;
+	double dampingconstant = 0.05;
+	double restlength = 20;
 };
