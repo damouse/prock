@@ -22,7 +22,7 @@ const float FRAME_X_OFFSET = 10;
 const float FRAME_Z_OFFSET = 5;
 
 // Box Physics Parameters
-const float GRAVITY = 0;
+const FVector GRAVITY(0, 0, 0);
 const float VISCOUS_DRAG = 0.1;
 
 UCLASS()

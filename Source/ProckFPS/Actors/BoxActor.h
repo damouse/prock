@@ -34,6 +34,9 @@ public:
 	UTextRenderComponent* mainLabel;
 
 //protected:
+	// Physics designed off work from Mr. Paul Bourke
+	// http://paulbourke.net/miscellaneous/particle/
+
 	void UpdateForces(TArray<ABoxActor*> boxes, TArray<ALineActor*> lines);
 	void UpdatePositions(TArray<ABoxActor*> boxes, TArray<ALineActor*> lines);
 

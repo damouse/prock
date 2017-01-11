@@ -10,10 +10,6 @@
 #include <stdio.h>
 #include <math.h> 
 
-// Used in physics calculations below
-const FVector VEC_DOWN(0, 0, -1);
-const FVector VEC_ZERO();
-
 
 void ABoxActor::BeginPlay() {
 	PrimaryActorTick.bCanEverTick = true;
@@ -58,11 +54,12 @@ void ABoxActor::Tick(float DeltaSeconds) {
 
 // The rest of this file is physics calculations. It should be compartmentalized in its own file, 
 // but I got tired reading through the holy wars on multiple-inheritance mixins vs base 
-// classes vs composed, more functional approaches. So its here.
+// classes vs composed, more functional approaches. I had a crtp solution, but the idea that 
+// I should triple implementation LOC for the sake of some tenously defined sense of "correctness" hurts me. 
 void ABoxActor::UpdateForces(TArray<ABoxActor*> boxes, TArray<ALineActor*> lines) {
 	for (ABoxActor *p : boxes) {
 		p->p = p->GetActorLocation();
-		p->f = (GRAVITY * p->m * VEC_DOWN) - (VISCOUS_DRAG * p->v);
+		p->f = (p->m * GRAVITY) - (p->v * VISCOUS_DRAG);
 	}
 
 	for (ALineActor *s : lines) {
