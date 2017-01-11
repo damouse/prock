@@ -68,7 +68,7 @@ void ABoxActor::UpdateForces(TArray<ABoxActor*> boxes, TArray<ALineActor*> lines
 		FVector dv = s->From->v - s->To->v;
 		float len = dp.Size();
 
-		FVector nf = dv * (dp / len) * s->dampingconstant + (s->springconstant  * (len - s->restlength) * (-dp / len));
+		FVector nf = dv * (dp / len) * s->dampingconstant + (s->springconstant * (-dp / len) * (len - s->restlength));
 
 		if (!s->From->fixed) {
 			s->From->f += nf;

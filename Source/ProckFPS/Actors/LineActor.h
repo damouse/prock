@@ -27,6 +27,6 @@ public:
 	ABoxActor *To;
 
 	double springconstant = 0.1;
-	double dampingconstant = 0.05;
-	double restlength = 20;
+	double dampingconstant = 0.01;
+	double restlength = 40;
 };
