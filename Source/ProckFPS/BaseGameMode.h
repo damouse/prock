@@ -18,11 +18,14 @@ public:
 
 	virtual void BeginPlay();
 
-	TSubclassOf<ABoxActor> boxBPClass;
-
 	// Likely temporary, but this is the RoomBP placed in the map before the procedural rendering starts
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Room")
 	ABoxActor *room;
+	
+	// Kick off a "running" phase
+	void Run();
+
+
 
 private:
 	Peter *peter;

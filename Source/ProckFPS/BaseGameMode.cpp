@@ -32,3 +32,20 @@ void ABaseGameMode::BeginPlay() {
 		root->Spawn(nullptr, FVector());
 	}
 }
+
+void ABaseGameMode::Run() {
+	// Load the code, move it to the background
+	
+	/*
+	Running: 
+
+	Scope			collection of variables. Can be created during a run cycle
+	Run Cycle		one step of the runner, corresponding to the execution of a single line of code
+
+	Tick:			windup animation
+	Turnover:		step debugger and update values instantaneously
+	Tock:			winddown animation
+
+
+	*/
+}

@@ -3,12 +3,13 @@ Python "native" portion of the processor script. Called directly by the engine o
 environment and do imports as needed. 
 '''
 
-import json, pprint
+import json
+import pprint
 
 from redbaron import nodes
 from redbaron import RedBaron
 
-from utils import log
+from debugger import Runner
 
 
 def load_file(path):
@@ -63,6 +64,10 @@ def test_source(path):
     # print isinstance(ast, (nodes.NodeList, nodes.CommaProxyList))
     pprint.pprint(ast.__dict__)
     # print ast.__class__
+
+
+def run_source(path="../../../../../../Code/unreal/Prock/samplecode.py"):
+    return Runner(path)
 
 
 def handshake():

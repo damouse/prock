@@ -27,22 +27,29 @@ ProckNodes map to native nodes 1:1.
 
 The engine is responsible for all drawing, animation, and input. It is implmented in a set of c++ classes and UE Blueprints. It uses two primitive classes, `Box` and `Line`, as building blocks to represent the AST. The BNL (Boxes 'n' Lines) is *not* a 1:1 mapping to the AST. Creating the BNL from AST is called *framing*, of which there are many types: direct code, class heirarchy, dependancy graph, etc. 
 
-At the time of this writing Frame subclasses are not implemented: the CodeList frame is the default.
+## Modes of Operation
 
-### Framing 
+Prock has three modes: Reading, Running, and Riting. These correspond to displaying, executing, and editting code. 
 
-Wraps around a set of nodes/boxes and displays them in some meaningful way with respect to this frame. 
+### Running
 
-Exerts internal physics on boxes and external physics on other frames.
+This section is a work in progress. 
 
+Some defintitions: 
 
-#### Ghost
+    Scope           collection of variables. Can be created during a run cycle
+    Run Cycle       one step of the runner, corresponding to the execution of a single line of code
 
-The logical representation of a single variable between all references to that variable in a given scope. 
+    Tick:           windup animation
+    Turnover:       step debugger and update values instantaneously
+    Tock:           winddown animation
 
-### Scope
+Unlike reading, running relies more on the native python extensions. Find this interface in `pypeter/debugger.py`.
 
-Like programmatic scope, this component collects references to variables and replaces them with ghosts.
+#### Problems
+
+- How does the engine find its place with respect to the statement currently being evaluated by the debugger? 
+
 
 ### Miscellanious Resources
 

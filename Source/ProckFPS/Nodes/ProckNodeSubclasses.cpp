@@ -55,7 +55,6 @@ void BinaryOperator_Spawn(PNBinaryOperator *n) {
 	Connect(n->Second(), n);
 }
 
-
 // Collections of Nodes
 void List_Spawn(PNList *n) {
 	FVector curr, origin, extent;
@@ -69,12 +68,8 @@ void List_Spawn(PNList *n) {
 		child->Spawn(n, FVector(0, 0, 0));
 		child->box->GetActorBounds(false, origin, extent);
 
-		currOffset += extent.X + FRAME_X_OFFSET;
+		currOffset += extent.X + FRAME_X_OFFSET * 3;
 		child->box->SetActorRelativeLocation(FVector(currOffset, extent.Y, extent.Z + FRAME_Z_OFFSET));
-
-		// Set the new box as the next line of code, which connects it to the scope
-		//n->Scope->DrawScopeInBox();
-		//n->Scope->SetNextLine(child->box);
 	};
 }
 
