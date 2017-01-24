@@ -9,187 +9,121 @@ import sys
 import os
 import traceback
 import pd
+import bdb
 
 from multiprocessing import Process, Queue
 import time
 import pprint
 
-
-#   File "../../samplecode.py", line 2, in <module>
-#     a = 1
-#   File "C:\Python27\lib\bdb.py", line 49, in trace_dispatch
-#     return self.dispatch_line(frame)
-#   File "C:\Python27\lib\bdb.py", line 67, in dispatch_line
-#     self.user_line(frame)
-#   File "D:\Code\unreal\Prock\Source\pypeter\pd.py", line 158, in user_line
-#     self.interaction(frame, None)
-#   File "D:\Code\unreal\Prock\Source\pypeter\pd.py", line 211, in interaction
-#     self.cmdloop()
-#   File "C:\Python27\lib\cmd.py", line 136, in cmdloop
-#     line = self.stdin.readline()
-#   File "D:\Code\unreal\Prock\Source\pypeter\debugger.py", line 149, in readline
-#     raise Exception
-# Exception
-# Uncaught exception. Entering post mortem debuggingTraceback (most recent call last):
-#   File "D:\Code\unreal\Prock\Source\pypeter\debugger.py", line 191, in <module>
+from greenlet import greenlet
 
 
-class ProckBugger(pd.Pdb):
+class Runner(bdb.Bdb):
+    '''
+    Python native debugger wrapper. 
 
-    def dispatch_line(self, frame):
-        if self.stop_here(frame) or self.break_here(frame):
-            # Block here for input on the object
-            # import time
-            # time.sleep(1)
-            # self.do_step(None)
+    Useful in setting this up: https://www.safaribooksonline.com/library/view/python-standard-library/0596000960/ch11s03.html
+    '''
 
-            self.user_line(frame)
+    def __init__(self, filename):
+        bdb.Bdb.__init__(self)
+        self.should_break = True
+        self.filename = filename
 
-            if self.quitting:
-                raise BdbQuit
-        return self.trace_dispatch
+        self.gr_paused = greenlet(self.tick)
+        self.gr_running = greenlet(self._runscript)
 
-    def trace_dispatch(self, frame, event, arg):
-        print event, frame, arg
-        # print locals()
+    def tick(self):
+        self.gr_running.switch()
 
-        if self.quitting:
-            return  # None
-        if event == 'line':
-            # print 'rigged dispatch'
-            # return self.dispatch_line(frame)
-            # Returning dispatch_line blocks on user input
-            return None
-        if event == 'call':
-            return self.dispatch_call(frame, arg)
-        if event == 'return':
-            return self.dispatch_return(frame, arg)
-        if event == 'exception':
-            return self.dispatch_exception(frame, arg)
-        if event == 'c_call':
-            return self.trace_dispatch
-        if event == 'c_exception':
-            return self.trace_dispatch
-        if event == 'c_return':
-            return self.trace_dispatch
-        print 'bdb.Bdb.dispatch: unknown debugging event:', repr(event)
-        return self.trace_dispatch
+    def finished_tick(self):
+        # Called by this class once a debugger cycle completes. Resumes control to the "tick" method
+        self.gr_paused.switch()
 
+    def stop_here(self, frame):
+        return True
 
-# Subclass pdb.PDB and override cmdloop, called in pd.py:209
-# Or just override cmdloop() in cmd.py
-class Runner():
-    ''' A pynative shim that acts as an interface to an executing script '''
+    def user_call(self, frame, args):
+        print 'Call'
+        name = frame.f_code.co_name or "<unknown>"
+        print "call", name, args
 
-    def __init__(self, path, redir):
-        self.mainpyfile = path
-        self.redir = redir
+        self.set_step()
+        self.finished_tick()
 
-    def runall(self):
-        ''' Create an instance of the pdb class with custom stdin/out. This allows us 
-        to feed input and output for each step  '''
+    def user_line(self, frame):
+        print 'Line'
 
-        if not os.path.exists(self.mainpyfile):
-            print 'Error:', self.mainpyfile, 'does not exist'
-            sys.exit(1)
+        if self.should_break:
+            self.should_break = False
+            self.set_trace()
+        else:
+            # arrived at breakpoint
+            name = frame.f_code.co_name or "<unknown>"
+            filename = self.canonic(frame.f_code.co_filename)
+            print "break at", filename, frame.f_lineno, "in", name
 
-        # Replace pdb's dir with script's dir in front of module search path.
-        sys.path[0] = os.path.dirname(self.mainpyfile)
+        self.finished_tick()
 
-        # self.redir = StdIORedirect()
-        self.debugger = ProckBugger()
-        # self.debugger = pd.Pdb(stdout=self.redir, stdin=self.redir)
+    def runscript(self):
+        self.gr_running.switch()
 
-        try:
-            self.debugger._runscript(self.mainpyfile)
-            print "The program completed"
-        # except Restart:
-        #     print "Restarting", self.mainpyfile, "with arguments:"
-        #     print "\t" + " ".join(sys.argv[1:])
-        except SystemExit:
-            # In most cases SystemExit does not warrant a post-mortem session.
-            print "The program exited via sys.exit(). Exit status: ", sys.exc_info()[1]
-        except SyntaxError:
-            traceback.print_exc()
-            sys.exit(1)
-        except:
-            import traceback
-            traceback.print_exc()
-            print "Uncaught exception. Entering post mortem debugging"
-            print "Running 'cont' or 'step' will restart the program"
-            t = sys.exc_info()[2]
-            debugger.interaction(None, t)
-            print "Post mortem debugger finished. The " + self.mainpyfile + " will be restarted"
+    def _runscript(self):
+        # Taken from pdb wholesale as a means to bootstrap a debugging session
+        # The script has to run in __main__ namespace (or imports from
+        # __main__ will break).
+        #
+        # So we clear up the __main__ and set several special variables
+        # (this gets rid of pdb's globals and cleans old variables on restarts).
+        import __main__
+        __main__.__dict__.clear()
+        __main__.__dict__.update({"__name__": "__main__",
+                                  "__file__": self.filename,
+                                  # "__builtins__": __builtins__,
+                                  })
 
-# Put redirecotr on a thread
-# Main thread waits 1s, sleeps, then calls worker thread
+        # When bdb sets tracing, a number of call and line events happens
+        # BEFORE debugger even reaches user's code (and the exact sequence of
+        # events depends on python version). So we take special measures to
+        # avoid stopping before we reach the main script (see user_line and
+        # user_call for details).
+        self._wait_for_mainpyfile = 1
+        self.mainpyfile = self.canonic(self.filename)
+        self._user_requested_quit = 0
+        statement = 'execfile(%r)' % self.filename
+        self.run(statement)
+
+# Dummy "spinning" method for simulating delayed steps instead of rolling through the whole thing
 
 
-class StdIORedirect():
+def waitForInput(gr):
+    for i in range(100):
+        print 'Taking a break...'
+        import time
+        time.sleep(.1)
+        gr.switch()
 
-    def __init__(self):
-        self.input_queue = Queue()
-        self.output_queue = Queue()
-        self.resultString = ''
-
-    def write(self, text):
-
-        if len(text.rstrip()):
-            print text
-            # self.resultString += '\n' + text
-
-        # if '(Pdb)' in text:
-        #     self.output_queue.put(self.resultString)
-        #     self.resultString = ''
-
-    def flush(self):
-        # print 'FLUSH'
-        pass
-
-    def readline(self):
-        ''' Makes PDB step. Could do it manually, im sure '''
-        raise Exception
-        return 's'
-
-        print 'Asked for a line'
-        ret = self.input_queue.get()
-        print 'returning a line', ret
-        return ret
+    print 'Main loop expiring'
 
 
 def main():
     print 'Starting'
 
-    input_redir = StdIORedirect()
-    dbg = Runner('../../samplecode.py', input_redir)
-    dbg.runall()
-    return
+    # gr2 = greenlet(waitForInput)
+    # dbg = Runner('../../samplecode.py', gr2)
+    # gr1 = greenlet(dbg.runscript)
+    # gr2.switch(gr1)
 
-    # input_thread = Process(target=dbg.runall)
-    # input_thread.start()
+    # dbg.runscript()
+    # gr1.switch()
 
-    # input_redir.input_queue.put('s')
-    # print input_redir.output_queue.get()
-    # time.sleep(1)
+    dbg = Runner('../../samplecode.py')
 
-    # input_redir.input_queue.put('s')
-    # print input_redir.output_queue.get()
-    # time.sleep(1)
+    for i in range(20):
+        import time
+        time.sleep(.1)
+        dbg.tick()
 
-    # input_redir.input_queue.put('s')
-    # print input_redir.output_queue.get()
-    # time.sleep(1)
-
-    # input_redir.input_queue.put('q')
-
-    # input_redir.input_queue.task_done()
-
-    # input_redir.input_queue.put('s')
-    # time.sleep(1)
-
-    # dbg.runall()
-
-    # pd.main('tester.py')
 
 if __name__ == '__main__':
     main()
