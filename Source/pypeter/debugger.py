@@ -23,6 +23,9 @@ class Runner(bdb.Bdb):
     Python native debugger wrapper. 
 
     Useful in setting this up: https://www.safaribooksonline.com/library/view/python-standard-library/0596000960/ch11s03.html
+
+    Because none of the builtin debugger faculties are built to tick at someone else's pace, this class uses greenlets to 
+    block debugger continuation. 
     '''
 
     def __init__(self, filename):
@@ -30,18 +33,19 @@ class Runner(bdb.Bdb):
         self.should_break = True
         self.filename = filename
 
+        # The first greenlet sits inside the tick method, always blocked. Calling tick()
+        # switches to the second greenlet, which perfroms a full step through the debugger and then switches
+        # back. Although now that I think about it a little bit I'm actually not sure how it works.
         self.gr_paused = greenlet(self.tick)
         self.gr_running = greenlet(self._runscript)
 
     def tick(self):
+        # Step the debugger once by switching back into the running greenlet.
         self.gr_running.switch()
 
     def finished_tick(self):
         # Called by this class once a debugger cycle completes. Resumes control to the "tick" method
         self.gr_paused.switch()
-
-    def stop_here(self, frame):
-        return True
 
     def user_call(self, frame, args):
         print 'Call'
@@ -64,9 +68,6 @@ class Runner(bdb.Bdb):
             print "break at", filename, frame.f_lineno, "in", name
 
         self.finished_tick()
-
-    def runscript(self):
-        self.gr_running.switch()
 
     def _runscript(self):
         # Taken from pdb wholesale as a means to bootstrap a debugging session
@@ -93,29 +94,9 @@ class Runner(bdb.Bdb):
         statement = 'execfile(%r)' % self.filename
         self.run(statement)
 
-# Dummy "spinning" method for simulating delayed steps instead of rolling through the whole thing
-
-
-def waitForInput(gr):
-    for i in range(100):
-        print 'Taking a break...'
-        import time
-        time.sleep(.1)
-        gr.switch()
-
-    print 'Main loop expiring'
-
 
 def main():
     print 'Starting'
-
-    # gr2 = greenlet(waitForInput)
-    # dbg = Runner('../../samplecode.py', gr2)
-    # gr1 = greenlet(dbg.runscript)
-    # gr2.switch(gr1)
-
-    # dbg.runscript()
-    # gr1.switch()
 
     dbg = Runner('../../samplecode.py')
 
