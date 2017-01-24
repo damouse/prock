@@ -9,7 +9,7 @@ import pprint
 from redbaron import nodes
 from redbaron import RedBaron
 
-from debugger import Runner
+from runner import Runner
 
 
 def load_file(path):

@@ -27,8 +27,11 @@ public:
 	PythonBindings();
 	~PythonBindings();
 
-	// Load the environment  then load the root node
+	// Load the environment, then the root node
 	PyObject * ImportCode();
+
+	// Instantiate a new copy of pypeter.Runner, the debugger wrapper. 
+	PyObject *LoadRunner();
 
 private: 
 	void PythonGILAcquire();

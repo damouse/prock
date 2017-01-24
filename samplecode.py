@@ -1,4 +1,4 @@
-#1: assignment
+# 1: assignment
 a = 1
 
 # 2: addition
@@ -7,25 +7,28 @@ b = 1 + a
 # 3: subtraction
 c = 1 - b
 
-#4: multiplication
+# 4: multiplication
 d = 2 * c
 
-#5: division
+# 5: division
 e = 2 / d
 
-#6: if
+# 6: if
 if a is 1:
-  f = 1
+    f = 1
 else:
-  f = 2
+    f = 2
 
-#7: loop
+# 7: loop
 while True:
-  g = 1
-  break
+    g = 1
+    break
 
-#8: invocation
+# 8: invocation
+
+
 def t():
-  pass
+    poop = 1
+    pass
 
 t()

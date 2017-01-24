@@ -24,3 +24,7 @@ void Peter::UnloadPython() {
 	delete bindPython;
 	delete prockRootNode;
 }
+
+void Peter::RunPython() {
+
+}

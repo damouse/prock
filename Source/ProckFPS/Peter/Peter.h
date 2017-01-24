@@ -20,8 +20,12 @@ public:
 	Peter();
 	~Peter();
 	
+	// Load a python filename into peter, return the root node for the loaded code
 	ProckNode * LoadPython();
 	void UnloadPython();
+
+	// Run a previously loaded python file using the native python debugger wrapper
+	void RunPython();
 
 private: 
 	PythonBindings *bindPython; // Don't know if this needs to stick around. Thinking the root node is enough

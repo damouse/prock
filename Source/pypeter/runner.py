@@ -8,7 +8,6 @@ Of importance is the "skip" argument, which specifies which modules to ignore. U
 import sys
 import os
 import traceback
-import pd
 import bdb
 
 from multiprocessing import Process, Queue
@@ -39,43 +38,67 @@ class Runner(bdb.Bdb):
         self.gr_paused = greenlet(self.tick)
         self.gr_running = greenlet(self._runscript)
 
+    # Ticking
+    def forget(self):
+        self.lineno = None
+        self.stack = []
+        self.curindex = 0
+        self.curframe = None
+        self.curframe_locals = {}
+
     def tick(self):
         # Step the debugger once by switching back into the running greenlet.
         self.gr_running.switch()
+        return self.curframe_locals
 
-    def finished_tick(self):
+    def finished_tick(self, frame, label):
         # Called by this class once a debugger cycle completes. Resumes control to the "tick" method
+        self.collect_locals(frame)
+        self.print_frame_info(frame, label)
         self.gr_paused.switch()
 
-    def user_call(self, frame, args):
-        print 'Call'
+    def print_frame_info(self, frame, label):
+        filename = self.canonic(frame.f_code.co_filename)
         name = frame.f_code.co_name or "<unknown>"
-        print "call", name, args
 
-        self.set_step()
-        self.finished_tick()
+        print "%s: %s#%s %s" % (label, filename, frame.f_lineno, name)
+
+    def collect_locals(self, frame):
+        self.forget()
+        self.stack, self.curindex = self.get_stack(frame, None)
+        self.curframe = self.stack[self.curindex][0]
+        self.curframe_locals = self.curframe.f_locals
+
+    # user_ overrides
+    def user_call(self, frame, args):
+        ''' The first tick sends a couple of a'''
+        self.finished_tick(frame, "Call")
 
     def user_line(self, frame):
-        print 'Line'
-
         if self.should_break:
             self.should_break = False
             self.set_trace()
-        else:
-            # arrived at breakpoint
-            name = frame.f_code.co_name or "<unknown>"
-            filename = self.canonic(frame.f_code.co_filename)
-            print "break at", filename, frame.f_lineno, "in", name
+        # else:
+        #     if 'bdb.py' in self.canonic(frame.f_code.co_filename):
+        #         return
 
-        self.finished_tick()
+        self.finished_tick(frame, "Line")
 
+    def user_return(self, frame, return_value):
+        """This method is called when a return trap is set here."""
+        self.finished_tick(frame, "Return")
+
+    def user_exception(self, frame, exc_info):
+        exc_type, exc_value, exc_traceback = exc_info
+        """This method is called if an exception occurs,
+        but only if we are to stop at or just below this level."""
+
+        self.finished_tick(frame, "Exception")
+
+    #
+    # Bootstrapping and Executing
     def _runscript(self):
-        # Taken from pdb wholesale as a means to bootstrap a debugging session
-        # The script has to run in __main__ namespace (or imports from
-        # __main__ will break).
-        #
-        # So we clear up the __main__ and set several special variables
-        # (this gets rid of pdb's globals and cleans old variables on restarts).
+        # Taken from pdb as a way to start a whole file bootstrap
         import __main__
         __main__.__dict__.clear()
         __main__.__dict__.update({"__name__": "__main__",
@@ -83,11 +106,6 @@ class Runner(bdb.Bdb):
                                   # "__builtins__": __builtins__,
                                   })
 
-        # When bdb sets tracing, a number of call and line events happens
-        # BEFORE debugger even reaches user's code (and the exact sequence of
-        # events depends on python version). So we take special measures to
-        # avoid stopping before we reach the main script (see user_line and
-        # user_call for details).
         self._wait_for_mainpyfile = 1
         self.mainpyfile = self.canonic(self.filename)
         self._user_requested_quit = 0
@@ -100,10 +118,15 @@ def main():
 
     dbg = Runner('../../samplecode.py')
 
+    # Simulate delayed "ticks" based on user interaction in ue4
     for i in range(20):
         import time
         time.sleep(.1)
-        dbg.tick()
+        local_vars = dbg.tick()
+
+        import pprint
+        realLocals = {k: v for k, v in local_vars.iteritems() if not '__' in k}
+        pprint.pprint(realLocals)
 
 
 if __name__ == '__main__':
