@@ -203,7 +203,6 @@ class Pdb(bdb.Bdb, cmd.Cmd):
         self.interaction(frame, exc_traceback)
 
     # General interaction function
-
     def interaction(self, frame, traceback):
         self.setup(frame, traceback)
         self.print_stack_entry(self.stack[self.curindex])
@@ -1294,6 +1293,7 @@ def main(mainpyfile):
         print 'Error:', mainpyfile, 'does not exist'
         sys.exit(1)
 
+
     # Replace pdb's dir with script's dir in front of module search path.
     sys.path[0] = os.path.dirname(mainpyfile)
 
@@ -1305,6 +1305,7 @@ def main(mainpyfile):
     pdb = Pdb(stdout=redir, stdin=redir)
 
     while True:
+        print 'spin'
         try:
             pdb._runscript(mainpyfile)
             if pdb._user_requested_quit:

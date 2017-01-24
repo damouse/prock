@@ -45,7 +45,5 @@ void ABaseGameMode::Run() {
 	Tick:			windup animation
 	Turnover:		step debugger and update values instantaneously
 	Tock:			winddown animation
-
-
 	*/
 }
