@@ -57,6 +57,11 @@ def load_source(path="../../../../../../Code/unreal/Prock/samplecode.py"):
     return ast
 
 
+def load_runner(path="../../../../../../Code/unreal/Prock/samplecode.py"):
+    dbg = Runner(path)
+    return dbg
+
+
 def test_source(path):
     ''' A demo function here to play with the AST graph '''
 

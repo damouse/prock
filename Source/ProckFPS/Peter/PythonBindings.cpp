@@ -18,7 +18,7 @@ PythonBindings::PythonBindings() {
 	PyObject *py_sys_dict = PyModule_GetDict(py_sys);
 	PyObject *py_path = PyDict_GetItemString(py_sys_dict, "path");
 
-	char *native_path = TCHAR_TO_UTF8(*FPaths::Combine(*FPaths::GameSourceDir(), UTF8_TO_TCHAR("")));
+	char *native_path = TCHAR_TO_UTF8(*FPaths::Combine(*FPaths::GameSourceDir(), UTF8_TO_TCHAR("pypeter")));
 	PyObject *py_native_path = PyUnicode_FromString(native_path);
 	PyList_Insert(py_path, 0, py_native_path);
 
@@ -28,7 +28,7 @@ PythonBindings::PythonBindings() {
 	PyList_Insert(py_path, 0, py_scripts_path);
 
 	// We don't meed native python handlers. Importing like this is temporary
-	this->pypeter = PyImport_ImportModule("pypeter.main");
+	this->pypeter = PyImport_ImportModule("main");
 	if (!this->pypeter) {
 		log_py_error();
 		return;
@@ -63,6 +63,20 @@ PyObject* PythonBindings::ImportCode() {
 	}
 
 	return ast;
+}
+
+PyObject *PythonBindings::LoadRunner() {
+	// Note the hardcoded load path to samplecode.py
+	char *sample_path = TCHAR_TO_ANSI(*FPaths::Combine(*FPaths::GameDir(), UTF8_TO_TCHAR("samplecode.py")));
+	PyObject *py_native_path = PyUnicode_FromString(sample_path);
+
+	PyObject *runner = PyObject_CallMethod(this->pypeter, (char *)"load_runner", (char *)"O", py_native_path);
+	if (!runner) {
+		log_py_error();
+		return nullptr;
+	}
+
+	return runner;
 }
 
 /*

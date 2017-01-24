@@ -26,6 +26,8 @@ void ABaseGameMode::BeginPlay() {
 	peter = new Peter();
 	ProckNode *root = peter->LoadPython();
 
+	peter->RunPython();
+
 	return;
 
 	if (root) {
