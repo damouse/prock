@@ -9,8 +9,9 @@ import sys
 import os
 import traceback
 import bdb
+import copy
 
-from multiprocessing import Process, Queue
+from multiprocessing import Process, Queue, Pipe
 import time
 import pprint
 
@@ -29,14 +30,21 @@ class Runner(bdb.Bdb):
 
     def __init__(self, filename):
         bdb.Bdb.__init__(self)
+
+        self.LOG = True
         self.should_break = True
         self.filename = filename
+        self.forget()
+        self.kill = False
 
         # The first greenlet sits inside the tick method, always blocked. Calling tick()
         # switches to the second greenlet, which perfroms a full step through the debugger and then switches
         # back. Although now that I think about it a little bit I'm actually not sure how it works.
         self.gr_paused = greenlet(self.tick)
         self.gr_running = greenlet(self._runscript)
+
+        # Backup module state by copying globals
+        self.backup_env = {k: v for k, v in globals().iteritems()}
 
     # Ticking
     def forget(self):
@@ -48,20 +56,35 @@ class Runner(bdb.Bdb):
 
     def tick(self):
         # Step the debugger once by switching back into the running greenlet.
+        # print 'TICK: ', self
+        self.set_step()
         self.gr_running.switch()
         return self.curframe_locals
+
+    def tick_locals(self):
+        # Same as tick, above, but removes the globals
+        r = self.tick()
+        return {k: v for k, v in r.iteritems() if not '__' in k}
 
     def finished_tick(self, frame, label):
         # Called by this class once a debugger cycle completes. Resumes control to the "tick" method
         self.collect_locals(frame)
         self.print_frame_info(frame, label)
-        self.gr_paused.switch()
+
+        if self.kill:
+            self.set_quit()
+            self.reset()
+
+            raise greenlet.GreenletExit
+        else:
+            self.gr_paused.switch()
 
     def print_frame_info(self, frame, label):
         filename = self.canonic(frame.f_code.co_filename)
         name = frame.f_code.co_name or "<unknown>"
 
-        print "%s: %s#%s %s" % (label, filename, frame.f_lineno, name)
+        if self.LOG:
+            print "%s: %s#%s %s" % (label, filename, frame.f_lineno, name)
 
     def collect_locals(self, frame):
         self.forget()
@@ -71,7 +94,7 @@ class Runner(bdb.Bdb):
 
     # user_ overrides
     def user_call(self, frame, args):
-        ''' The first tick sends a couple of a'''
+        ''' The first tick sends a couple of frames we dont care about '''
         self.finished_tick(frame, "Call")
 
     def user_line(self, frame):
@@ -112,10 +135,23 @@ class Runner(bdb.Bdb):
         statement = 'execfile(%r)' % self.filename
         self.run(statement)
 
+    def reset_env(self):
+        ''' Put the main dict back '''
+        self.set_quit()
+        self.reset()
+        self.kill = True
+        self.gr_running.switch()
+
+        import sys
+        module = sys.modules[__name__]
+        module.__dict__.clear()
+
+        for k, v in self.backup_env.iteritems():
+            setattr(module, k, v)
+
 
 def main():
     print 'Starting'
-
     dbg = Runner('../../samplecode.py')
 
     # Simulate delayed "ticks" based on user interaction in ue4
@@ -126,8 +162,17 @@ def main():
 
         import pprint
         realLocals = {k: v for k, v in local_vars.iteritems() if not '__' in k}
+
+        if 'globals' in realLocals:
+            continue
         pprint.pprint(realLocals)
 
+    print 'Done'
+    dbg.reset_env()
 
 if __name__ == '__main__':
     main()
+    # main()
+
+    # Running it in a seperate process. Doesn't handle objects well
+    # process_main()

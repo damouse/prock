@@ -33,14 +33,32 @@ void Peter::RunPython() {
 		return;
 	}
 
+	/*
+	A "Runtime" object should be running the show here, but I'm just overloading the gamemode object for simplicity now
+
+		Progress	pick the next node to run
+		Anup		run initial animations
+		Tick		tick the debugger
+		Andown		run teardown animations
+
+	Its not clear what the biggest value of the program is yet. Do basic running and riting and then move forward. 
+	*/
+
 	for (int i = 0; i < 10; i++) {
 		// Runner.tick() returns the list of local variables after a debugger step 
-		PyObject *locals = PyObject_CallMethod(runner, (char *)"tick", NULL);
+		PyObject *locals = PyObject_CallMethod(runner, (char *)"tick_locals", NULL);
 
 		if (!locals) {
 			log_py_error();
 		} else {
 			printpy(locals);
 		}
+	}
+
+	PyObject *end = PyObject_CallMethod(runner, (char *)"reset_env", NULL);
+	if (!end) {
+		log_py_error();
+	} else {
+		printpy(end);
 	}
 }

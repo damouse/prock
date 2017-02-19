@@ -26,15 +26,13 @@ void ABaseGameMode::BeginPlay() {
 	peter = new Peter();
 	ProckNode *root = peter->LoadPython();
 
-	peter->RunPython();
-
-	return;
-
 	if (root) {
 		// The first box is already placed, assign it as the root's box
 		root->box = room;
 		root->Spawn(nullptr, FVector());
 	}
+
+	peter->RunPython();
 }
 
 void ABaseGameMode::Run() {
