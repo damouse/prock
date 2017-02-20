@@ -68,7 +68,9 @@ def test_source(path):
     ast = load_file(path)
     # print isinstance(ast, (nodes.NodeList, nodes.CommaProxyList))
     pprint.pprint(ast.__dict__)
-    # print ast.__class__
+
+    for l in ast:
+        pprint.pprint(l.__dict__)
 
 
 def run_source(path="../../../../../../Code/unreal/Prock/samplecode.py"):
