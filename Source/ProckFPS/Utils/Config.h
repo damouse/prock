@@ -25,6 +25,9 @@ const float FRAME_Z_OFFSET = 5;
 const FVector GRAVITY(0.f, 0.f, 0.f);
 const float VISCOUS_DRAG = 0.1;
 
+// Running parameters
+const float RUNNING_STEP_TIME = 0.5f; // seconds between timed debugger steps
+
 UCLASS()
 class PROCKFPS_API UConfig : public UObject
 {

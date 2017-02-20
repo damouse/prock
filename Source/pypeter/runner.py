@@ -173,6 +173,3 @@ def main():
 if __name__ == '__main__':
     main()
     # main()
-
-    # Running it in a seperate process. Doesn't handle objects well
-    # process_main()

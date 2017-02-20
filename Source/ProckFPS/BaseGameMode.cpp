@@ -3,6 +3,7 @@
 #include "ProckFPS.h"
 #include "BaseGameMode.h"
 
+
 #include "Nodes/ProckNodeSubclasses.h"
 
 #include "Utils/Config.h"
@@ -13,9 +14,15 @@ ABaseGameMode::ABaseGameMode() {
 }
 
 void ABaseGameMode::BeginPlay() {
-	// Load the room instance which starts the game in the map
+	// Loads the static boxes-- boxes placed in fixed positions in the editor before Prock loads
 	for (TActorIterator<ABoxActor> ActorItr(GetWorld()); ActorItr; ++ActorItr) {
-		room = *ActorItr;
+		if (ActorItr->GetName().Equals("Room")) {
+			room = *ActorItr;
+		}
+
+		if (ActorItr->GetName().Equals("Table")) {
+			table = *ActorItr;
+		}
 	}
 
 	if (!room) {
@@ -32,20 +39,30 @@ void ABaseGameMode::BeginPlay() {
 		root->Spawn(nullptr, FVector());
 	}
 
-	peter->RunPython();
+	// Should be hooked up to a menu. Menus have not yet been implemented.
+	Run();
 }
 
+// I'm not super happy with the encapsulation here, but not 100% sure how the architecture is going to fall out of this one.
+// Playing it by ear for now, excuse the lack of encapsulation.
 void ABaseGameMode::Run() {
-	// Load the code, move it to the background
-	
-	/*
-	Running: 
+	if (!table) {
+		UE_LOG(LogProck, Error, TEXT("Table doesnt exist, can't run"));
+		return;
+	}
 
-	Scope			collection of variables. Can be created during a run cycle
-	Run Cycle		one step of the runner, corresponding to the execution of a single line of code
+	PyObject *pyRunner = peter->pyBindings->LoadRunner();
+	if (!pyRunner) {
+		UE_LOG(LogProck, Error, TEXT("Peter could not load native runner"));
+		return;
+	}
 
-	Tick:			windup animation
-	Turnover:		step debugger and update values instantaneously
-	Tock:			winddown animation
-	*/
+	// Can I really not create my own constructor? That can't be right, I must be doing something stupid.
+	runtime = NewObject<URuntime>(URuntime::StaticClass());
+	runtime->root = peter->prockRootNode;
+	runtime->runner = pyRunner;
+	runtime->table = table;
+
+	// Set the value for the timer in Config
+	runtime->StartTimed(RUNNING_STEP_TIME);
 }

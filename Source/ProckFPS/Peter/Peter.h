@@ -4,6 +4,8 @@
 #include "PythonBindings.h"
 #include "Nodes/ProckNodeSubclasses.h"
 
+class Runtime;
+
 /**
  * Peter manages editting code: loading and reading, transforming the AST, 
  * saving, and more.
@@ -17,17 +19,11 @@
 class PROCKFPS_API Peter
 {
 public:
-	Peter();
-	~Peter();
-	
 	// Load a python filename into peter, return the root node for the loaded code
-	ProckNode * LoadPython();
+	ProckNode *LoadPython();
 	void UnloadPython();
 
-	// Run a previously loaded python file using the native python debugger wrapper
-	void RunPython();
-
-private: 
+//private: 
 	PythonBindings *pyBindings; // Don't know if this needs to stick around. Thinking the root node is enough
 
 	// The root of the loaded ast
