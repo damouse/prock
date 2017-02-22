@@ -26,6 +26,14 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "NeedsRedraw"))
 	void NeedsRedraw();
 
+	// Call to change the material of this box to an Active or Inactive state, wrt the runtime
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "SetRunstate"))
+	void SetRunstate(bool isActive);
+
+	// Changes the "value" label of the box with the passed value. Pass an empty string to clear.
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "SetRunValue"))
+	void SetRunValue(const FString& value);
+
 	// TODO: remove and replace with direct BP method
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Label")
 	UTextRenderComponent* mainLabel;
