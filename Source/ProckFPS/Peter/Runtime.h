@@ -7,6 +7,7 @@
 
 #include "Runtime.generated.h"
 
+class ProckNode;
 
 // Loads the code, loads the debugger shim, and then executes the code by stepping through it. 
 // Assume that LoadPython has already been called in BeginPlay
@@ -37,4 +38,9 @@ public:
 	ABoxActor *table;
 
 	FTimerHandle runnerTimerHandler;
+
+	// Nodes and lines currently affected by the current cycle
+	TArray<ABoxActor *> activeBoxes;
+
+	//TArray<ProckNode *> activeNodes;
 };

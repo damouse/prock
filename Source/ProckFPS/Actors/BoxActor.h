@@ -2,6 +2,7 @@
 
 #include "GameFramework/Actor.h"
 #include "LinkableInterface.h"
+//#include "Actors/LineActor.h"
 
 #include <vector>
 
@@ -11,7 +12,7 @@
 const int LABEL_MARGIN = 2;
 const int BOX_DEPTH = 40;		// Depth when looking straight-on. Corresponds to y coordinate
 
-class ALineActor;
+//class ALineActor;
 
 UCLASS()
 class PROCKFPS_API ABoxActor : public ALinkable
@@ -37,5 +38,10 @@ public:
 	// TODO: remove and replace with direct BP method
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Label")
 	UTextRenderComponent* mainLabel;
+
+	// The lines that most directly belong to this node and that are "animated"
+	// ERROR: suspect something is wrong with the import cycle here, can't get this to compile
+	// during Runtime cycles
+	//std::vector<ALineActor *> AttachedActiveLines;
 };
 

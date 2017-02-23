@@ -69,11 +69,7 @@ def test_source(path):
     # print isinstance(ast, (nodes.NodeList, nodes.CommaProxyList))
     pprint.pprint(ast.__dict__)
 
-    # Getting athe line number from a node:
-    # print l.path().path[0]
-
     for l in ast:
-
         pprint.pprint(l.__dict__)
 
 

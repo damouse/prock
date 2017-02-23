@@ -42,6 +42,8 @@ public:
 	char *GetAsString(char *name);
 	std::vector<ProckNode *> *GetAsList(char *name);
 	ProckNode *GetAsNode(char *name);
+
+	int GetLineNumber();
 		
 	AScopeActor *Scope;
 

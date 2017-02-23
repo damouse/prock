@@ -13,6 +13,11 @@ ABaseGameMode::ABaseGameMode() {
 	UConfig::world = GetWorld();	
 }
 
+void ABaseGameMode::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+	UE_LOG(LogProck, Log, TEXT("EndPlay"));
+	peter->UnloadPython();
+}
+
 void ABaseGameMode::BeginPlay() {
 	// Loads the static boxes-- boxes placed in fixed positions in the editor before Prock loads
 	for (TActorIterator<ABoxActor> ActorItr(GetWorld()); ActorItr; ++ActorItr) {

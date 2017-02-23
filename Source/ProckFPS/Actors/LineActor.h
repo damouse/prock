@@ -7,9 +7,11 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include "Actors/BoxActor.h"
+//#include "Actors/BoxActor.h"
 #include "Actors/LinkableInterface.h"
 #include "LineActor.generated.h"
+
+class ABoxActor;
 
 // Line actor
 UCLASS()

@@ -33,14 +33,17 @@ class Runner(bdb.Bdb):
 
         self.LOG = True
         self.should_break = True
+        self.kill = False
         self.filename = filename
         self.forget()
-        self.kill = False
+
+        # Locals, globals, and newly created variables
+        self.locals, self.globals, self.new = {}, {}, {}
 
         # The first greenlet sits inside the tick method, always blocked. Calling tick()
         # switches to the second greenlet, which perfroms a full step through the debugger and then switches
         # back. Although now that I think about it a little bit I'm actually not sure how it works.
-        self.gr_paused = greenlet(self.tick)
+        self.gr_paused = greenlet(self.step)
         self.gr_running = greenlet(self._runscript)
 
         # Backup module state by copying globals
@@ -54,19 +57,17 @@ class Runner(bdb.Bdb):
         self.curframe = None
         self.curframe_locals = {}
 
-    def tick(self):
-        # Step the debugger once by switching back into the running greenlet.
-        # print 'TICK: ', self
+    def step(self):
+        # Step the debugger once by switching back into the running greenlet. Save variables after the tick.
         self.set_step()
         self.gr_running.switch()
-        return self.curframe_locals
 
-    def tick_locals(self):
-        # Same as tick, above, but removes the globals
-        r = self.tick()
-        return {k: v for k, v in r.iteritems() if not '__' in k}
+        self.globals = self.curframe_locals
+        l = {k: v for k, v in self.globals.iteritems() if not '__' in k}
+        self.new = {k:v for k, v in l.iteritems() if k not in self.locals}
+        self.locals = l
 
-    def finished_tick(self, frame, label):
+    def finished_step(self, frame, label):
         # Called by this class once a debugger cycle completes. Resumes control to the "tick" method
         self.collect_locals(frame)
         self.print_frame_info(frame, label)
@@ -82,6 +83,7 @@ class Runner(bdb.Bdb):
     def print_frame_info(self, frame, label):
         filename = self.canonic(frame.f_code.co_filename)
         name = frame.f_code.co_name or "<unknown>"
+        self.lineno = int(frame.f_lineno)
 
         if self.LOG:
             print "%s: %s#%s %s" % (label, filename, frame.f_lineno, name)
@@ -95,7 +97,7 @@ class Runner(bdb.Bdb):
     # user_ overrides
     def user_call(self, frame, args):
         ''' The first tick sends a couple of frames we dont care about '''
-        self.finished_tick(frame, "Call")
+        self.finished_step(frame, "Call")
 
     def user_line(self, frame):
         if self.should_break:
@@ -105,30 +107,24 @@ class Runner(bdb.Bdb):
         #     if 'bdb.py' in self.canonic(frame.f_code.co_filename):
         #         return
 
-        self.finished_tick(frame, "Line")
+        self.finished_step(frame, "Line")
 
     def user_return(self, frame, return_value):
         """This method is called when a return trap is set here."""
-        self.finished_tick(frame, "Return")
+        self.finished_step(frame, "Return")
 
     def user_exception(self, frame, exc_info):
         exc_type, exc_value, exc_traceback = exc_info
         """This method is called if an exception occurs,
         but only if we are to stop at or just below this level."""
 
-        self.finished_tick(frame, "Exception")
+        self.finished_step(frame, "Exception")
 
-    #
-    # Bootstrapping and Executing
     def _runscript(self):
-        # Taken from pdb as a way to start a whole file bootstrap
+        # Taken from pdb as a way to start a whole file bootstrap. Kicks off the debugger
         import __main__
         __main__.__dict__.clear()
-        __main__.__dict__.update({"__name__": "__main__",
-                                  "__file__": self.filename,
-                                  # "__builtins__": __builtins__,
-                                  })
-
+        __main__.__dict__.update({"__name__": "__main__", "__file__": self.filename})
         self._wait_for_mainpyfile = 1
         self.mainpyfile = self.canonic(self.filename)
         self._user_requested_quit = 0
@@ -151,20 +147,23 @@ class Runner(bdb.Bdb):
 
 
 def main():
+    # Testing function
     print 'Starting'
     dbg = Runner('../../samplecode.py')
 
     # Simulate delayed "ticks" based on user interaction in ue4
     for i in range(20):
         import time
-        time.sleep(.1)
-        local_vars = dbg.tick()
+        time.sleep(.4)
+        dbg.step()
 
         import pprint
-        realLocals = {k: v for k, v in local_vars.iteritems() if not '__' in k}
+        realLocals = {k: v for k, v in dbg.locals.iteritems() if not '__' in k}
 
         if 'globals' in realLocals:
             continue
+
+        print "New:", dbg.new
         pprint.pprint(realLocals)
 
     print 'Done'

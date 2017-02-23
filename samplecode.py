@@ -25,8 +25,6 @@ while True:
     break
 
 # 8: invocation
-
-
 def t():
     poop = 1
     pass
