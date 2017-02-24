@@ -50,9 +50,9 @@ Misc TODO
 */
 void URuntime::Step() {
 	// Tock- wind down animations from last runner step and clear the animating boxes
-	for (auto& box : activeBoxes) {
-		box->SetRunstate(false);
-	}
+	//for (auto& box : activeBoxes) {
+	//	box->SetRunstate(false);
+	//}
 
 	activeBoxes.Empty();
 
@@ -74,48 +74,76 @@ void URuntime::Step() {
 	}
 
 	int debuggerLineNumber = atoi(PyString_AsString(PyObject_Str(lineno)));
-	printpy(locals);
-	UE_LOG(LogProck, Log, TEXT("Line Number: %d"), debuggerLineNumber);
+	//printpy(locals);
+	UE_LOG(LogProck, Log, TEXT("Debugger line Number: %d"), debuggerLineNumber);
 
 	// Find ProckNode that matches line number
 	// I can't think of any way to make this work with a non-list, but I don't want to constrain it yet, so deal with the cast
 	PNList *list = (PNList *)root;
-	ProckNode *current = nullptr;
 
-	for (auto& child : *list->NodeList()) {
-		if (child->Type() == PNT_Comment || child->Type() == PNT_Endl) {
-			continue;
-		}
+	// Yet another "Fuck redbaron". How is the line number not a relevant field to retain? 
+	//if (debuggerLineNumber > list->NodeList()->size()) {
+	//	UE_LOG(LogProck, Error, TEXT("Looking for a debugger line number out of codelist range"));
+	//	StopTimed();
+	//	return;
+	//} 
 
-		if (child->GetLineNumber() == debuggerLineNumber) {
-			current = child;
-			break;
-		}
-	};
+	//ProckNode *current = list->NodeList()->at(debuggerLineNumber - 1);
+	//UE_LOG(LogProck, Log, TEXT("Node lineno: %d Name: %s"), debuggerLineNumber, ANSI_TO_TCHAR(current->Name()));
 
-	if (!current) {
+	// Aww, shit. There are (obviously) multiple nodes that share one line number.
+	// Two options: collect them all, or only collect the first non-comment, non endline node. The first is better, but going for the second right now.
+	//for (int i = 0; i < list->NodeList()->size(); i++) {
+	////for (auto& child : *list->NodeList()) {
+	//	//if (child->Type() == PNT_Comment || child->Type() == PNT_Endl) {
+	//	//	continue;
+	//	//}
+
+	//	int ln = child->GetLineNumber();
+	//	UE_LOG(LogProck, Log, TEXT("Node lineno: %d Name: %s"), ln, ANSI_TO_TCHAR(child->Name()));
+
+	//	if (ln == debuggerLineNumber) {
+	//		current = child;
+	//		//break;
+	//	}
+	//};
+
+	if (current == nullptr) {
 		UE_LOG(LogProck, Error, TEXT("Could not find ProckNode to match debugger line number: %d"), debuggerLineNumber);
 		return;
 	}
 
 	// Tick- windup animations
 	// Child nodes should be "animated" too, but skipping for now
-	activeBoxes.Add(current->box);
+	// Ok, so there's a dumb mistake here: not all nodes have boxes. There may also be too many boxes in play, but 
+	// deal with that after with solving the obvious problem. Immediate issue is storing relevant nodes in arrays
 
-	for (auto& box : activeBoxes) {
-		box->SetRunstate(true);
-	}
+	//activeBoxes.Add(current->box);
+
+	//for (auto& box : activeBoxes) {
+	//	if (box) {
+	//		box->SetRunstate(true);
+	//	} else {
+	//		UE_LOG(LogProck, Error, TEXT("No node found for node"));
+	//	}
+	//}
 
 	// Turnover- visualize the changes reported by the native debugger
 
 	// There must be a generalizable way to collect the target nodes, but this will do for now 
 	// This mirrors the design of the Spawn function. In other words: icky.
+	char *name = current->Name();
 	switch (current->Type()) {
+	case PNT_Endl: 
+	case PNT_Comment:
+		UE_LOG(LogProck, Log, TEXT("Comment or endline"));
+		break;
+
 	case PNT_Assignment:		Assignment_Run((PNAssignment *) current, locals); break;
 	case PNT_BinaryOperator:	BinaryOperator_Run((PNBinaryOperator *) current, locals); break;
 
 	default:
-		UE_LOG(LogProck, Error, TEXT("Unknown node, not sure how to update values"));
+		UE_LOG(LogProck, Error, TEXT("Unknown node %s at line %d, not sure how to update values"), ANSI_TO_TCHAR(name), current->GetLineNumber());
 	}
 
 	// Update the table	
@@ -133,6 +161,14 @@ bool URuntime::Shutdown() {
 }
 
 void URuntime::StartTimed(float t) {
+	// Debugging 
+	PNList *list = (PNList *)root;
+
+	for (auto& child : *list->NodeList()) {
+		int ln = child->GetLineNumber();
+		UE_LOG(LogProck, Log, TEXT("Node lineno: %d Name: %s"), ln, ANSI_TO_TCHAR(child->Name()));
+	};
+
 	if (!UConfig::world->GetTimerManager().IsTimerPaused(runnerTimerHandler)) {
 		UConfig::world->GetTimerManager().SetTimer(runnerTimerHandler, this, &URuntime::Step, t, true);
 	} else {
@@ -142,7 +178,7 @@ void URuntime::StartTimed(float t) {
 
 
 void URuntime::StopTimed() {
-	if (UConfig::world->GetTimerManager().IsTimerPaused(runnerTimerHandler)) {
+	if (!UConfig::world->GetTimerManager().IsTimerPaused(runnerTimerHandler)) {
 		UConfig::world->GetTimerManager().PauseTimer(runnerTimerHandler);
 	} else {
 		UE_LOG(LogProck, Error, TEXT("Runner asked to stop a timer thats not running"));
