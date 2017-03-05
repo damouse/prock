@@ -18,6 +18,7 @@ public:
 	ABaseGameMode();
 
 	virtual void BeginPlay();
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
 
 	// Likely temporary, but this is the RoomBP placed in the map before the procedural rendering starts
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Room")

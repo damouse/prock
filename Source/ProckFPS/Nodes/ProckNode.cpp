@@ -106,17 +106,47 @@ ProckNode *ProckNode::GetAsNode(char *name) {
 	return nullptr;
 }
 
+// Nope. Apparently this information is not worth holding onto. Fuck off, redbaron. Poorly designed library.
+// NOTE: this function does not work. Retained for possible future use
+int ProckNode::GetLineNumber() {
+	if (!astNode) {
+		UE_LOG(LogProck, Error, TEXT("Native python object not set, cannot query line number"));
+		return -1;
+	}
+	
+	PyObject *pathObj = PyObject_CallMethod(astNode, (char *)"path", "");
+	if (!pathObj) {
+		log_py_error();
+		return -1;
+	}
+
+	PyObject *pathList = PyObject_GetAttrString(pathObj, "path");
+	if (!pathList || !PyList_Check(pathList)) {
+		log_py_error();
+		return -1;
+	}
+
+	PyObject *num = PyList_GetItem(pathList, 0);
+	if (!num) {
+		log_py_error();
+		return -1;
+	}
+
+	return atoi(PyString_AsString(PyObject_Str(num))) + 1;
+}
+
 void ProckNode::PrintRaw() {
-	if (astNode) {
-		PyObject *dict = PyObject_GetAttrString(astNode, "__dict__");
-		if (dict) {
-			printpy(dict);
-		} else {
-			UE_LOG(LogProck, Error, TEXT("Unable to retrieve object __dict__, fallback to str()"));
-			printpy(astNode);
-		}
-	} else {
+	if (!astNode) {
 		UE_LOG(LogProck, Error, TEXT("Native python object not set!"));
+		return;
+	}
+
+	PyObject *dict = PyObject_GetAttrString(astNode, "__dict__");
+	if (dict) {
+		printpy(dict);
+	} else {
+		UE_LOG(LogProck, Error, TEXT("Unable to retrieve object __dict__, fallback to str()"));
+		printpy(astNode);
 	}
 }
 

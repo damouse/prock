@@ -27,9 +27,20 @@ public:
 	// Avoid constructing your own
 	static ProckNode* NewNode(PyObject* astNode);
 
+	// The following three method are "silent" overrides. They're implmemented in ProckNodeSubclasses.cpp 
+	// as a single method on this class, the superclass, which switches on base class Type().
+	// This allows nodes to customize their behavior without having to actually create the 500 or so files thats
+	// necesary for the subclasses to appropriately override the method.
+	// All three of these methods are recursive and apply themselves to their subnoces
+
 	// Spawn this node in the game world.
-	// NOTE: this method is the ProckNode.cpp since its a simple switch statement for the functions there
 	void Spawn(ProckNode *node, FVector pos);
+	
+	// Fill this node, recursively, from the dictionary of locals passed in. If empty, then clear the label
+	void Assign(PyObject *locals, bool emtpy);
+
+	// Toggle activation state for this node's boxes to signify runtime state
+	void Activate(bool isActive);
 
 	// Dump the underlying python object. Equivalent to python: str(obj)
 	void PrintRaw();
@@ -42,6 +53,8 @@ public:
 	char *GetAsString(char *name);
 	std::vector<ProckNode *> *GetAsList(char *name);
 	ProckNode *GetAsNode(char *name);
+
+	int GetLineNumber();
 		
 	AScopeActor *Scope;
 

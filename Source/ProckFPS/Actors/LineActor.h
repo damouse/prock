@@ -7,9 +7,11 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include "Actors/BoxActor.h"
+//#include "Actors/BoxActor.h"
 #include "Actors/LinkableInterface.h"
 #include "LineActor.generated.h"
+
+class ABoxActor;
 
 // Line actor
 UCLASS()
@@ -25,4 +27,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "To")
 	ABoxActor *To;
+
+	// Call to change the material of this box to an Active or Inactive state, wrt the runtime
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "SetRunstate"))
+	void SetRunstate(bool isActive);
 };

@@ -25,15 +25,3 @@ void Peter::UnloadPython() {
 	delete prockRootNode;
 }
 
-
-//Runtime* Peter::RunPython() {
-//	PyObject *pyRunner = pyBindings->LoadRunner();
-//
-//	if (!pyRunner) {
-//		UE_LOG(LogProck, Error, TEXT("Peter could not load native runner"));
-//		return nullptr;
-//	}
-//
-//	Runtime *runner = new Runtime(prockRootNode, pyRunner);
-//	return runner;
-//}

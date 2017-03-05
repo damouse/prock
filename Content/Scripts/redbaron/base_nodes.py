@@ -118,7 +118,11 @@ class Path(object):
             parent = parent.node_list
 
         if isinstance(parent, NodeList):
-            pos = parent.index(node.node_list if isinstance(node, ProxyList) else node)
+            if isinstance(node, ProxyList):
+                item = node.node_list
+            else:
+                item = node
+            pos = parent.index(item)
             return pos
 
         if isinstance(node, NodeList):
@@ -207,10 +211,27 @@ class GenericNodesUtils(object):
 
     def find_by_position(self, position):
         path = Path.from_baron_path(self, baron.path.position_to_path(self.fst(), position))
-        if path:
-            return path.node
-        else:
-            return None
+        return path.node if path else None
+
+    def at(self, line_no):
+        if not 0 <= line_no <= self.absolute_bounding_box.bottom_right.line:
+            raise IndexError("Line number {0} is outside of the file".format(line_no))
+        node = self.find_by_position((line_no, 1))
+        if node.absolute_bounding_box.top_left.line == line_no:
+            if hasattr(node.parent, 'absolute_bounding_box') and \
+                            node.parent.absolute_bounding_box.top_left.line == line_no and \
+                    node.parent.parent is not None:
+                return node.parent
+            return node
+        elif node is not None and hasattr(node, 'next_rendered'):
+            return list(self._iter_in_rendering_order(node.next_rendered))[0]
+        elif node.parent is None:
+            node = node.data[0][0]
+            while True:
+                if node.absolute_bounding_box.top_left.line == line_no:
+                    return node
+                node = node.next_rendered
+        return node
 
     def _string_to_node_list(self, string, parent, on_attribute):
         return NodeList.from_fst(baron.parse(string), parent=parent, on_attribute=on_attribute)
@@ -305,11 +326,13 @@ class NodeList(UserList, GenericNodesUtils):
     def __setitem__(self, key, value):
         self.data[key] = self._convert_input_to_node_object(value, parent=self.parent, on_attribute=self.on_attribute)
 
+    def find_iter(self, identifier, *args, **kwargs):
+        for node in self.data:
+            for matched_node in node.find_iter(identifier, *args, **kwargs):
+                yield matched_node
+
     def find_all(self, identifier, *args, **kwargs):
-        to_return = NodeList([])
-        for i in self.data:
-            to_return += i.find_all(identifier, *args, **kwargs)
-        return to_return
+        return NodeList(list(self.find_iter(identifier, *args, **kwargs)))
 
     findAll = find_all
     __call__ = find_all
@@ -632,7 +655,10 @@ class Node(GenericNodesUtils):
         if self.on_attribute is "root":
             in_list = self.parent
         elif self.on_attribute is not None:
-            in_list = getattr(self.parent, self.on_attribute)
+            if isinstance(self.parent, NodeList):
+                in_list = getattr(self.parent.parent, self.on_attribute)
+            else:
+                in_list = getattr(self.parent, self.on_attribute)
         else:
             return None
 
@@ -643,40 +669,6 @@ class Node(GenericNodesUtils):
             return None
 
         return in_list
-
-    def find(self, identifier, *args, **kwargs):
-        if "recursive" in kwargs:
-            recursive = kwargs["recursive"]
-            kwargs = kwargs.copy()
-            del kwargs["recursive"]
-        else:
-            recursive = True
-
-        if self._node_match_query(self, identifier, *args, **kwargs):
-            return self
-
-        if not recursive:
-            return None
-
-        for kind, key, _ in filter(lambda x: x[0] in ("list", "key"), self._render()):
-            if kind == "key":
-                i = getattr(self, key)
-                if not i:
-                    continue
-
-                found = i.find(identifier, *args, **kwargs)
-                if found is not None:
-                    return found
-
-            elif kind == "list":
-                attr = getattr(self, key).node_list if isinstance(getattr(self, key), ProxyList) else getattr(self, key)
-                for i in attr:
-                    found = i.find(identifier, *args, **kwargs)
-                    if found is not None:
-                        return found
-
-            else:
-                raise Exception()
 
     def __getattr__(self, key):
         if key.endswith("_") and key[:-1] in self._dict_keys + self._list_keys + self._str_keys:
@@ -738,8 +730,7 @@ class Node(GenericNodesUtils):
         else:
             raise AttributeError("__delitem__")
 
-    def find_all(self, identifier, *args, **kwargs):
-        to_return = NodeList([])
+    def find_iter(self, identifier, *args, **kwargs):
         if "recursive" in kwargs:
             recursive = kwargs["recursive"]
             kwargs = kwargs.copy()
@@ -748,33 +739,29 @@ class Node(GenericNodesUtils):
             recursive = True
 
         if self._node_match_query(self, identifier, *args, **kwargs):
-            to_return.append(self)
+            yield self
 
-        if not recursive:
-            return to_return
+        if recursive:
+            for (kind, key, _) in self._render():
+                if kind == "key":
+                    node = getattr(self, key)
+                    if not isinstance(node, Node):
+                        continue
+                    for matched_node in node.find_iter(identifier, *args, **kwargs):
+                        yield matched_node
+                elif kind in ("list", "formatting"):
+                    nodes = getattr(self, key)
+                    if isinstance(nodes, ProxyList):
+                        nodes = nodes.node_list
+                    for node in nodes:
+                        for matched_node in node.find_iter(identifier, *args, **kwargs):
+                            yield matched_node
 
-        for kind, key, _ in filter(
-                lambda x: x[0] in ("list", "formatting") or (x[0] == "key" and isinstance(getattr(self, x[1]), Node)),
-                self._render()):
-            if kind == "key":
-                i = getattr(self, key)
-                if not i:
-                    continue
+    def find(self, identifier, *args, **kwargs):
+        return next(self.find_iter(identifier, *args, **kwargs), None)
 
-                to_return += i.find_all(identifier, *args, **kwargs)
-
-            elif kind in ("list", "formatting"):
-                if isinstance(getattr(self, key), ProxyList):
-                    for i in getattr(self, key).node_list:
-                        to_return += i.find_all(identifier, *args, **kwargs)
-                else:
-                    for i in getattr(self, key):
-                        to_return += i.find_all(identifier, *args, **kwargs)
-
-            else:
-                raise Exception()
-
-        return to_return
+    def find_all(self, identifier, *args, **kwargs):
+        return NodeList(list(self.find_iter(identifier, *args, **kwargs)))
 
     findAll = find_all
     __call__ = find_all
@@ -864,36 +851,46 @@ class Node(GenericNodesUtils):
 
     def _get_helpers(self):
         not_helpers = set([
+            'at',
             'copy',
-            'dumps',
-            'find',
-            'findAll',
-            'find_all',
-            'fst',
-            'help',
-            'next_generator',
-            'previous_generator',
-            'get_indentation_node',
-            'indentation_node_is_direct',
-            'parent_find',
-            'path',
-            'find_by_path',
-            'replace',
-            'edit',
-            'increase_indentation',
             'decrease_indentation',
-            'has_render_key',
-            'get_absolute_bounding_box_of_attribute',
+            'dumps',
+            'edit',
+            'find',
+            'find_all',
+            'findAll',
+            'find_by_path',
             'find_by_position',
-            'parse_code_block',
-            'parse_decorators',
+            'find_iter',
             'from_fst',
+            'fst',
+            'fst',
+            'generate_identifiers',
+            'get_absolute_bounding_box_of_attribute',
+            'get_indentation_node',
+            'get_indentation_node',
+            'has_render_key',
+            'help',
+            'help',
+            'increase_indentation',
+            'indentation_node_is_direct',
+            'indentation_node_is_direct',
             'index_on_parent',
             'index_on_parent_raw',
-            'insert_before',
             'insert_after',
+            'insert_before',
+            'next_generator',
+            'next_generator',
+            'parent_find',
+            'parent_find',
+            'parse_code_block',
+            'parse_decorators',
+            'path',
+            'path',
+            'previous_generator',
+            'previous_generator',
+            'replace',
             'to_python',
-            'generate_identifiers',
         ])
         return [x for x in dir(self) if
                 not x.startswith("_") and x not in not_helpers and inspect.ismethod(getattr(self, x))]
@@ -1640,9 +1637,9 @@ class LineProxyList(ProxyList):
             {"type": "endl", "formatting": [], "value": "\n", "indent": "    "})
 
     def _synchronise(self):
-        log("Before synchronise, self.data = '%s' + '%s'", self.first_blank_lines, self.data)
+        log("Before synchronise, self.data = '%s' + '%s'", self.first_blank_lines, self.node_list)
         super(LineProxyList, self)._synchronise()
-        log("After synchronise, self.data = '%s' + '%s'", self.first_blank_lines, self.data)
+        log("After synchronise, self.data = '%s' + '%s'", self.first_blank_lines, self.node_list)
 
     def _build_inner_list(self, node_list):
         result = []

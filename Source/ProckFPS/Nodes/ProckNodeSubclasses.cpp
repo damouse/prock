@@ -5,6 +5,10 @@
 #include "Utils/Config.h"
 #include <queue>
 
+/*
+	Spawn- recursive creation of boxes
+*/
+
 // Line Utility Method
 void Connect(ProckNode *from, ProckNode *to) {
 	ALineActor* line = UConfig::world->SpawnActor<ALineActor>(UConfig::lineBPClass);
@@ -105,5 +109,129 @@ void ProckNode::Spawn(ProckNode *node, FVector pos) {
 	if (node && box) {
 		box->AttachToActor(node->box, FAttachmentTransformRules::SnapToTargetIncludingScale);
 		box->SetActorRelativeLocation(pos);
+	}
+}
+
+
+/*
+    Activation- toggling boxes on or off based on runstate.
+	The default Base_Activate covers a lot more cases here.
+*/
+
+// Leaf Nodes
+void Base_Activate(ProckNode *n, bool state) {
+    if (n->box) {
+        n->box->SetRunstate(state);
+    }
+}
+
+// "Basic" Operators
+void Assignment_Activate(PNAssignment *n, bool state) {
+    Base_Activate(n, state);
+
+    n->Target()->Activate(state);
+    n->Value()->Activate(state);
+}
+
+void BinaryOperator_Activate(PNBinaryOperator *n, bool state) {
+    Base_Activate(n, state);
+   
+    n->First()->Activate(state);
+    n->Second()->Activate(state);
+}
+
+// Collections of Nodes
+void List_Activate(PNList *n, bool state) {
+    for (ProckNode *child : *n->NodeList()) {
+        if (child->Type() == PNT_Comment || child->Type() == PNT_Endl) {
+            continue;
+        }
+
+        child->Activate(state);
+    };
+}
+
+void ProckNode::Activate(bool state) {
+	switch (Type()) {
+
+	// Basic Operators
+	case PNT_Assignment:        Assignment_Activate((PNAssignment *) this, state); break;
+	case PNT_BinaryOperator:    BinaryOperator_Activate((PNBinaryOperator *) this, state); break;
+
+	// Collections
+	case PNT_List:              List_Activate((PNList *) this, state); break;
+
+	// Basic box
+	default:                    Base_Activate(this, state); break;
+	}
+}
+
+
+/*
+	Assignment - filling the sublabel on a node.
+	The default case again covers a lot of subcases
+*/
+
+void Base_Assign(ProckNode *n, PyObject *locals, bool empty) {
+	if (!n->box) {
+		return;
+	}
+
+	if (empty) {
+		n->box->SetRunValue("");
+	}
+}
+
+void Name_Assign(PNName *n, PyObject *locals, bool empty) {
+	if (empty) {
+		n->box->SetRunValue("");
+		return;
+	}
+
+	PyObject *target = PyDict_GetItemString(locals, n->Value());
+
+	if (!target) {
+		UE_LOG(LogProck, Error, TEXT("Unable to find local variable to match name node: %s"), ANSI_TO_TCHAR(n->Value()));
+	} else {
+		n->box->SetRunValue(PyString_AsString(PyObject_Str(target)));
+	}
+}
+
+// "Basic" Operators
+void Assignment_Assign(PNAssignment *n, PyObject *locals, bool empty) {
+	n->Target()->Assign(locals, empty);
+    n->Value()->Assign(locals, empty); 
+}
+
+void BinaryOperator_Assign(PNBinaryOperator *n, PyObject *locals, bool empty) {
+    n->First()->Assign(locals, empty);
+    n->Second()->Assign(locals, empty); 
+}
+
+// Collections of Nodes
+void List_Assign(PNList *n, PyObject *locals, bool empty) {
+	for (ProckNode *child : *n->NodeList()) {
+		if (child->Type() == PNT_Comment || child->Type() == PNT_Endl) {
+			continue;
+		}
+
+		child->Assign(locals, empty);
+	};
+}
+
+void ProckNode::Assign(PyObject *locals, bool empty) {
+	switch (Type()) {
+	// The first, obvious assign node
+	case PNT_Name:				Name_Assign((PNName *) this, locals, empty); break;
+
+	// Basic Operators
+	case PNT_Assignment:        Assignment_Assign((PNAssignment *) this, locals, empty); break;
+	case PNT_BinaryOperator:    BinaryOperator_Assign((PNBinaryOperator *) this, locals, empty); break;
+
+	// Collections
+	case PNT_List:              List_Assign((PNList *) this, locals, empty); break;
+
+	// Basic box
+	default:                    Base_Assign(this, locals, empty); break;
 	}
 }
