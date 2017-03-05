@@ -107,6 +107,7 @@ ProckNode *ProckNode::GetAsNode(char *name) {
 }
 
 // Nope. Apparently this information is not worth holding onto. Fuck off, redbaron. Poorly designed library.
+// NOTE: this function does not work. Retained for possible future use
 int ProckNode::GetLineNumber() {
 	if (!astNode) {
 		UE_LOG(LogProck, Error, TEXT("Native python object not set, cannot query line number"));

@@ -45,3 +45,5 @@ void log_py_error();
 
 // Returns the attribute as a string if the attribute exists. Equivalent to "a.b" where "a" is the object and "b" is the attribute
 char *pyGetAttr(PyObject* obj, char *attrName);
+
+//PyObject *callFunction(PyObject *target, char *name, )

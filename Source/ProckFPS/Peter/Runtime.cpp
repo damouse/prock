@@ -50,9 +50,9 @@ Misc TODO
 */
 void URuntime::Step() {
 	// Tock- wind down animations from last runner step and clear the animating boxes
-	//for (auto& box : activeBoxes) {
-	//	box->SetRunstate(false);
-	//}
+	for (auto& box : activeBoxes) {
+		box->SetRunstate(false);
+	}
 
 	activeBoxes.Empty();
 
@@ -73,40 +73,46 @@ void URuntime::Step() {
 		return;
 	}
 
-	int debuggerLineNumber = atoi(PyString_AsString(PyObject_Str(lineno)));
-	//printpy(locals);
-	UE_LOG(LogProck, Log, TEXT("Debugger line Number: %d"), debuggerLineNumber);
-
-	// Find ProckNode that matches line number
-	// I can't think of any way to make this work with a non-list, but I don't want to constrain it yet, so deal with the cast
 	PNList *list = (PNList *)root;
+	int debuggerLineNumber = atoi(PyString_AsString(PyObject_Str(lineno)));
+	UE_LOG(LogProck, Log, TEXT("Debugger line Number: %d"), debuggerLineNumber);
+	
+	if (debuggerLineNumber > list->NodeList()->size()) {
+		UE_LOG(LogProck, Error, TEXT("Looking for a debugger line number out of codelist range"));
+		StopTimed();
+		return;
+	}
 
-	// Yet another "Fuck redbaron". How is the line number not a relevant field to retain? 
-	//if (debuggerLineNumber > list->NodeList()->size()) {
-	//	UE_LOG(LogProck, Error, TEXT("Looking for a debugger line number out of codelist range"));
-	//	StopTimed();
-	//	return;
-	//} 
+	PyObject *at = PyObject_CallMethod(list->astNode, (char *)"at", (char *)"i", debuggerLineNumber);
+	if (!res) {
+		UE_LOG(LogProck, Error, TEXT("Calling at failed"));
+		log_py_error();
+		return;
+	}
 
-	//ProckNode *current = list->NodeList()->at(debuggerLineNumber - 1);
-	//UE_LOG(LogProck, Log, TEXT("Node lineno: %d Name: %s"), debuggerLineNumber, ANSI_TO_TCHAR(current->Name()));
+	// The target node's parent index
+	PyObject *atNodeParentIndex = PyObject_GetAttrString(at, "index_on_parent");
+	ProckNode *current = nullptr;
 
-	// Aww, shit. There are (obviously) multiple nodes that share one line number.
-	// Two options: collect them all, or only collect the first non-comment, non endline node. The first is better, but going for the second right now.
-	//for (int i = 0; i < list->NodeList()->size(); i++) {
-	////for (auto& child : *list->NodeList()) {
-	//	//if (child->Type() == PNT_Comment || child->Type() == PNT_Endl) {
-	//	//	continue;
-	//	//}
+	for (auto& child : *list->NodeList()) {
+		// index_on_parent crashes badly with endline nodes
+		if (child->Type() == PNT_Endl) {
+			continue;
+		}
 
-	//	int ln = child->GetLineNumber();
-	//	UE_LOG(LogProck, Log, TEXT("Node lineno: %d Name: %s"), ln, ANSI_TO_TCHAR(child->Name()));
+		PyObject *parentIndex = PyObject_GetAttrString(child->astNode, "index_on_parent");
+		if (!parentIndex) {
+			UE_LOG(LogProck, Error, TEXT("Calling index_on_parent failed on child node"));
+			log_py_error();
+			return;
+		}
 
-	//	if (ln == debuggerLineNumber) {
-	//		current = child;
-	//		//break;
-	//	}
-	//};
+		// Check if the parent indicies match
+		if (PyObject_Compare(parentIndex, atNodeParentIndex) == 0) {
+			current = child;
+			break;
+		}
+	};
 
 	if (current == nullptr) {
 		UE_LOG(LogProck, Error, TEXT("Could not find ProckNode to match debugger line number: %d"), debuggerLineNumber);
@@ -118,15 +124,15 @@ void URuntime::Step() {
 	// Ok, so there's a dumb mistake here: not all nodes have boxes. There may also be too many boxes in play, but 
 	// deal with that after with solving the obvious problem. Immediate issue is storing relevant nodes in arrays
 
-	//activeBoxes.Add(current->box);
+	activeBoxes.Add(current->box);
 
-	//for (auto& box : activeBoxes) {
-	//	if (box) {
-	//		box->SetRunstate(true);
-	//	} else {
-	//		UE_LOG(LogProck, Error, TEXT("No node found for node"));
-	//	}
-	//}
+	for (auto& box : activeBoxes) {
+		if (box) {
+			box->SetRunstate(true);
+		} else {
+			UE_LOG(LogProck, Error, TEXT("No node found for node"));
+		}
+	}
 
 	// Turnover- visualize the changes reported by the native debugger
 
@@ -163,11 +169,6 @@ bool URuntime::Shutdown() {
 void URuntime::StartTimed(float t) {
 	// Debugging 
 	PNList *list = (PNList *)root;
-
-	for (auto& child : *list->NodeList()) {
-		int ln = child->GetLineNumber();
-		UE_LOG(LogProck, Log, TEXT("Node lineno: %d Name: %s"), ln, ANSI_TO_TCHAR(child->Name()));
-	};
 
 	if (!UConfig::world->GetTimerManager().IsTimerPaused(runnerTimerHandler)) {
 		UConfig::world->GetTimerManager().SetTimer(runnerTimerHandler, this, &URuntime::Step, t, true);

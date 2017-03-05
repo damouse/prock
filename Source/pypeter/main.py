@@ -66,17 +66,34 @@ def test_source(path):
     ''' A demo function here to play with the AST graph '''
 
     ast = load_file(path)
-    # print isinstance(ast, (nodes.NodeList, nodes.CommaProxyList))
-    # pprint.pprint(ast.__dict__)
 
-    i = 1
-    for l in ast:
-        # print l.__dict__
-        # print str(i) + " type: " + l.__class__.__name__
-        # print "Line: " + str(l.path())
-        pprint.pprint(l.__dict__)
-        # print "line: ", i
-        # i += 1x
+    # at() returns the node at the given line number, but the node can't
+    # reference this information after being seperately selected.
+    # In other words, we have to match this number to an existinng node once queryed
+    target2 = ast.at(2)
+    target5 = ast.at(5)
+    target8 = ast.at(8)
+    target11 = ast.at(11)
+    target14 = ast.at(14)
+
+    # print target2.index_on_parent
+    # print target5.index_on_parent
+    # print target8.index_on_parent
+    # print target11.index_on_parent
+    # print target14.index_on_parent
+
+    # for l in ast:
+    #     print l.index_on_parent
+
+    # pprint.pprint(target.__dict__)
+    # print target.index_on_parent
+
+    # mebe = ast[10]
+    # pprint.pprint(mebe.__dict__)
+    # print mebe.index_on_parent
+
+    # Line algorithm: call .at() on nodelist
+    # Iterate through nodes on nodelist, match index_on_parent
 
 
 def run_source(path="../../../../../../Code/unreal/Prock/samplecode.py"):
