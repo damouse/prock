@@ -23,49 +23,6 @@ Note that theres a problem with this logic: values are not updated in the curren
 the next step of the debugger. 
 */
 
-// Node-specific runtime operations- find the locals that match our names and fill our values with them
-void Assignment_Activate(PNAssignment *n) {
-	n->Target()->box->SetRunstate(true);
-	n->Value()->box->SetRunstate(true);
-}
-
-void BinaryOperator_Activate(PNBinaryOperator *n) {
-
-}
-
-void Activate(ProckNode *n) {}
-
-// Fill this nodes with values fetched from locals
-void Assignment_Fill(PNAssignment *n, PyObject* locals) {
-	UE_LOG(LogProck, Log, TEXT("Setting values in an assignment node: %s"), ANSI_TO_TCHAR(n->Target()->Name()));
-	printpy(locals);
-
-	if (n->Target()->Type() == PNT_Name) {
-		PNName *named = (PNName *)n->Target();
-		PyObject *target = PyDict_GetItemString(locals, named->Value());
-
-		if (!target) {
-			UE_LOG(LogProck, Error, TEXT("Unable to find local variable to match name node: %s"), ANSI_TO_TCHAR(named->Value()));
-		} else {
-			named->box->SetRunValue(PyString_AsString(PyObject_Str(target)));
-		}
-	}
-
-	//PyObject *target = PyDict_GetItemString(locals, n->Target()->Name());
-	//PyObject *value = PyDict_GetItemString(locals, n->Value()->Name());
-
-	//if (target) {
-	//	n->Target()->box->SetRunValue(PyString_AsString(PyObject_Str(target)));
-	//}
-
-	//if (value) {
-	//	n->Value()->box->SetRunValue(PyString_AsString(PyObject_Str(value)));
-	//}
-
-}
-
-
-
 /*
 Misc TODO
 	- Setup the table: spawn a bunch of boxes in the middle of the world
@@ -96,7 +53,7 @@ void URuntime::Step() {
 	// Problem: values are not updates until the next step. Have to check the locals for updates here, at the start of the next 
 	// step
 	for (auto& n : activeNodes) {
-		n->Assign(locals, true);
+		n->Assign(locals, false);
 		n->Activate(false);
 	}
 

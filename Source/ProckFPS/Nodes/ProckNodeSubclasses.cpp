@@ -142,9 +142,6 @@ void BinaryOperator_Activate(PNBinaryOperator *n, bool state) {
 
 // Collections of Nodes
 void List_Activate(PNList *n, bool state) {
-    FVector curr, origin, extent;
-    float currOffset = 0.f;
-
     for (ProckNode *child : *n->NodeList()) {
         if (child->Type() == PNT_Comment || child->Type() == PNT_Endl) {
             continue;
@@ -224,6 +221,8 @@ void List_Assign(PNList *n, PyObject *locals, bool empty) {
 
 void ProckNode::Assign(PyObject *locals, bool empty) {
 	switch (Type()) {
+	// The first, obvious assign node
+	case PNT_Name:				Name_Assign((PNName *) this, locals, empty); break;
 
 	// Basic Operators
 	case PNT_Assignment:        Assignment_Assign((PNAssignment *) this, locals, empty); break;
