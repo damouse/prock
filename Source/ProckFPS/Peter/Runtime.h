@@ -40,7 +40,7 @@ public:
 	FTimerHandle runnerTimerHandler;
 
 	// Nodes and lines currently affected by the current cycle
-	TArray<ABoxActor *> activeBoxes;
+	TArray<ProckNode *> activeNodes;
 
 	//TArray<ProckNode *> activeNodes;
 };

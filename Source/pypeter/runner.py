@@ -59,12 +59,12 @@ class Runner(bdb.Bdb):
 
     def step(self):
         # Step the debugger once by switching back into the running greenlet. Save variables after the tick.
-        self.set_step()
+        # self.set_step()
         self.gr_running.switch()
 
         self.globals = self.curframe_locals
         l = {k: v for k, v in self.globals.iteritems() if not '__' in k}
-        self.new = {k:v for k, v in l.iteritems() if k not in self.locals}
+        self.new = {k: v for k, v in l.iteritems() if k not in self.locals}
         self.locals = l
 
     def finished_step(self, frame, label):
@@ -171,4 +171,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    # main()

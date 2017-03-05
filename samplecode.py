@@ -5,13 +5,13 @@ a = 1
 b = 1 + a
 
 # 3: subtraction
-c = 1 - b
+# c = 1 - b
 
-# 4: multiplication
-d = 2 * c
+# # 4: multiplication
+# d = 2 * c
 
-# 5: division
-e = 2 / d
+# # 5: division
+# e = 2 / d
 
 # # 6: if
 # if a is 1:

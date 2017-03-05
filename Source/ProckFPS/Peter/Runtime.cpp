@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+//// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "ProckFPS.h"
 #include "Runtime.h"
@@ -18,23 +18,49 @@ Progress	pick the next node to run
 Anup		run initial animations
 Tick		tick the debugger
 Andown		run teardown animations
+
+Note that theres a problem with this logic: values are not updated in the currently paused node until 
+the next step of the debugger. 
 */
 
 // Node-specific runtime operations- find the locals that match our names and fill our values with them
-void Assignment_Run(PNAssignment *n, PyObject* locals) {
-	PyObject *target = PyDict_GetItemString(locals, n->Target()->Name());
-	PyObject *value = PyDict_GetItemString(locals, n->Value()->Name());
-
-	if (!target || !value) {
-		log_py_error();
-		return;
-	}
-
-	n->Target()->box->SetRunValue(PyString_AsString(PyObject_Str(target)));
-	n->Value()->box->SetRunValue(PyString_AsString(PyObject_Str(value)));
+void Assignment_Activate(PNAssignment *n) {
+	n->Target()->box->SetRunstate(true);
+	n->Value()->box->SetRunstate(true);
 }
 
-void BinaryOperator_Run(PNBinaryOperator *n, PyObject* locals) {
+void BinaryOperator_Activate(PNBinaryOperator *n) {
+
+}
+
+void Activate(ProckNode *n) {}
+
+// Fill this nodes with values fetched from locals
+void Assignment_Fill(PNAssignment *n, PyObject* locals) {
+	UE_LOG(LogProck, Log, TEXT("Setting values in an assignment node: %s"), ANSI_TO_TCHAR(n->Target()->Name()));
+	printpy(locals);
+
+	if (n->Target()->Type() == PNT_Name) {
+		PNName *named = (PNName *)n->Target();
+		PyObject *target = PyDict_GetItemString(locals, named->Value());
+
+		if (!target) {
+			UE_LOG(LogProck, Error, TEXT("Unable to find local variable to match name node: %s"), ANSI_TO_TCHAR(named->Value()));
+		} else {
+			named->box->SetRunValue(PyString_AsString(PyObject_Str(target)));
+		}
+	}
+
+	//PyObject *target = PyDict_GetItemString(locals, n->Target()->Name());
+	//PyObject *value = PyDict_GetItemString(locals, n->Value()->Name());
+
+	//if (target) {
+	//	n->Target()->box->SetRunValue(PyString_AsString(PyObject_Str(target)));
+	//}
+
+	//if (value) {
+	//	n->Value()->box->SetRunValue(PyString_AsString(PyObject_Str(value)));
+	//}
 
 }
 
@@ -49,13 +75,6 @@ Misc TODO
 	- Basic anup and andown animations
 */
 void URuntime::Step() {
-	// Tock- wind down animations from last runner step and clear the animating boxes
-	for (auto& box : activeBoxes) {
-		box->SetRunstate(false);
-	}
-
-	activeBoxes.Empty();
-
 	// Step the native runner. Get the line numbers and locals for this step 
 	PyObject *res = PyObject_CallMethod(runner, (char *)"step", NULL);
 	if (!res) {
@@ -73,9 +92,20 @@ void URuntime::Step() {
 		return;
 	}
 
+	// Tock- wind down animations from last runner step and clear the animating boxes
+	// Problem: values are not updates until the next step. Have to check the locals for updates here, at the start of the next 
+	// step
+	for (auto& n : activeNodes) {
+		n->Assign(locals, true);
+		n->Activate(false);
+	}
+
+	activeNodes.Empty();
+
+
 	PNList *list = (PNList *)root;
 	int debuggerLineNumber = atoi(PyString_AsString(PyObject_Str(lineno)));
-	UE_LOG(LogProck, Log, TEXT("Debugger line Number: %d"), debuggerLineNumber);
+	//UE_LOG(LogProck, Log, TEXT("Debugger line Number: %d"), debuggerLineNumber);
 	
 	if (debuggerLineNumber > list->NodeList()->size()) {
 		UE_LOG(LogProck, Error, TEXT("Looking for a debugger line number out of codelist range"));
@@ -109,6 +139,7 @@ void URuntime::Step() {
 
 		// Check if the parent indicies match
 		if (PyObject_Compare(parentIndex, atNodeParentIndex) == 0) {
+			//UE_LOG(LogProck, Log, TEXT("Found node: %s"), ANSI_TO_TCHAR(child->Name()));
 			current = child;
 			break;
 		}
@@ -120,37 +151,13 @@ void URuntime::Step() {
 	}
 
 	// Tick- windup animations
-	// Child nodes should be "animated" too, but skipping for now
-	// Ok, so there's a dumb mistake here: not all nodes have boxes. There may also be too many boxes in play, but 
-	// deal with that after with solving the obvious problem. Immediate issue is storing relevant nodes in arrays
+	activeNodes.Add(current);
 
-	activeBoxes.Add(current->box);
-
-	for (auto& box : activeBoxes) {
-		if (box) {
-			box->SetRunstate(true);
-		} else {
-			UE_LOG(LogProck, Error, TEXT("No node found for node"));
-		}
+	for (auto& n : activeNodes) {
+		n->Activate(true);
 	}
 
 	// Turnover- visualize the changes reported by the native debugger
-
-	// There must be a generalizable way to collect the target nodes, but this will do for now 
-	// This mirrors the design of the Spawn function. In other words: icky.
-	char *name = current->Name();
-	switch (current->Type()) {
-	case PNT_Endl: 
-	case PNT_Comment:
-		UE_LOG(LogProck, Log, TEXT("Comment or endline"));
-		break;
-
-	case PNT_Assignment:		Assignment_Run((PNAssignment *) current, locals); break;
-	case PNT_BinaryOperator:	BinaryOperator_Run((PNBinaryOperator *) current, locals); break;
-
-	default:
-		UE_LOG(LogProck, Error, TEXT("Unknown node %s at line %d, not sure how to update values"), ANSI_TO_TCHAR(name), current->GetLineNumber());
-	}
 
 	// Update the table	
 }
