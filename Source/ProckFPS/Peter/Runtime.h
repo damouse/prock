@@ -18,9 +18,6 @@ class PROCKFPS_API URuntime: public UObject
 public:
 	GENERATED_BODY()
 
-	// Init with the root ProckNode, the native debugger, and the "table"-- or the collection of scope variables
-	//URuntime();
-
 	// Tick the debugger once. This involves updating the table, finding the right ProckNodes to act on, 
 	// ticking the native debugger, and updating the values in the world
 	void Step();
@@ -39,8 +36,6 @@ public:
 
 	FTimerHandle runnerTimerHandler;
 
-	// Nodes and lines currently affected by the current cycle
+	// The current node of the runtime cycle
 	TArray<ProckNode *> activeNodes;
-
-	//TArray<ProckNode *> activeNodes;
 };

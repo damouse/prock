@@ -50,15 +50,13 @@ void URuntime::Step() {
 	}
 
 	// Tock- wind down animations from last runner step and clear the animating boxes
-	// Problem: values are not updates until the next step. Have to check the locals for updates here, at the start of the next 
-	// step
+	// Problem: values are not updates until the next step. Have to check the locals for updates here, at the start of the next step
 	for (auto& n : activeNodes) {
 		n->Assign(locals, false);
 		n->Activate(false);
 	}
 
 	activeNodes.Empty();
-
 
 	PNList *list = (PNList *)root;
 	int debuggerLineNumber = atoi(PyString_AsString(PyObject_Str(lineno)));
