@@ -6,16 +6,29 @@ to build a list of examples and valid fields. Writes these out as c++ classes.
 
 Usage: run this file. Results are written to CLASS_FILE and ENUM_FILE 
 between comment delimiters. 
+
+Update: 3/10/17. So it looks like at some point the redbaron people stopped following their own 
+conventions, changing the self-documentation features of nodes. Because of course they would.
+That said, the kinds of nodes excluded from this functionality are those that tend to return other nodes. 
+Its strictly harder to implement that.
+
+The key observation of the nodes we don't have implemented already is that they always have fixed return 
+types for their nodes, I think. Potential solutions: copy the target nodes out of the generation section a la
+carte and manually override them, metaprogram more boilerplate and magically box the new references, or ?
+
+The first is easier, but more manual.
 '''
-import sys, pprint, os
+import sys
+import pprint
+import os
 from string import Template
 
 from redbaron.nodes import *
 from redbaron import nodes, RedBaron
 
-CLASS_FILE = '../ProckFPS/ProckNode.h'
-HEADER_FILE = '../ProckFPS/BaseNode.h'
-ENUM_FILE = '../ProckFPS/BaseNode.cpp'
+CLASS_FILE = '../ProckFPS/Nodes/ProckNodeSubclasses.h'
+HEADER_FILE = '../ProckFPS/Nodes/ProckNode.h'
+ENUM_FILE = '../ProckFPS/Nodes/ProckNode.cpp'
 
 # type enum
 enum_template = '''
@@ -24,7 +37,7 @@ enum ProckNodeType {
 $body};
 '''
 
-# single class 
+# single class
 class_template = '''/*
 $comment
 
@@ -62,6 +75,10 @@ public:
 list_template = '''\tstd::vector<ProckNode *> *$name() { return GetAsList("$key"); } '''
 str_template = '''\tchar *$name() { return GetAsString("$key"); } '''
 dict_template = '''\tProckNode *$name() { return GetAsNode("$key"); } '''
+
+# Nodes we're writing our own implementation of. Dont write these out to file.
+# These are the names of the final forms of the classes, the cpp names
+MANUAL_OVERRIDES = ['PNFuncdef']
 
 
 # Reads in the redbaron types and builds definition objects for each
@@ -117,7 +134,9 @@ def parse_definitions():
     out.off()
     return [x for x in defs if x.node is not None]
 
-# Go through the RedBaron declarations and build a list of node names. Ignore the nodes that appear in the list of NodeDefinitions 
+# Go through the RedBaron declarations and build a list of node names. Ignore the nodes that appear in the list of NodeDefinitions
+
+
 def read_node_declarations(known):
     read = list(filter(lambda x: x.endswith("Node") or x.endswith("List"), dir(nodes)))
     decs = [x for x in read if len(list(filter(lambda y: y.name == x, known))) == 0]
@@ -125,8 +144,10 @@ def read_node_declarations(known):
     # Filter out spcific duplicates.
     return filter(lambda x: x != 'Node' and x != 'NodeList', decs)
 
-# Scrape all the publically declared nodes in RedBaron to catch any nodes not seen in barondoc.txt, 
+# Scrape all the publically declared nodes in RedBaron to catch any nodes not seen in barondoc.txt,
 # the documentation. Because we only have node names here we assume all these nodes return "value"
+
+
 def template_unknowns(names):
     return '\n'.join([Template(anonymous_template).substitute(
         class_name='PN' + x.replace('Node', ''),
@@ -134,12 +155,15 @@ def template_unknowns(names):
         type='PNT_' + x.replace('Node', ''),
     ) for x in names])
 
+
 def template_enums(defs, unknowns):
     body = ['\tPNT_' + d.name.replace("Node", '') + ',\n' for d in defs]
     body += ['\tPNT_' + n.replace("Node", '') + ',\n' for n in unknowns]
     return Template(enum_template).substitute(body=''.join(body))
 
 # Should include a list of override types
+
+
 def write_classes():
     out = PrintInterceptor()
     defs = parse_definitions()
@@ -148,6 +172,10 @@ def write_classes():
     for d in defs:
         getters = ''
         class_name = 'PN' + d.name.replace("Node", '')
+
+        # Ignore nodes we're manually implementing
+        if class_name in MANUAL_OVERRIDES:
+            continue
 
         # Build a list of getters for these classes
         if hasattr(d.node, 'node_list'):
@@ -197,10 +225,12 @@ def write_classes():
     # Create and write string to class conversions
     enum = ["\t} else if (strcmp(t, \"" + n + "\") == 0) {\n\t\treturn new PN" + n.replace('Node', '') + "();\n" for n in unknowns]
     enum += ["\t} else if (strcmp(t, \"" + d.name + "\") == 0) {\n\t\treturn new PN" + d.name.replace('Node', '') + "();\n" for d in defs]
-    
+
     foldAndWrite(ENUM_FILE, ''.join(enum))
 
 # Writes "addition" into the named file between the two delimiters hardcoded into the method
+
+
 def foldAndWrite(fileName, addition):
     start_marker = '// Start Generated Code\n'
     end_marker = '// End Generated Code\n'
@@ -215,7 +245,10 @@ def foldAndWrite(fileName, addition):
         [f.write(x) for x in ret]
 
 # Data wrapper class
+
+
 class NodeDefinition():
+
     def __init__(self, name):
         self.name = name
         self.description = ''
@@ -225,7 +258,10 @@ class NodeDefinition():
         self.node = None
 
 # Utility for capturing stdout
+
+
 class PrintInterceptor(object):
+
     def __init__(self):
         self.current = []
         self.stdout = sys.stdout
@@ -249,5 +285,3 @@ class PrintInterceptor(object):
 
 if __name__ == '__main__':
     write_classes()
-
-
