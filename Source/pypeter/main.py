@@ -66,15 +66,7 @@ def test_source(path):
     ''' A demo function here to play with the AST graph '''
 
     ast = load_file(path)
-
-    # at() returns the node at the given line number, but the node can't
-    # reference this information after being seperately selected.
-    # In other words, we have to match this number to an existinng node once queryed
-    target2 = ast.at(2)
-    target5 = ast.at(5)
-    target8 = ast.at(8)
-    target11 = ast.at(11)
-    target14 = ast.at(14)
+    ast.help()
 
     # print target2.index_on_parent
     # print target5.index_on_parent

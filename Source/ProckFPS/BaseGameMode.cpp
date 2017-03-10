@@ -25,6 +25,7 @@ void ABaseGameMode::BeginPlay() {
 			room = *ActorItr;
 		}
 
+		// Not currently used
 		if (ActorItr->GetName().Equals("Table")) {
 			table = *ActorItr;
 		}
@@ -45,7 +46,7 @@ void ABaseGameMode::BeginPlay() {
 	}
 
 	// Should be hooked up to a menu. Menus have not yet been implemented.
-	Run();
+	//Run();
 }
 
 // I'm not super happy with the encapsulation here, but not 100% sure how the architecture is going to fall out of this one.

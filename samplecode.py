@@ -24,9 +24,11 @@ e = 2 / d
 #     g = 1
 #     break
 
-# # 8: invocation
-# def t():
-#     poop = 1
-#     pass
+# 8: invocation
 
-# t()
+
+def t():
+    poop = 1
+    pass
+
+t()
