@@ -1,17 +1,17 @@
-# 1: assignment
-a = 1
+# # 1: assignment
+# a = 1
 
-# 2: addition
-b = 1 + a
+# # 2: addition
+# b = 1 + a
 
-# 3: subtraction
-c = 1 - b
+# # 3: subtraction
+# c = 1 - b
 
-# 4: multiplication
-d = 2 * c
+# # 4: multiplication
+# d = 2 * c
 
-# 5: division
-e = 2 / d
+# # 5: division
+# e = 2 / d
 
 # # 6: if
 # if a is 1:
@@ -27,8 +27,9 @@ e = 2 / d
 # 8: invocation
 
 
-def t():
-    poop = 1
-    pass
+def t(a, b):
+    a = b
+    c = d
+    return b
 
 t()

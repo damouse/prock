@@ -66,16 +66,16 @@ def test_source(path):
     ''' A demo function here to play with the AST graph '''
 
     ast = load_file(path)
-    ast.help()
+    # ast.help()
 
-    # print target2.index_on_parent
-    # print target5.index_on_parent
-    # print target8.index_on_parent
-    # print target11.index_on_parent
-    # print target14.index_on_parent
+    for l in ast:
+        if l.type != "def":
+            continue
 
-    # for l in ast:
-    #     print l.index_on_parent
+        l.help()
+
+        print "Arguments: "
+        print l.value.type
 
     # pprint.pprint(target.__dict__)
     # print target.index_on_parent
