@@ -77,6 +77,36 @@ void List_Spawn(PNList *n) {
 	};
 }
 
+// Composites
+void Funcdef_Spawn(PNFuncdef *n) {
+	FVector curr, origin, extent;
+	float currOffset = 0.f;
+
+	// Change the scale?
+
+	// Spawn the body 
+	// Note: the last node might be a return node. It should not be spawned as a regular node
+	for (ProckNode *child : *n->NodeList()) {
+		if (child->Type() == PNT_Comment || child->Type() == PNT_Endl) {
+			continue;
+		}
+
+		child->Spawn(n, FVector(0, 0, 0));
+		child->box->GetActorBounds(false, origin, extent);
+
+		currOffset += extent.X + FRAME_X_OFFSET * 3;
+		child->box->SetActorRelativeLocation(FVector(currOffset, extent.Y, extent.Z + FRAME_Z_OFFSET));
+	};
+
+	// Autotent the body, expanding the extent mesh to wrap it
+	n->box->SetText(n->Title());
+	n->box->SetAutotenting(true);	
+
+	// Draw args
+
+	// Draw return 
+}
+
 // This function switches on the type of the passed node and invokes a respective _Spawn function if one exists, 
 // else calls Base_Spawn. Each type check here is basically the implementation of another node "drawing" type.
 // When creating new _Spawn methods, please give them the same name as the node being targeted
@@ -95,9 +125,12 @@ void ProckNode::Spawn(ProckNode *node, FVector pos) {
 	case PNT_Assignment:		Assignment_Spawn((PNAssignment *) this); break; 
 	case PNT_BinaryOperator:	BinaryOperator_Spawn((PNBinaryOperator *) this); break; 
 
-	// Collections
+	// Blocks of Code
 	case PNT_List:				List_Spawn((PNList *) this); break; 
 
+	// Composites
+	case PNT_Funcdef:			Funcdef_Spawn((PNFuncdef *) this); break;
+	
 	// Basic box
 	default:					Base_Spawn(this); break; 
 	}
