@@ -83,8 +83,6 @@ void Def_Spawn(PNDef *n) {
 	FVector curr, origin, extent;
 	float currOffset = 0.f;
 
-	// Change the scale?
-
 	// Spawn the body 
 	// Note: the last node might be a return node. It should not be spawned as a regular node
 	for (ProckNode *child : *n->NodeList()) {
@@ -102,10 +100,10 @@ void Def_Spawn(PNDef *n) {
 	};
 
 	// Autotent the body, expanding the extent mesh to wrap it
+	// NOTE: autotenting does NOT work when the scale of the box is not 1!
+	// Have to autotent, then rescale. Implies that the extents are not converted back to local coordinates... or something?
 	n->box->SetText(n->Title());
 	n->box->SetAutotenting(true);	
-
-	// I assume that snaptotarget is rescaling the children based on the the parent's scale.
 
 	// Draw args
 
