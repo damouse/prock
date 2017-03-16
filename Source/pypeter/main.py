@@ -73,9 +73,10 @@ def test_source(path):
             continue
 
         l.help()
+        # print l.value.__class__
 
-        print "Arguments: "
-        print l.value.type
+        for x in l.value:
+            print 'This is a list'
 
     # pprint.pprint(target.__dict__)
     # print target.index_on_parent

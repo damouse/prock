@@ -55,10 +55,18 @@ std::vector<ProckNode *> *ProckNode::GetAsList(char *name) {
 
 	PyObject *r = PyObject_GetAttrString(astNode, name);
 
-	if (!r || !PyIter_Check(r)) {
-		UE_LOG(LogProck, Error, TEXT("Did not recieve list in node request"));
+	if (!r) {
+		UE_LOG(LogProck, Error, TEXT("Did not recieve anything in node request for key: %s"), ANSI_TO_TCHAR(name));
 		return nullptr;
 	}
+
+	//printpy(r);
+
+	// The proxylist fails this itercheck. For the tenth time, thanks redbaron
+	//if (!PyIter_Check(r)) {
+	//	UE_LOG(LogProck, Error, TEXT("Did not recieve list in node request for key: %s"), ANSI_TO_TCHAR(name));
+	//	return nullptr;
+	//}
 
 	PyObject *iterator = PyObject_GetIter(r);
 	if (iterator == NULL) {
@@ -293,8 +301,6 @@ ProckNode *nodeSubclassFromString(char *t) {
 		return new PNFor();
 	} else if (strcmp(t, "FromImportNode") == 0) {
 		return new PNFromImport();
-	} else if (strcmp(t, "FuncdefNode") == 0) {
-		return new PNFuncdef();
 	} else if (strcmp(t, "GeneratorComprehensionNode") == 0) {
 		return new PNGeneratorComprehension();
 	} else if (strcmp(t, "GetitemNode") == 0) {

@@ -63,7 +63,7 @@ void BinaryOperator_Spawn(PNBinaryOperator *n) {
 void List_Spawn(PNList *n) {
 	FVector curr, origin, extent;
 	float currOffset = 0.f;
-
+	
 	for (ProckNode *child : *n->NodeList()) {
 		if (child->Type() == PNT_Comment || child->Type() == PNT_Endl) {
 			continue;
@@ -71,14 +71,15 @@ void List_Spawn(PNList *n) {
 
 		child->Spawn(n, FVector(0, 0, 0));
 		child->box->GetActorBounds(false, origin, extent);
-
+		child->box->SetActorRelativeLocation(FVector(currOffset, extent.Y, FRAME_Z_OFFSET));
 		currOffset += extent.X + FRAME_X_OFFSET * 3;
-		child->box->SetActorRelativeLocation(FVector(currOffset, extent.Y, extent.Z + FRAME_Z_OFFSET));
 	};
 }
 
 // Composites
-void Funcdef_Spawn(PNFuncdef *n) {
+void Def_Spawn(PNDef *n) {
+	Base_Spawn(n);
+
 	FVector curr, origin, extent;
 	float currOffset = 0.f;
 
@@ -94,17 +95,24 @@ void Funcdef_Spawn(PNFuncdef *n) {
 		child->Spawn(n, FVector(0, 0, 0));
 		child->box->GetActorBounds(false, origin, extent);
 
+		// The original code list spawner offset by the y extent of the child being spawned. Why would it do that?
+		// The z term is zero here because when spawned as part of a code list it gets doubled up
+		child->box->SetActorRelativeLocation(FVector(currOffset, 0, 0));
 		currOffset += extent.X + FRAME_X_OFFSET * 3;
-		child->box->SetActorRelativeLocation(FVector(currOffset, extent.Y, extent.Z + FRAME_Z_OFFSET));
 	};
 
 	// Autotent the body, expanding the extent mesh to wrap it
 	n->box->SetText(n->Title());
 	n->box->SetAutotenting(true);	
 
+	// I assume that snaptotarget is rescaling the children based on the the parent's scale.
+
 	// Draw args
 
 	// Draw return 
+
+	n->box->SetActorScale3D(FVector(.8, .8, .8));
+
 }
 
 // This function switches on the type of the passed node and invokes a respective _Spawn function if one exists, 
@@ -129,7 +137,7 @@ void ProckNode::Spawn(ProckNode *node, FVector pos) {
 	case PNT_List:				List_Spawn((PNList *) this); break; 
 
 	// Composites
-	case PNT_Funcdef:			Funcdef_Spawn((PNFuncdef *) this); break;
+	case PNT_Def:				Def_Spawn((PNDef *) this); break;
 	
 	// Basic box
 	default:					Base_Spawn(this); break; 
@@ -140,7 +148,7 @@ void ProckNode::Spawn(ProckNode *node, FVector pos) {
 
 	// Check the box for existence since name nodes dont spawn anything
 	if (node && box) {
-		box->AttachToActor(node->box, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		box->AttachToActor(node->box, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 		box->SetActorRelativeLocation(pos);
 	}
 }
