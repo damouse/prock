@@ -10,6 +10,9 @@ The key hypothesis of this project is that there exists a visual representation 
 
 ## Demo
 
+Quick video demo of interactions in an early build:
+[![IMAGE ALT TEXT](http://img.youtube.com/vi/RdVaZoD8ptc/0.jpg)](http://www.youtube.com/watch?v=RdVaZoD8ptc)
+
 Rendered code in a timeline format: 
 ![Pathlining](pathlining.PNG?raw=true)
 
