@@ -7,3 +7,11 @@ Python is compiled into the engine, but a properly pathed x64 python27 install m
 Tested on Windows with python2.7. 
 
 The key hypothesis of this project is that there exists a visual representation of almost any program that is more useful in understanding it compared to just reading the code. Unfortunatly, this project has been suspended due to the scope of work involved-- finding those representations is hard!
+
+## Demo
+
+Rendered code in a timeline format: 
+![Pathlining](pathlining.PNG?raw=true)
+
+Python code mid-execution:
+![Debugging](running.PNG?raw=true)
